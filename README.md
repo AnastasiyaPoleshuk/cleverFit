@@ -2,10 +2,10 @@
 
 ##to start:
 
-`clone repo`
-`git checkout dev`
-`yarn install`
-`yarn start`
+- `clone repo`
+- `git checkout dev`
+- `yarn install`
+- `yarn start`
 
 ##tests:
 
