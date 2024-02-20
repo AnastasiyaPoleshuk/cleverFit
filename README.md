@@ -1,13 +1,13 @@
 # cleverFit
 
-##to start:
+## To start:
 
 - `clone repo`
 - `git checkout dev`
 - `yarn install`
 - `yarn start`
 
-##tests:
+## Tests:
 
 `yarn cy:e2e`
 
