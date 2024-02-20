@@ -1,6 +1,6 @@
 # cleverFit
 
-## To start:
+## Start:
 
 - `clone repo`
 - `git checkout dev`
