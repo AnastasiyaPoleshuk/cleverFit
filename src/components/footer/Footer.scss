@@ -1,0 +1,73 @@
+@import '../../App.variables.scss';
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+
+    @media (max-width: 834px) {
+        margin-top: 200px;
+    }
+
+    @media (max-width: 360px) {
+        flex-direction: column-reverse;
+        align-items: center;
+        gap: 24px;
+        margin-top: 24px;
+    }
+
+    .footer__link {
+        @include h6;
+    }
+
+    .footer__download-blok {
+        border-radius: 2px;
+        width: 240px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: $white-color;
+
+        @media (max-width: 360px) {
+            width: 330px;
+            justify-content: space-around;
+        }
+    }
+
+    .download-blok__title {
+        @include h6;
+        color: $brand-color-light;
+        padding: 12px 0 8px;
+    }
+
+    .download-blok__subtitle {
+        width: 100%;
+        text-align: center;
+        @include body-regular;
+        color: $gray-color;
+        padding-bottom: 12px;
+        border-bottom: 1px solid $selected-bg-color-light;
+    }
+
+    .download-blok__btns {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        padding: 20px 0;
+        width: 100%;
+    }
+
+    .download-blok__btn {
+        padding: 0;
+        width: 120px;
+
+        background: none;
+        @include body-regular;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+    }
+}

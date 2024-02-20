@@ -1,0 +1,75 @@
+@import '../../App.variables.scss';
+
+.auth-page {
+    width: 1440px;
+    height: 100vh;
+    position: relative;
+    background-image: url(../../../public/assets/png/Enter\ page_light.png);
+
+    &:after {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 1440px;
+        height: 100vh;
+        backdrop-filter: blur(10px);
+        background: rgba(121, 156, 212, 0.5);
+    }
+
+    @media (max-width: 834px) {
+        width: 834px;
+    }
+
+    @media (max-width: 360px) {
+        width: 360px;
+    }
+    .auth__box {
+        background-color: $white-color;
+        border-radius: 2px;
+        padding: 65px 0;
+        width: 540px;
+
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 5;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .auth__logo {
+        width: 309px;
+        height: 76px;
+        margin-bottom: 50px;
+    }
+
+    .auth__btn-box {
+        margin-bottom: 24px;
+    }
+
+    .auth__btn {
+        display: inline-block;
+        width: 184px;
+        height: 30px;
+
+        @include h6;
+        color: $text-color;
+        text-align: center;
+        vertical-align: middle;
+
+        border-bottom: 1px solid $selected-bg-color-light;
+        transition: 0.3s;
+    }
+
+    .auth__btn-active {
+        transition: 0.3s;
+        color: $brand-color-light;
+        border-bottom: 2px solid $brand-color-light;
+    }
+}

@@ -1,0 +1,17 @@
+.loader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1440px;
+    height: 100vh;
+    backdrop-filter: blur(10px);
+    background: rgba(121, 156, 212, 0.5);
+    z-index: 100;
+
+    .loader__spin {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50% -50%);
+    }
+}

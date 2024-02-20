@@ -1,0 +1,186 @@
+@import '../../App.variables.scss';
+
+.main-page {
+    .main__section {
+        background-image: url(../../../public/assets/png/Main\ page_light.png);
+        background-repeat: no-repeat;
+        background-size: cover;
+        min-height: 100vh;
+        padding: 24px 24px 42px;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        @media (max-width: 360px) {
+            padding: 16px 16px 42px;
+
+            width: 360px;
+        }
+    }
+
+    .main__articles-wrapp {
+        @media (max-width: 834px) {
+            width: 520px;
+        }
+
+        @media (max-width: 360px) {
+            width: 360px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+        }
+    }
+
+    .main__list {
+        border-radius: 2px;
+        width: 700px;
+        background-color: $white-color;
+        padding: 24px;
+        color: #003a8c;
+        @include h6;
+
+        @media (max-width: 834px) {
+            width: 520px;
+        }
+
+        @media (max-width: 360px) {
+            width: 300px;
+            padding: 16px;
+        }
+    }
+
+    .main__list ul {
+        padding: 0;
+        margin: 0;
+    }
+
+    .main__list-item {
+        list-style-type: none;
+    }
+
+    .main__article-last {
+        @include h4;
+        background-color: $white-color;
+        border-radius: 2px;
+        width: 700px;
+        margin: 24px 0;
+        padding: 24px;
+
+        @media (max-width: 834px) {
+            width: 520px;
+        }
+
+        @media (max-width: 360px) {
+            width: 300px;
+            padding: 16px;
+            margin: 24px 0 16px;
+        }
+    }
+
+    .main__cards-block {
+        width: 750px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        @media (max-width: 834px) {
+            width: 570px;
+            gap: 16px;
+        }
+
+        @media (max-width: 360px) {
+            width: 360px;
+            flex-direction: column;
+            justify-content: center;
+            gap: 8px;
+        }
+    }
+
+    .card {
+        border-radius: 2px;
+        width: 240px;
+        background-color: $white-color;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+
+        &:nth-child(1):before,
+        &:nth-child(2):before,
+        &:nth-child(3):before {
+            display: block;
+            position: absolute;
+
+            bottom: 16px;
+        }
+
+        &:nth-child(1):before {
+            content: url(../../../public/assets/svg/main__workout-icon.svg);
+            left: 60px;
+            @media (max-width: 834px) {
+                left: 32px;
+            }
+            @media (max-width: 360px) {
+                left: 102px;
+            }
+        }
+
+        &:nth-child(2):before {
+            content: url(../../../public/assets/svg/main__celendar-icon.svg);
+            left: 60px;
+            @media (max-width: 834px) {
+                left: 32px;
+            }
+            @media (max-width: 360px) {
+                left: 107px;
+            }
+        }
+
+        &:nth-child(3):before {
+            content: url(../../../public/assets/svg/main__profile-icon.svg);
+            left: 70px;
+            @media (max-width: 834px) {
+                left: 40px;
+            }
+
+            @media (max-width: 360px) {
+                left: 114px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            width: 330px;
+        }
+    }
+
+    .card__title {
+        padding: 12px 0;
+        margin: 0 12px;
+        margin: 0;
+        width: 100%;
+        text-align: center;
+        border-bottom: 1px solid $selected-bg-color-light;
+        @include h6;
+
+        @media (max-width: 834px) {
+            margin: 0 24px;
+        }
+    }
+
+    .card__link {
+        display: block;
+        margin: 20px 0;
+        width: 100%;
+        text-align: center;
+        @include body-regular;
+        color: $brand-color-light;
+        transition: 0.3s;
+
+        &:hover {
+            color: $hover-color-light;
+        }
+    }
+}

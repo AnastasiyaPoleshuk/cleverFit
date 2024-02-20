@@ -1,0 +1,21 @@
+@import './App.variables.scss';
+
+.app {
+    width: 1440px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex: 1 1 auto;
+    box-sizing: border-box;
+
+    @media (max-width: 834px) {
+        width: 834px;
+    }
+
+    @media (max-width: 360px) {
+        width: 360px;
+        position: relative;
+        align-items: center;
+    }
+}

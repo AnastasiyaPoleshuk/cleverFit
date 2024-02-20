@@ -1,0 +1,160 @@
+@import '../../App.variables.scss';
+
+.nav__menu {
+    flex-grow: 1;
+    transition: 0.3s;
+    position: relative;
+    padding-top: 50px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+
+    @media (max-width: 360px) {
+        position: absolute;
+        z-index: 10;
+        background: $white-color;
+        left: 0;
+        top: 0;
+    }
+
+    & .not-collapsed__menu {
+        width: 210px;
+
+        @media (max-width: 360px) {
+            width: 105px;
+            position: absolute;
+        }
+    }
+
+    & .collapsed__menu {
+        width: 65px;
+
+        @media (max-width: 360px) {
+            width: 1px;
+        }
+    }
+
+    & img {
+        margin-bottom: 64px;
+        @media (max-width: 360px) {
+            width: 72px;
+        }
+    }
+
+    .logo-short-con {
+        @media (max-width: 360px) {
+            display: none;
+        }
+    }
+
+    .nav__menu-btn {
+        width: 20px;
+        height: 65px;
+        padding: 0;
+
+        position: absolute;
+        right: -18px;
+        top: 50%;
+        background: transparent;
+        border-left: 20px solid $white-color;
+        border-top: 12px solid transparent;
+        border-bottom: 12px solid transparent;
+        border-right: none;
+
+        &:focus {
+            outline: none;
+        }
+
+        &:active {
+            outline: none;
+        }
+
+        @media (max-width: 360px) {
+            top: 24px;
+
+            width: 32px;
+
+            right: -30px;
+
+            border-left: 32px solid $white-color;
+            border-top: 15px solid transparent;
+            border-bottom: 15px solid transparent;
+        }
+
+        .menu-btn__icon {
+            position: absolute;
+            top: 14px;
+            right: 2px;
+            z-index: 5;
+
+            &:hover {
+                background: none;
+            }
+
+            @media (max-width: 360px) {
+                top: 12px;
+                right: 8px;
+            }
+        }
+    }
+
+    .nav__button-exit {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 25px;
+
+        width: 100%;
+        margin-top: 550px;
+        border-top: 1px solid $selected-bg-color-light;
+
+        @media (max-width: 834px) {
+            margin-top: 680px;
+        }
+
+        @media (max-width: 360px) {
+            margin-top: 1888px;
+        }
+
+        & img {
+            margin: 0;
+            @media (max-width: 360px) {
+                display: none;
+            }
+        }
+    }
+}
+
+.menu {
+    width: 210px;
+    transition: 0.3;
+
+    @media (max-width: 360px) {
+        width: 105px;
+    }
+
+    &__collapsed {
+        width: 65px;
+
+        @media (max-width: 360px) {
+            width: 1px;
+        }
+    }
+}
+
+.ant-menu-item {
+    @media (max-width: 360px) {
+        padding: 0 !important;
+    }
+
+    & img {
+        margin-right: 25px;
+        margin-bottom: 0;
+        @media (max-width: 360px) {
+            display: none;
+            margin: 0;
+        }
+    }
+}

@@ -1,0 +1,69 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+$brand-color-light: #2f54eb;
+$selected-bg-color-light: #f0f5ff;
+$hover-color-light: #597ef7;
+$click-color-light: #1d39c4;
+$white-color: #fff;
+$gray-color: #8c8c8c;
+$text-color: rgba(0, 0, 0, 0.85);
+
+@mixin h1 {
+    font-weight: 700;
+    font-size: 38px;
+    line-height: 130%;
+}
+
+@mixin h2 {
+    font-weight: 500;
+    font-size: 32px;
+    line-height: 130%;
+}
+
+@mixin h3 {
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 130%;
+}
+
+@mixin h4 {
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 130%;
+}
+
+@mixin h5 {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 130%;
+}
+
+@mixin h6 {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 130%;
+}
+
+@mixin body-regular {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 130%;
+}
+
+@mixin body-small {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 130%;
+}
+
+@mixin body-medium {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 130%;
+}
+
+@mixin body-strong {
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 130%;
+}
