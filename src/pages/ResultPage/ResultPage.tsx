@@ -4,14 +4,14 @@ import { useAppSelector } from '@hooks/typed-react-redux-hooks';
 import { Outlet } from 'react-router-dom';
 
 export const ResultPage = () => {
-    const { isLoading } = useAppSelector((state) => state.isLoading);
-
+    const { isLoading: isLoadingUserState } = useAppSelector((state) => state.user);
+    const { isLoading } = useAppSelector((state) => state.changePassword);
     return (
         <div className='result-page'>
             <div className='result__box'>
                 <Outlet />
             </div>
-            {isLoading && <Loader />}
+            {(isLoadingUserState || isLoading) && <Loader />}
         </div>
     );
 };

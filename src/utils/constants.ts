@@ -20,6 +20,8 @@ const CONSTANTS = {
             },
         },
     },
+    CHECK_EMAIL_ERROR_MESSAGE: 'Email не найден',
+    LOGIN_ERROR_MESSAGE: 'Неверные логин или пароль.',
 };
 
 export default CONSTANTS;

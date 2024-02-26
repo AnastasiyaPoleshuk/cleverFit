@@ -3,6 +3,10 @@
 .form {
     width: 368px;
 
+    @media (max-width: 360px) {
+        width: 300px;
+    }
+
     .form__input {
         width: 100%;
         border: 1px solid var($selected-bg-color-light);
@@ -13,7 +17,6 @@
     .form__items-box {
         display: flex;
         justify-content: space-between;
-        align-items: center;
         width: 100%;
 
         & a {

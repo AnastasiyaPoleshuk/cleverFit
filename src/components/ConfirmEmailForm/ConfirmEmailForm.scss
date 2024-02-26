@@ -18,6 +18,10 @@
     @include body-regular;
 }
 
+.verification-input__inactive {
+    background: $white-color;
+}
+
 .verification-input__error {
     border: 1px solid #ff4d4f;
 }

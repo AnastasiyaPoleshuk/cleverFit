@@ -3,18 +3,18 @@ import './RegistrationResult.scss';
 import { useAppDispatch, useAppSelector } from '@hooks/typed-react-redux-hooks';
 import { push } from 'redux-first-history';
 import CONSTANTS from '@utils/constants';
-import { isErrorAction } from '@redux/actions/ErrorAction';
 import { useEffect } from 'react';
+import { changeRegisterErrorState } from '@redux/slices/UserSlice';
 
 export const RegistrationFailWindow = () => {
     const dispatch = useAppDispatch();
-    const { isError } = useAppSelector((state) => state.error);
+    const { isRegisterError } = useAppSelector((state) => state.user);
 
     useEffect(() => {
-        if (!isError) {
+        if (!isRegisterError) {
             dispatch(push(`${CONSTANTS.ROUTER__PATH.AUTH__PATH}/registration`));
         }
-    }, [isError]);
+    }, [isRegisterError]);
 
     return (
         <Result
@@ -25,7 +25,7 @@ export const RegistrationFailWindow = () => {
             extra={[
                 <Button
                     type='primary'
-                    onClick={() => dispatch(isErrorAction(false))}
+                    onClick={() => dispatch(changeRegisterErrorState(false))}
                     className='registration__res_btn'
                     data-test-id='registration-retry-button'
                 >

@@ -3,6 +3,10 @@
 .form {
     width: 368px;
 
+    @media (max-width: 360px) {
+        width: 300px;
+    }
+
     .form__input {
         width: 100%;
         border: 1px solid var($selected-bg-color-light);
@@ -13,11 +17,21 @@
     .form__items-box {
         display: flex;
         justify-content: space-between;
-        align-items: center;
+        align-items: flex-start;
         width: 100%;
 
         & a {
             margin-bottom: 24px;
+        }
+
+        .login-forgot-button {
+            border: none;
+            outline: none;
+
+            &:hover {
+                border: none;
+                outline: none;
+            }
         }
     }
 

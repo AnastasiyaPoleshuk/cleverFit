@@ -14,6 +14,10 @@ import { RegistrationFailEmailWindow } from '@components/RegistrationResult/Regi
 import { RegistrationSuccessWindow } from '@components/RegistrationResult/RegistrationSuccessWindow';
 import { ConfirmEmailForm } from '@components/ConfirmEmailForm/ConfirmEmailForm';
 import { ChangePasswordForm } from '@components/ChangePasswordForm/ChangePasswordForm';
+import { CheckEmailFail } from '@components/CheckPasswordResult/CheckEmailFail';
+import { CheckEmailError } from '@components/CheckPasswordResult/CheckEmailError';
+import { ChangePasswordFail } from '@components/CheckPasswordResult/ChangePasswordFail';
+import { ChangePasswordSuccess } from '@components/CheckPasswordResult/ChangePasswordSuccess';
 
 export const App = () => {
     return (
@@ -58,6 +62,22 @@ export const App = () => {
                 <Route
                     path={`${CONSTANTS.ROUTER__PATH.RESULT.RESULT}${CONSTANTS.ROUTER__PATH.RESULT.ERROR.ERROR__PATH}`}
                     element={<RegistrationFailWindow />}
+                />
+                <Route
+                    path={`${CONSTANTS.ROUTER__PATH.RESULT.RESULT}${CONSTANTS.ROUTER__PATH.RESULT.ERROR.CHECK_EMAIL_NO_EXIST__PATH}`}
+                    element={<CheckEmailFail />}
+                />
+                <Route
+                    path={`${CONSTANTS.ROUTER__PATH.RESULT.RESULT}${CONSTANTS.ROUTER__PATH.RESULT.ERROR.CHECK_EMAIL__PATH}`}
+                    element={<CheckEmailError />}
+                />
+                <Route
+                    path={`${CONSTANTS.ROUTER__PATH.RESULT.RESULT}${CONSTANTS.ROUTER__PATH.RESULT.ERROR.CHANGE_PASSWORD__PATH}`}
+                    element={<ChangePasswordFail />}
+                />
+                <Route
+                    path={`${CONSTANTS.ROUTER__PATH.RESULT.RESULT}${CONSTANTS.ROUTER__PATH.RESULT.SUCCESS.CHANGE_PASSWORD__PATH}`}
+                    element={<ChangePasswordSuccess />}
                 />
             </Route>
         </Routes>

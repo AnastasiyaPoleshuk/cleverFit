@@ -3,12 +3,12 @@ import './LoginFailWindow.scss';
 import CONSTANTS from '@utils/constants';
 import { useAppDispatch, useAppSelector } from '@hooks/typed-react-redux-hooks';
 import { push } from 'redux-first-history';
-import { isErrorAction } from '@redux/actions/ErrorAction';
 import { useEffect } from 'react';
+import { changeErrorState } from '@redux/slices/UserSlice';
 
 export const LoginFailWindow = () => {
     const dispatch = useAppDispatch();
-    const { isError } = useAppSelector((state) => state.error);
+    const { isError } = useAppSelector((state) => state.user);
 
     useEffect(() => {
         if (!isError) {
@@ -25,7 +25,9 @@ export const LoginFailWindow = () => {
             extra={
                 <Button
                     type='primary'
-                    onClick={() => dispatch(isErrorAction(false))}
+                    onClick={() => {
+                        dispatch(changeErrorState(false));
+                    }}
                     className='loginFail__res_btn'
                     data-test-id='login-retry-button'
                 >

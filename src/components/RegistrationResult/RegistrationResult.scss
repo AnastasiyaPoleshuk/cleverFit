@@ -2,14 +2,14 @@
 
 .registration__res {
     width: 368px;
-    padding: 0;
 
     .registration__res_btn {
         width: 100%;
         height: 40px;
         border-radius: 2px;
         padding: 4px 0;
-        margin-top: 24px;
+
+        @include body-regular;
     }
 
     @media (max-width: 360px) {

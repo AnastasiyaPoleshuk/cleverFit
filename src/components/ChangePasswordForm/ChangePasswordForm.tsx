@@ -3,38 +3,56 @@ import './ChangePasswordForm.scss';
 import { useAppSelector, useAppDispatch } from '@hooks/typed-react-redux-hooks';
 import { useEffect, useState } from 'react';
 import { IChangePasswordRequest } from '../../types/apiTypes';
-import { ChangePasswordThunk } from '@redux/thunks/ChangePasswordThunk';
+import { ChangePasswordThunk } from '@redux/thunk/changePasswordThunks';
 import CONSTANTS from '@utils/constants';
 import { push } from 'redux-first-history';
 
 export const ChangePasswordForm = () => {
     const [isValidPassword, setIsValidPassword] = useState(true);
     const [isPasswordsMatch, setIsVPasswordsMatch] = useState(true);
+    const [changePassword, setChangePassword] = useState({ password: '', confirmPassword: '' });
     const [password, setPassword] = useState('');
-    const { IsChangePasswordSuccess } = useAppSelector((state) => state.user);
-    const { isError } = useAppSelector((state) => state.error);
+    const { isChangePasswordSuccess, isChangePasswordError } = useAppSelector(
+        (state) => state.changePassword,
+    );
+    const router = useAppSelector((state) => state.router);
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        if (IsChangePasswordSuccess) {
+        const previousLocation = router.previousLocations
+            ? router.previousLocations[1].location?.pathname
+            : undefined;
+        if (
+            previousLocation ===
+            `${CONSTANTS.ROUTER__PATH.RESULT.RESULT}${CONSTANTS.ROUTER__PATH.RESULT.ERROR.CHANGE_PASSWORD__PATH}`
+        ) {
+            dispatch(ChangePasswordThunk(changePassword));
+        } else if (previousLocation !== `${CONSTANTS.ROUTER__PATH.AUTH__PATH}/confirm-email`) {
+            dispatch(push(`${CONSTANTS.ROUTER__PATH.AUTH__PATH}`));
+        }
+    }, []);
+
+    useEffect(() => {
+        if (isChangePasswordSuccess) {
             dispatch(
                 push(
-                    `${CONSTANTS.ROUTER__PATH.RESULT}${CONSTANTS.ROUTER__PATH.RESULT.SUCCESS.CHANGE_PASSWORD__PATH}`,
+                    `${CONSTANTS.ROUTER__PATH.RESULT.RESULT}${CONSTANTS.ROUTER__PATH.RESULT.SUCCESS.CHANGE_PASSWORD__PATH}`,
                 ),
             );
         }
-        if (isError && !IsChangePasswordSuccess) {
+        if (isChangePasswordError) {
             dispatch(
                 push(
                     `${CONSTANTS.ROUTER__PATH.RESULT.RESULT}${CONSTANTS.ROUTER__PATH.RESULT.ERROR.CHANGE_PASSWORD__PATH}`,
                 ),
             );
         }
-    }, [IsChangePasswordSuccess]);
+    }, [isChangePasswordSuccess, isChangePasswordError]);
 
     const onFinish = (passwordData: IChangePasswordRequest) => {
         if (isPasswordsMatch) {
             dispatch(ChangePasswordThunk(passwordData));
+            setChangePassword(passwordData);
         }
     };
 
@@ -85,7 +103,7 @@ export const ChangePasswordForm = () => {
                         className='form__input'
                         placeholder='Пароль'
                         onChange={(e) => CheckPasswordsMatch(e.target.value)}
-                        data-test-id='registration-confirm-password'
+                        data-test-id='change-confirm-password'
                     />
                 </Form.Item>
 

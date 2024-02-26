@@ -2,7 +2,7 @@ import { Button, Form, Input } from 'antd';
 import './RegistrationForm.scss';
 import { GooglePlusOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
-import { RegisterUserThunk } from '@redux/thunks/RegisterUserThunk';
+import { RegisterUserThunk } from '../../redux/thunk/userThunks';
 import { useAppDispatch, useAppSelector } from '@hooks/typed-react-redux-hooks';
 import CONSTANTS from '@utils/constants';
 import { push } from 'redux-first-history';
@@ -19,8 +19,28 @@ export const RegistrationForm = () => {
     const [isPasswordsMatch, setIsVPasswordsMatch] = useState(true);
     const [submitButtonDisabled, setSubmitButtonDisabled] = useState(true);
     const [password, setPassword] = useState('');
+    const [registrationData, setRegistrationData] = useState({ email: '', password: '' });
     const { isRegisterSuccess } = useAppSelector((state) => state.user);
+    const router = useAppSelector((state) => state.router);
     const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        const previousLocation = router.previousLocations
+            ? router.previousLocations[1].location?.pathname
+            : undefined;
+
+        if (
+            previousLocation ===
+            `${CONSTANTS.ROUTER__PATH.RESULT.RESULT}${CONSTANTS.ROUTER__PATH.RESULT.ERROR.ERROR__PATH}`
+        ) {
+            dispatch(
+                RegisterUserThunk({
+                    email: registrationData.email,
+                    password: registrationData.password,
+                }),
+            );
+        }
+    }, []);
 
     useEffect(() => {
         if (isRegisterSuccess) {
@@ -34,6 +54,7 @@ export const RegistrationForm = () => {
 
     const onFinish = (registrationData: IRegistrationData) => {
         if (isPasswordsMatch) {
+            setRegistrationData(registrationData);
             dispatch(
                 RegisterUserThunk({
                     email: registrationData.email,
@@ -43,7 +64,7 @@ export const RegistrationForm = () => {
         }
     };
 
-    const onFinishFailed = (errorInfo: any) => {
+    const onFinishFailed = () => {
         setSubmitButtonDisabled(true);
     };
 

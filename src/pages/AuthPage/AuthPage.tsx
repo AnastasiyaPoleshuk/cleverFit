@@ -6,23 +6,26 @@ import CONSTANTS from '@utils/constants';
 import { Loader } from '@components/Loader/Loader';
 import { useAppDispatch, useAppSelector } from '@hooks/typed-react-redux-hooks';
 import { push } from 'redux-first-history';
-import { IsAuthAction, LoginAction } from '@redux/actions/AuthActions';
-import { ILoginResponse } from '../../types/apiTypes';
+import { StatusCodes } from 'http-status-codes';
+import { changeAuthState, setToken } from '@redux/slices/UserSlice';
 
 export const AuthPage = () => {
     const [isLoginForm, setIsLoginForm] = useState(true);
-    const { isLoading } = useAppSelector((state) => state.isLoading);
-    const { isAuth } = useAppSelector((state) => state.user);
+    const { isAuth, isRegisterError, error, isLoading } = useAppSelector((state) => state.user);
     const router = useAppSelector((state) => state.router);
-    const { isError } = useAppSelector((state) => state.error);
-    const { requestError } = useAppSelector((state) => state.error);
     const dispatch = useAppDispatch();
 
     useEffect(() => {
+        if (router.location?.pathname === CONSTANTS.ROUTER__PATH.AUTH__PATH) {
+            setIsLoginForm(true);
+        } else {
+            setIsLoginForm(false);
+        }
+
         const token = localStorage.getItem('jwtToken');
         if (token) {
-            dispatch(LoginAction({ accessToken: token } as ILoginResponse));
-            dispatch(IsAuthAction(true));
+            dispatch(setToken(token));
+            dispatch(changeAuthState(true));
             dispatch(push('/main'));
         }
     }, []);
@@ -34,70 +37,54 @@ export const AuthPage = () => {
     }, [isAuth]);
 
     useEffect(() => {
-        if (isError) {
-            switch (requestError.statusCode) {
-                case 401:
-                    dispatch(
-                        push(
-                            `${CONSTANTS.ROUTER__PATH.RESULT.RESULT}${CONSTANTS.ROUTER__PATH.RESULT.ERROR.LOGIN__PATH}`,
-                        ),
-                    );
-                    break;
-                case 400:
-                    dispatch(
-                        push(
-                            `${CONSTANTS.ROUTER__PATH.RESULT.RESULT}${CONSTANTS.ROUTER__PATH.RESULT.ERROR.ERROR__PATH}`,
-                        ),
-                    );
-                    break;
-                case 409:
-                    dispatch(
-                        push(
-                            `${CONSTANTS.ROUTER__PATH.RESULT.RESULT}${CONSTANTS.ROUTER__PATH.RESULT.ERROR.USER_EXIT__PATH}`,
-                        ),
-                    );
-                    break;
-                case 429:
-                    dispatch(
-                        push(
-                            `${CONSTANTS.ROUTER__PATH.RESULT.RESULT}${CONSTANTS.ROUTER__PATH.RESULT.ERROR.ERROR__PATH}`,
-                        ),
-                    );
-                    break;
-                case 500:
-                    dispatch(
-                        push(
-                            `${CONSTANTS.ROUTER__PATH.RESULT.RESULT}${CONSTANTS.ROUTER__PATH.RESULT.ERROR.ERROR__PATH}`,
-                        ),
-                    );
-                    break;
-
-                default:
-                    break;
-            }
+        if (
+            isRegisterError &&
+            error.statusCode === StatusCodes.CONFLICT &&
+            router.location?.pathname === `${CONSTANTS.ROUTER__PATH.AUTH__PATH}/registration`
+        ) {
+            dispatch(
+                push(
+                    `${CONSTANTS.ROUTER__PATH.RESULT.RESULT}${CONSTANTS.ROUTER__PATH.RESULT.ERROR.USER_EXIT__PATH}`,
+                ),
+            );
+        } else if (
+            isRegisterError &&
+            router.location?.pathname === `${CONSTANTS.ROUTER__PATH.AUTH__PATH}/registration`
+        ) {
+            dispatch(
+                push(
+                    `${CONSTANTS.ROUTER__PATH.RESULT.RESULT}${CONSTANTS.ROUTER__PATH.RESULT.ERROR.ERROR__PATH}`,
+                ),
+            );
         }
-    }, [isError]);
+    }, [isRegisterError]);
 
     return (
         <div className='auth-page'>
             <div className='auth__box'>
-                <img src={logo} alt='logo' className='auth__logo' />
-                <div className='auth__btn-box'>
-                    <NavLink
-                        to={`${CONSTANTS.ROUTER__PATH.AUTH__PATH}`}
-                        className={`auth__btn ${isLoginForm ? ' auth__btn-active' : ''}`}
-                        onClick={() => setIsLoginForm(true)}
-                    >
-                        Вход
-                    </NavLink>
-                    <NavLink
-                        to={`${CONSTANTS.ROUTER__PATH.AUTH__PATH}/registration`}
-                        className={`auth__btn ${!isLoginForm ? ' auth__btn-active' : ''}`}
-                        onClick={() => setIsLoginForm(false)}
-                    >
-                        Регистрация
-                    </NavLink>
-                </div>
+                {(router.location?.pathname === '/auth' ||
+                    router.location?.pathname === '/auth/registration') && (
+                    <>
+                        <img src={logo} alt='logo' className='auth__logo' />
+                        <div className='auth__btn-box'>
+                            <NavLink
+                                to={`${CONSTANTS.ROUTER__PATH.AUTH__PATH}`}
+                                className={`auth__btn ${isLoginForm ? ' auth__btn-active' : ''}`}
+                                onClick={() => setIsLoginForm(true)}
+                            >
+                                Вход
+                            </NavLink>
+                            <NavLink
+                                to={`${CONSTANTS.ROUTER__PATH.AUTH__PATH}/registration`}
+                                className={`auth__btn ${!isLoginForm ? ' auth__btn-active' : ''}`}
+                                onClick={() => setIsLoginForm(false)}
+                            >
+                                Регистрация
+                            </NavLink>
+                        </div>
+                    </>
+                )}
+
                 <Outlet />
             </div>
             {isLoading && <Loader />}

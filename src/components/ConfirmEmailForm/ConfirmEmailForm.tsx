@@ -2,32 +2,36 @@ import { Result } from 'antd';
 import './ConfirmEmailForm.scss';
 import VerificationInput from 'react-verification-input';
 import { useAppDispatch, useAppSelector } from '@hooks/typed-react-redux-hooks';
-import { ConfirmEmailThunk } from '@redux/thunks/ConfirmEmailThunk';
+import { ConfirmEmailThunk } from '@redux/thunk/changePasswordThunks';
 import { useEffect, useState } from 'react';
 import CONSTANTS from '@utils/constants';
 import { push } from 'redux-first-history';
 
-// TODO : разберись с поведением окошек change password. Всего флоу. Творить херню
-// TODO : пересмотри роуты(нету окон result на смену пароля, но сука они отображаютя)
-// TODO : пересмотри статусы ответов в thunk где-то потярялся 201 вместо 200
-// TODO : actions => generic НАДА
-// TODO : ну и конечно redux => redux toolkit
-// TODO : внемательно посмотри верстку!! стили уплывают капец как
-// TODO : разобраться с outlet на странице auth хрень с окошками result
-// TODO : дописать окошки!!! Error в healthcheck и checkEmail
-
 export const ConfirmEmailForm = () => {
     const [formError, setFormError] = useState(false);
-    const { email } = useAppSelector((state) => state.user);
-    const { IsConfirmEmailSuccess } = useAppSelector((state) => state.user);
-    const IsError = useAppSelector((state) => state.error.isError);
+    const [confirmCode, setConfirmCode] = useState('');
+    const { email } = useAppSelector((state) => state.changePassword);
+    const { isConfirmEmailError, isConfirmEmailSuccess } = useAppSelector(
+        (state) => state.changePassword,
+    );
+    const router = useAppSelector((state) => state.router);
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        if (!IsConfirmEmailSuccess && IsError) {
+        const previousLocation = router.previousLocations
+            ? router.previousLocations[1].location?.pathname
+            : undefined;
+        if (previousLocation !== CONSTANTS.ROUTER__PATH.AUTH__PATH) {
+            dispatch(push(`${CONSTANTS.ROUTER__PATH.AUTH__PATH}`));
+        }
+    }, []);
+
+    useEffect(() => {
+        if (isConfirmEmailError) {
+            setConfirmCode('');
             setFormError(true);
         }
-        if (IsConfirmEmailSuccess && !IsError) {
+        if (isConfirmEmailSuccess) {
             setFormError(false);
             dispatch(
                 push(
@@ -35,7 +39,7 @@ export const ConfirmEmailForm = () => {
                 ),
             );
         }
-    }, [IsError]);
+    }, [isConfirmEmailSuccess, isConfirmEmailError]);
 
     const checkCode = (code: string) => {
         dispatch(
@@ -61,12 +65,15 @@ export const ConfirmEmailForm = () => {
                         placeholder=''
                         autoFocus={true}
                         onComplete={(codeString) => checkCode(codeString)}
+                        onChange={(codeString) => setConfirmCode(codeString)}
+                        value={confirmCode}
                         classNames={{
                             character: `verification-input ${
                                 formError ? 'verification-input__error' : ''
                             }`,
+                            characterInactive: 'verification-input__inactive',
                         }}
-                        data-test-id='verification-input'
+                        inputProps={{ ['data-test-id']: 'verification-input' }}
                     />
                     <p className='confirm-email__text'>Не пришло письмо? Проверьте папку Спам.</p>
                 </>

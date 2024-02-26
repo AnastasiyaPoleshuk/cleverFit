@@ -36,7 +36,6 @@
     .result__box {
         background-color: $white-color;
         border-radius: 2px;
-        padding: 64px 32px;
         width: 539px;
         position: absolute;
         left: 50%;
@@ -48,6 +47,10 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
+
+        @media (max-width: 834px) {
+            width: 742px;
+        }
 
         @media (max-width: 360px) {
             width: 300px;

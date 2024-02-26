@@ -4,22 +4,22 @@ import './LoginForm.scss';
 import CONSTANTS from '@utils/constants';
 import { GooglePlusOutlined } from '@ant-design/icons';
 import { IAuthRequest } from '../../types/apiTypes';
-import { LoginUserThunk } from '@redux/thunks/LoginUserThunk';
+import { LoginUserThunk } from '@redux/thunk/userThunks';
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@hooks/typed-react-redux-hooks';
-import { HealthMonitorThunk } from '@redux/thunks/HealthMonitorThunk';
-import { CheckEmailThunk } from '@redux/thunks/CheckEmailThunk';
+import { CheckEmailThunk } from '@redux/thunk/changePasswordThunks';
 import { push } from 'redux-first-history';
+import { StatusCodes } from 'http-status-codes';
 export const LoginForm = () => {
     const [isValidEmail, setIsValidEmail] = useState(true);
     const [isValidPassword, setIsValidPassword] = useState(false);
     const [rememberUser, setRememberUser] = useState(false);
     const [email, setEmail] = useState('');
-    const { token } = useAppSelector((state) => state.user);
-    const { isAuth } = useAppSelector((state) => state.user);
-    const { isCheckEmailSuccess } = useAppSelector((state) => state.user);
-    const { isHealth } = useAppSelector((state) => state.isHealth);
-    const { isError } = useAppSelector((state) => state.error);
+    const { isCheckEmailSuccess, isCheckEmailError, error } = useAppSelector(
+        (state) => state.changePassword,
+    );
+
+    const { isAuth, isError: isErrorLogin, accessToken } = useAppSelector((state) => state.user);
 
     const dispatch = useAppDispatch();
 
@@ -27,26 +27,48 @@ export const LoginForm = () => {
         if (isCheckEmailSuccess) {
             dispatch(push(`${CONSTANTS.ROUTER__PATH.AUTH__PATH}/confirm-email`));
         }
-
-        if (!isCheckEmailSuccess && isError) {
-            //! dispatch(push(`${CONSTANTS.ROUTER__PATH.AUTH__PATH}/confirm-email`));
-        }
     }, [isCheckEmailSuccess]);
 
     useEffect(() => {
-        if (isAuth && rememberUser) {
-            localStorage.setItem('jwtToken', token as string);
+        if (isErrorLogin) {
+            dispatch(
+                push(
+                    `${CONSTANTS.ROUTER__PATH.RESULT.RESULT}${CONSTANTS.ROUTER__PATH.RESULT.ERROR.LOGIN__PATH}`,
+                ),
+            );
+        }
+    }, [isErrorLogin]);
+
+    useEffect(() => {
+        if (
+            isCheckEmailError &&
+            error.statusCode === StatusCodes.NOT_FOUND &&
+            error.message === CONSTANTS.CHECK_EMAIL_ERROR_MESSAGE
+        ) {
+            dispatch(
+                push(
+                    `${CONSTANTS.ROUTER__PATH.RESULT.RESULT}${CONSTANTS.ROUTER__PATH.RESULT.ERROR.CHECK_EMAIL_NO_EXIST__PATH}`,
+                ),
+            );
+        } else if (isCheckEmailError && error.message !== CONSTANTS.CHECK_EMAIL_ERROR_MESSAGE) {
+            dispatch(
+                push(
+                    `${CONSTANTS.ROUTER__PATH.RESULT.RESULT}${CONSTANTS.ROUTER__PATH.RESULT.ERROR.CHECK_EMAIL__PATH}`,
+                ),
+            );
+        }
+    }, [isCheckEmailError]);
+
+    useEffect(() => {
+        if (isAuth) {
+            dispatch(push('/main'));
+
+            rememberUser && localStorage.setItem('jwtToken', accessToken as string);
         }
     }, [isAuth]);
 
-    useEffect(() => {
-        if (isHealth) {
-            dispatch(CheckEmailThunk({ email }));
-        }
-    }, [isHealth]);
-
     const onClickForgotPassword = () => {
-        dispatch(HealthMonitorThunk());
+        isValidEmail && email ? dispatch(CheckEmailThunk({ email })) : null;
     };
 
     const onFinish = (values: IAuthRequest) => {
@@ -65,6 +87,7 @@ export const LoginForm = () => {
     const CheckEmail = (email: string) => {
         if (/([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}/.test(email)) {
             setIsValidEmail(true);
+            setEmail(email);
         } else {
             setIsValidEmail(false);
         }
@@ -93,9 +116,6 @@ export const LoginForm = () => {
                     onChange={(e) => {
                         CheckEmail(e.target.value);
                     }}
-                    onBlur={(e) => {
-                        setEmail(e.target.value);
-                    }}
                 />
             </Form.Item>
 
@@ -115,10 +135,9 @@ export const LoginForm = () => {
                     </Checkbox>
                 </Form.Item>
                 <Button
-                    className='form__item'
+                    className='form__item login-forgot-button'
                     type='link'
                     data-test-id='login-forgot-button'
-                    disabled={isValidEmail ? false : true}
                     onClick={onClickForgotPassword}
                 >
                     Забыли пароль?

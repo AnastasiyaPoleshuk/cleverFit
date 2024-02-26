@@ -7,8 +7,7 @@ import { Footer } from '@components/footer/Footer';
 import { push } from 'redux-first-history';
 import { useAppDispatch, useAppSelector } from '@hooks/typed-react-redux-hooks';
 import CONSTANTS from '@utils/constants';
-import { LoginAction, IsAuthAction } from '@redux/actions/AuthActions';
-import { ILoginResponse } from '../../types/apiTypes';
+import { changeAuthState, setToken } from '@redux/slices/UserSlice';
 
 export const MainPage: React.FC = () => {
     const { isAuth } = useAppSelector((state) => state.user);
@@ -17,8 +16,8 @@ export const MainPage: React.FC = () => {
     useEffect(() => {
         const token = localStorage.getItem('jwtToken');
         if (token) {
-            dispatch(LoginAction({ accessToken: token } as ILoginResponse));
-            dispatch(IsAuthAction(true));
+            dispatch(setToken(token));
+            dispatch(changeAuthState(true));
             dispatch(push('/main'));
         }
     }, []);

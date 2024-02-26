@@ -10,13 +10,17 @@ export const checkEmail = async (request: { email: string }) => {
         return { data, status };
     } catch (error) {
         if (axios.isAxiosError(error)) {
-            return {
-                data: error.response?.data,
-                status: error.response?.status,
-            };
+            const errorString = JSON.stringify({
+                statusCode: error.response?.status,
+                error: error.response?.data.error || error.name,
+                message: error.response?.data.message || error.message,
+            });
+            throw Error(errorString);
         }
 
         const requestError = error as IRequestError;
-        return { data: requestError, status: requestError.statusCode };
+        const errorString = JSON.stringify(requestError);
+
+        throw Error(errorString);
     }
 };

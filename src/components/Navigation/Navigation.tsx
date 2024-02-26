@@ -1,15 +1,5 @@
 import './Navigation.scss';
-import logo from '../../../public/assets/svg/logo.svg';
-
-import {
-    AppstoreOutlined,
-    ContainerOutlined,
-    DesktopOutlined,
-    MailOutlined,
-    MenuFoldOutlined,
-    MenuUnfoldOutlined,
-    PieChartOutlined,
-} from '@ant-design/icons';
+import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Button, Menu } from 'antd';
 import React, { useState } from 'react';
@@ -24,8 +14,7 @@ import { LogoShortIcon } from './Iconscomponents/LogoShortIcon';
 import { NavLink } from 'react-router-dom';
 import CONSTANTS from '@utils/constants';
 import { useAppDispatch } from '@hooks/typed-react-redux-hooks';
-import { LoginAction, IsAuthAction } from '@redux/actions/AuthActions';
-import { ILoginResponse } from '../../types/apiTypes';
+import { changeAuthState, setToken } from '@redux/slices/UserSlice';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -62,8 +51,8 @@ export const Navigation: React.FC = () => {
     };
 
     const logOut = () => {
-        dispatch(LoginAction({ accessToken: '' } as ILoginResponse));
-        dispatch(IsAuthAction(false));
+        dispatch(setToken(''));
+        dispatch(changeAuthState(false));
         localStorage.removeItem('jwtToken');
     };
 
