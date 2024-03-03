@@ -28,7 +28,7 @@ export const CheckEmailError = () => {
 
     return (
         <Result
-            status='500'
+            status={CONSTANTS.RESULT_STATUS_TYPE_500}
             title='Что-то пошло не так'
             subTitle='Произошла ошибка, попробуйте отправить форму ещё раз.'
             extra={

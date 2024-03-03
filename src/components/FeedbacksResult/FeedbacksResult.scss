@@ -1,0 +1,54 @@
+@import '../../App.variables.scss';
+
+.component-padding {
+    padding: 64px 150px;
+
+    @media (max-width: 360px) {
+        padding: 32px 36px;
+    }
+}
+
+.modal-component {
+    border-radius: 2px !important;
+    @media (max-width: 360px) {
+        padding: 0;
+    }
+}
+
+.result-component {
+    padding: 32px 16px;
+
+    @media (max-width: 360px) {
+        padding: 0;
+    }
+}
+
+.result-fail-button {
+    border-radius: 2px;
+    padding: 4px 15px;
+}
+
+.result-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+
+    @media (max-width: 360px) {
+        padding: 4px 15px;
+    }
+}
+
+.button {
+    width: 180px;
+    height: 40px;
+    border-radius: 2px;
+
+    &:first-child {
+        margin-right: 8px;
+    }
+
+    @media (max-width: 360px) {
+        width: 48%;
+    }
+}

@@ -10,8 +10,7 @@ import { push } from 'redux-first-history';
 export const ConfirmEmailForm = () => {
     const [formError, setFormError] = useState(false);
     const [confirmCode, setConfirmCode] = useState('');
-    const { email } = useAppSelector((state) => state.changePassword);
-    const { isConfirmEmailError, isConfirmEmailSuccess } = useAppSelector(
+    const { email, isConfirmEmailError, isConfirmEmailSuccess } = useAppSelector(
         (state) => state.changePassword,
     );
     const router = useAppSelector((state) => state.router);
@@ -57,7 +56,12 @@ export const ConfirmEmailForm = () => {
                     ? 'Неверный код. Введите код для восстановления аккауанта'
                     : 'Введите код для восстановления аккауанта'
             }
-            subTitle={`Мы отправили вам на e-mail ${email} шестизначный код. Введите его в поле ниже.`}
+            subTitle={
+                <span>
+                    Мы отправили вам на e-mail {email ? email : ''} <br /> шестизначный код. Введите
+                    его в поле ниже.
+                </span>
+            }
             extra={
                 <>
                     <VerificationInput

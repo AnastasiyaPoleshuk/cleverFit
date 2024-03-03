@@ -3,6 +3,7 @@ import { createBrowserHistory } from 'history';
 import { configureStore } from '@reduxjs/toolkit';
 import userReducer from './slices/UserSlice';
 import changePasswordReducer from './slices/ChangePasswordSlice';
+import feedbacksReducer from './slices/FeedbacksSlice';
 
 const { createReduxHistory, routerMiddleware, routerReducer } = createReduxHistoryContext({
     history: createBrowserHistory(),
@@ -14,6 +15,7 @@ export const store = configureStore({
         router: routerReducer,
         user: userReducer,
         changePassword: changePasswordReducer,
+        feedbacks: feedbacksReducer,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(routerMiddleware),
 });

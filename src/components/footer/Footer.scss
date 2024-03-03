@@ -18,6 +18,11 @@
 
     .footer__link {
         @include h6;
+
+        outline: none;
+        border: none;
+
+        margin: 0 0 9px 6px;
     }
 
     .footer__download-blok {
@@ -26,7 +31,7 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
-        align-items: center;
+        align-items: flex-start;
         background-color: $white-color;
 
         @media (max-width: 360px) {
@@ -38,15 +43,14 @@
     .download-blok__title {
         @include h6;
         color: $brand-color-light;
-        padding: 12px 0 8px;
+        padding: 12px 0 8px 24px;
     }
 
     .download-blok__subtitle {
-        width: 100%;
         text-align: center;
         @include body-regular;
         color: $gray-color;
-        padding-bottom: 12px;
+        padding: 0 0 12px 24px;
         border-bottom: 1px solid $selected-bg-color-light;
     }
 
@@ -60,7 +64,7 @@
 
     .download-blok__btn {
         padding: 0;
-        width: 120px;
+        width: 100%;
 
         background: none;
         @include body-regular;

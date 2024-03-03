@@ -8,6 +8,7 @@ import { push } from 'redux-first-history';
 import { useAppDispatch, useAppSelector } from '@hooks/typed-react-redux-hooks';
 import CONSTANTS from '@utils/constants';
 import { changeAuthState, setToken } from '@redux/slices/UserSlice';
+import { Button } from 'antd';
 
 export const MainPage: React.FC = () => {
     const { isAuth } = useAppSelector((state) => state.user);
@@ -18,7 +19,7 @@ export const MainPage: React.FC = () => {
         if (token) {
             dispatch(setToken(token));
             dispatch(changeAuthState(true));
-            dispatch(push('/main'));
+            dispatch(push(CONSTANTS.ROUTER__PATH.MAIN__PATH));
         }
     }, []);
 
@@ -26,7 +27,7 @@ export const MainPage: React.FC = () => {
         if (!isAuth) {
             dispatch(push(`${CONSTANTS.ROUTER__PATH.AUTH__PATH}`));
         } else {
-            dispatch(push('/main'));
+            dispatch(push(CONSTANTS.ROUTER__PATH.MAIN__PATH));
         }
     }, [isAuth]);
 
@@ -57,8 +58,8 @@ export const MainPage: React.FC = () => {
                         </ul>
                     </article>
                     <article className='main__article-last'>
-                        CleverFit — это не просто приложение, а твой личный помощник в мире фитнеса.
-                        Не откладывай на завтра — начни тренироваться уже сегодня!
+                        CleverFit — это не просто приложение, а твой личный помощник <br /> в мире
+                        фитнеса. Не откладывай на завтра — начни тренироваться уже сегодня!
                     </article>
                     <div className='main__cards-block'>
                         <div className='card'>
@@ -75,9 +76,9 @@ export const MainPage: React.FC = () => {
                         </div>
                         <div className='card'>
                             <h5 className='card__title'>Заполнить профить</h5>
-                            <NavLink className='card__link' to='/'>
+                            <Button type='link' className='card__link'>
                                 Профиль
-                            </NavLink>
+                            </Button>
                         </div>
                     </div>
                 </div>

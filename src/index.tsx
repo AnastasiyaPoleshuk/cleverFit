@@ -9,6 +9,7 @@ import './index.scss';
 import { App } from './App';
 import { HistoryRouter } from 'redux-first-history/rr6';
 import { HashRouter } from 'react-router-dom';
+import { AppState } from './context/AppContext';
 
 const domNode = document.getElementById('root') as HTMLDivElement;
 const root = createRoot(domNode);
@@ -16,9 +17,11 @@ const root = createRoot(domNode);
 root.render(
     <React.StrictMode>
         <Provider store={store}>
-            <HistoryRouter history={history}>
-                <App />
-            </HistoryRouter>
+            <AppState>
+                <HistoryRouter history={history}>
+                    <App />
+                </HistoryRouter>
+            </AppState>
         </Provider>
     </React.StrictMode>,
 );

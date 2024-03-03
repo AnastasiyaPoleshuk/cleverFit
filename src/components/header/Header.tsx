@@ -10,8 +10,8 @@ export const Header = () => {
             </NavLink>
             <div className='header__info-box'>
                 <p className='header__info-text'>
-                    Приветствуем тебя в CleverFit — приложении, которое поможет тебе добиться своей
-                    мечты!
+                    Приветствуем тебя в CleverFit — приложении,
+                    <br /> которое поможет тебе добиться своей мечты!
                 </p>
 
                 <button className='header__info-settings-btn'>

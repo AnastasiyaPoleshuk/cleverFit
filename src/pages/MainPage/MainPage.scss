@@ -1,11 +1,12 @@
 @import '../../App.variables.scss';
 
 .main-page {
+    width: 100%;
     .main__section {
         background-image: url(../../../public/assets/png/Main\ page_light.png);
         background-repeat: no-repeat;
         background-size: cover;
-        min-height: 100vh;
+        min-height: 87vh;
         padding: 24px 24px 42px;
 
         display: flex;
@@ -15,7 +16,7 @@
         @media (max-width: 360px) {
             padding: 16px 16px 42px;
 
-            width: 360px;
+            width: 344px;
         }
     }
 
@@ -35,10 +36,10 @@
 
     .main__list {
         border-radius: 2px;
-        width: 700px;
+        width: 705px;
         background-color: $white-color;
-        padding: 24px;
-        color: #003a8c;
+        padding: 25px;
+        color: $primary-color-light-9;
         @include h6;
 
         @media (max-width: 834px) {
@@ -64,8 +65,8 @@
         @include h4;
         background-color: $white-color;
         border-radius: 2px;
-        width: 700px;
-        margin: 24px 0;
+        width: 705px;
+        margin: 24px 0 18px 0;
         padding: 24px;
 
         @media (max-width: 834px) {
@@ -119,7 +120,7 @@
 
         &:nth-child(1):before {
             content: url(../../../public/assets/svg/main__workout-icon.svg);
-            left: 60px;
+            left: 66px;
             @media (max-width: 834px) {
                 left: 32px;
             }
@@ -130,7 +131,7 @@
 
         &:nth-child(2):before {
             content: url(../../../public/assets/svg/main__celendar-icon.svg);
-            left: 60px;
+            left: 68px;
             @media (max-width: 834px) {
                 left: 32px;
             }
@@ -141,13 +142,19 @@
 
         &:nth-child(3):before {
             content: url(../../../public/assets/svg/main__profile-icon.svg);
-            left: 70px;
+            left: 80px;
             @media (max-width: 834px) {
                 left: 40px;
             }
 
             @media (max-width: 360px) {
                 left: 114px;
+            }
+        }
+
+        &:last-child {
+            .card__link {
+                margin: 13px 0 13px 30px;
             }
         }
 
@@ -172,15 +179,19 @@
 
     .card__link {
         display: block;
-        margin: 20px 0;
+        margin: 20px 0 20px 15px;
         width: 100%;
         text-align: center;
         @include body-regular;
         color: $brand-color-light;
         transition: 0.3s;
+        outline: none;
+        border: none;
 
         &:hover {
             color: $hover-color-light;
+            border: none;
+            outline: none;
         }
     }
 }

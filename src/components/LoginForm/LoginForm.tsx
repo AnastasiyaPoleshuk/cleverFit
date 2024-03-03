@@ -10,6 +10,7 @@ import { useAppDispatch, useAppSelector } from '@hooks/typed-react-redux-hooks';
 import { CheckEmailThunk } from '@redux/thunk/changePasswordThunks';
 import { push } from 'redux-first-history';
 import { StatusCodes } from 'http-status-codes';
+
 export const LoginForm = () => {
     const [isValidEmail, setIsValidEmail] = useState(true);
     const [isValidPassword, setIsValidPassword] = useState(false);
@@ -18,7 +19,6 @@ export const LoginForm = () => {
     const { isCheckEmailSuccess, isCheckEmailError, error } = useAppSelector(
         (state) => state.changePassword,
     );
-
     const { isAuth, isError: isErrorLogin, accessToken } = useAppSelector((state) => state.user);
 
     const dispatch = useAppDispatch();
@@ -61,11 +61,15 @@ export const LoginForm = () => {
 
     useEffect(() => {
         if (isAuth) {
-            dispatch(push('/main'));
+            dispatch(push(CONSTANTS.ROUTER__PATH.MAIN__PATH));
 
             rememberUser && localStorage.setItem('jwtToken', accessToken as string);
         }
     }, [isAuth]);
+
+    const loginUseGoogle = () => {
+        window.location.href = `${CONSTANTS.URL}auth/google`;
+    };
 
     const onClickForgotPassword = () => {
         isValidEmail && email ? dispatch(CheckEmailThunk({ email })) : null;
@@ -80,8 +84,6 @@ export const LoginForm = () => {
                 }),
             );
         }
-
-        setRememberUser(values.remember as boolean);
     };
 
     const CheckEmail = (email: string) => {
@@ -130,7 +132,13 @@ export const LoginForm = () => {
 
             <div className='form__items-box'>
                 <Form.Item name='remember' valuePropName='checked'>
-                    <Checkbox className='form__item' data-test-id='login-remember'>
+                    <Checkbox
+                        className='form__item'
+                        defaultChecked={rememberUser}
+                        checked={rememberUser}
+                        onClick={() => setRememberUser(!rememberUser)}
+                        data-test-id='login-remember'
+                    >
                         Запомнить меня
                     </Checkbox>
                 </Form.Item>
@@ -154,8 +162,8 @@ export const LoginForm = () => {
                     Войти
                 </Button>
             </Form.Item>
-            <Button className='form__button'>
-                <GooglePlusOutlined />
+            <Button className='form__button' onClick={loginUseGoogle}>
+                <GooglePlusOutlined className='form__button-icon' />
                 Регистрация через Google
             </Button>
         </Form>

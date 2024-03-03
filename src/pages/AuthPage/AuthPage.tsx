@@ -26,13 +26,13 @@ export const AuthPage = () => {
         if (token) {
             dispatch(setToken(token));
             dispatch(changeAuthState(true));
-            dispatch(push('/main'));
+            dispatch(push(CONSTANTS.ROUTER__PATH.MAIN__PATH));
         }
     }, []);
 
     useEffect(() => {
         if (isAuth) {
-            dispatch(push('/main'));
+            dispatch(push(CONSTANTS.ROUTER__PATH.MAIN__PATH));
         }
     }, [isAuth]);
 

@@ -11,10 +11,10 @@ import { WorkoutIcon } from './Iconscomponents/WorkoutIcon';
 import { LogoIcon } from './Iconscomponents/LogoIcon';
 import { ExitIcon } from './Iconscomponents/ExitIcon';
 import { LogoShortIcon } from './Iconscomponents/LogoShortIcon';
-import { NavLink } from 'react-router-dom';
 import CONSTANTS from '@utils/constants';
-import { useAppDispatch } from '@hooks/typed-react-redux-hooks';
+import { useAppDispatch, useAppSelector } from '@hooks/typed-react-redux-hooks';
 import { changeAuthState, setToken } from '@redux/slices/UserSlice';
+import { push } from 'redux-first-history';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -42,8 +42,10 @@ const items: MenuItem[] = [
 ];
 
 export const Navigation: React.FC = () => {
-    const [collapsed, setCollapsed] = useState(false);
+    const [collapsed, setCollapsed] = useState(window.innerWidth <= 360);
     const [width, setIsMobile] = useState(window.innerWidth);
+    const router = useAppSelector((state) => state.router);
+
     const dispatch = useAppDispatch();
 
     const toggleCollapsed = () => {
@@ -51,6 +53,7 @@ export const Navigation: React.FC = () => {
     };
 
     const logOut = () => {
+        dispatch(push(CONSTANTS.ROUTER__PATH.AUTH__PATH));
         dispatch(setToken(''));
         dispatch(changeAuthState(false));
         localStorage.removeItem('jwtToken');
@@ -80,9 +83,13 @@ export const Navigation: React.FC = () => {
                 items={items}
                 className={collapsed ? 'menu__collapsed' : 'menu'}
             ></Menu>
-            <NavLink
-                to={`${CONSTANTS.ROUTER__PATH.AUTH__PATH}`}
-                className='nav__button-exit'
+            <Button
+                type='link'
+                className={`nav__button-exit ${
+                    router.location?.pathname === CONSTANTS.ROUTER__PATH.FEEDBACKS__PATH
+                        ? 'nav__button-exit-feedbacks'
+                        : null
+                }`}
                 onClick={logOut}
             >
                 {collapsed ? (
@@ -93,7 +100,7 @@ export const Navigation: React.FC = () => {
                         <span>Выход</span>
                     </>
                 )}
-            </NavLink>
+            </Button>
         </div>
     );
 };

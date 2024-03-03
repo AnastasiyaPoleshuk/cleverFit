@@ -1,11 +1,29 @@
 import { AndroidFilled, AppleFilled } from '@ant-design/icons';
 import './Footer.scss';
 import { Button } from 'antd';
+import { useAppDispatch, useAppSelector } from '@hooks/typed-react-redux-hooks';
+import { GetFeedbacksThunk } from '@redux/thunk/feedbacksThunk';
+import CONSTANTS from '@utils/constants';
+import { push } from 'redux-first-history';
 
 export const Footer = () => {
+    const { accessToken } = useAppSelector((state) => state.user);
+
+    const dispatch = useAppDispatch();
+
+    const checkFeedback = () => {
+        dispatch(GetFeedbacksThunk(accessToken));
+        dispatch(push(`${CONSTANTS.ROUTER__PATH.FEEDBACKS__PATH}`));
+    };
+
     return (
         <footer className='footer'>
-            <Button type='link' className='footer__link'>
+            <Button
+                type='link'
+                className='footer__link'
+                onClick={checkFeedback}
+                data-test-id='see-reviews'
+            >
                 Смотреть отзывы
             </Button>
 

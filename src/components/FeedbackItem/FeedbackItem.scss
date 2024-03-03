@@ -1,0 +1,79 @@
+@import '../../App.variables.scss';
+
+.feedback-card {
+    border-radius: 2px;
+    padding: 16px;
+    width: 1200px;
+    height: fit-content;
+
+    background-color: $white-color;
+
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+
+    @media (max-width: 360px) {
+        width: 300px;
+        flex-direction: column;
+    }
+
+    .card__info {
+        width: 20%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        @media (max-width: 360px) {
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: flex-start;
+
+            gap: 16px;
+            margin: 0;
+            margin-bottom: 12px;
+        }
+    }
+
+    .card__info-img {
+        margin-right: 80px;
+    }
+
+    .card__info-username {
+        @include h6;
+        width: min-content;
+        margin-top: 12px;
+        text-align: center;
+    }
+
+    .card__rating {
+        width: 80%;
+        box-sizing: border-box;
+        overflow: hidden;
+    }
+
+    .rating-info {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 16px;
+
+        padding-bottom: 12px;
+    }
+
+    .card__date {
+        @include body-small;
+        color: $gray-color-light;
+    }
+
+    .card__info-message {
+        @include body-regular;
+        color: $gray-color;
+        word-break: break-all;
+    }
+}
+
+.anticon-star svg {
+    fill: $gold-color-6;
+}

@@ -1,0 +1,32 @@
+@import '../../App.variables.scss';
+
+.create-feedback {
+    border-radius: 2px;
+    width: 539px;
+    height: 247px;
+
+    .create-feedback__rate {
+        margin-bottom: 16px;
+    }
+
+    .create-feedback__btn {
+        border: 1px;
+        border-radius: 2px;
+        padding: 4px 15px;
+    }
+
+    .create-feeedback__modal-content {
+        border-bottom: 2px solid $selected-bg-color-light;
+        border-top: 2px solid $selected-bg-color-light;
+        padding: 24px 0;
+    }
+}
+
+.ant-modal-wrap {
+    backdrop-filter: blur(10px);
+    background: rgba(121, 156, 212, 0.2);
+}
+
+.ant-modal-content {
+    border-radius: 2px !important;
+}

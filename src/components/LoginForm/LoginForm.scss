@@ -12,6 +12,10 @@
         border: 1px solid var($selected-bg-color-light);
         border-radius: 2px;
         height: 40px;
+
+        & input {
+            height: auto;
+        }
     }
 
     .form__items-box {
@@ -41,6 +45,12 @@
         border-radius: 2px;
 
         @include h6;
+    }
+
+    .form__button-icon {
+        @media (max-width: 360px) {
+            display: none;
+        }
     }
 }
 

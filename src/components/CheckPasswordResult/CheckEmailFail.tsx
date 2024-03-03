@@ -28,7 +28,11 @@ export const CheckEmailFail = () => {
         <Result
             status='error'
             title='Такой e-mail не зарегистрирован'
-            subTitle='Мы не нашли в базе вашего e-mail. Попробуйте войти с другим e-mail.'
+            subTitle={
+                <span>
+                    Мы не нашли в базе вашего e-mail. Попробуйте <br /> войти с другим e-mail.
+                </span>
+            }
             extra={
                 <Button
                     type='primary'
