@@ -27,22 +27,22 @@ const getListData = (
 
         const dt = moment(training.date);
         const trainings = [];
+
         if (value.date() == +dt.format('DD')) {
             const currentTraining = trainingList.find(
                 (listItem) => listItem.name === training.name,
             );
             currentTraining ? trainings.push(currentTraining as IGetTrainingListResponse) : null;
+            return currentTraining;
         }
-
-        return trainings || [];
+        return;
     });
 
-    if (ListData[0]?.length) {
-        return ListData[0];
+    if (ListData?.length) {
+        return ListData.filter(Boolean);
     }
     return [];
 };
-
 const getCurrentDayTrainings = (day: Moment, allTrainingsArr: IGetTrainingsResponse[]) => {
     return allTrainingsArr.filter((item) => moment(item.date).format('DD') === day.format('DD'));
 };
@@ -89,7 +89,7 @@ const getStatus = (key: string) => {
 };
 
 export const CalengarWrapp = ({ trainings }: { trainings: IGetTrainingsResponse[] }) => {
-    const { isGetTrainingListError, isGetTrainingListSuccess, trainingList, trainingInfo } =
+    const { isCreateTrainingSuccess, isGetTrainingListSuccess, trainingList, trainingInfo } =
         useAppSelector((state) => state.calendar);
     const [cellData, setCellData] = useState(<></>);
     const [isOpenModal, setIsOpenModal] = useState(false);
@@ -101,6 +101,15 @@ export const CalengarWrapp = ({ trainings }: { trainings: IGetTrainingsResponse[
     useEffect(() => {
         isGetTrainingListSuccess ? setIsModalRender(true) : null;
     }, [isGetTrainingListSuccess]);
+
+    useEffect(() => {
+        if (isCreateTrainingSuccess) {
+            getCurrentDayTrainings(selectedDate, trainingInfo);
+            const modalBodyData = dateCellRender(selectedDate, true);
+
+            setCellData(modalBodyData as JSX.Element);
+        }
+    }, [trainingInfo]);
 
     const getModalPosition = (dateElement: Element | null) => {
         if (!dateElement) return { top: '0', left: '0' };

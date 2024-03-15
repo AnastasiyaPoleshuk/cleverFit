@@ -142,6 +142,7 @@ const calendarSlice = createSlice({
                 state.isCreateTrainingSuccess = true;
 
                 state.training = action.payload.data;
+                state.trainingInfo.push(state.training);
             })
             .addCase(CreateTrainingThunk.rejected, (state, action) => {
                 state.isLoading = false;
