@@ -64,7 +64,12 @@ export const CalendarCreateTrainingModal = ({
     }, [exercisesData]);
 
     const options = trainingsListData.map((item) => {
-        if (trainingsData.some((trainingObj) => trainingObj.name !== item.name)) {
+        if (!trainingsData.length) {
+            return {
+                value: item.name,
+                label: item.name,
+            };
+        } else if (trainingsData.some((trainingObj) => trainingObj.name !== item.name)) {
             return {
                 value: item.name,
                 label: item.name,
