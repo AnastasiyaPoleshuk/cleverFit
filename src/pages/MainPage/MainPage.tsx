@@ -90,6 +90,7 @@ export const MainPage: React.FC = () => {
                                 type='link'
                                 className='card__link'
                                 onClick={() => dispatch(GetTrainingInfoThunk(accessToken))}
+                                data-test-id='menu-button-calendar'
                             >
                                 Календарь
                             </Button>

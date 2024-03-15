@@ -103,13 +103,17 @@ export const CalendarCreateTrainingModal = ({
         <Modal
             title={
                 <header className='modal__header'>
-                    <ArrowLeftOutlined onClick={close} />
+                    <ArrowLeftOutlined
+                        onClick={close}
+                        data-test-id='modal-exercise-training-button-close'
+                    />
                     <Select
                         defaultValue='Выбор типа тренировки'
                         style={{ width: '92%' }}
                         variant={'borderless'}
                         onChange={addTraining}
                         options={options}
+                        data-test-id='modal-create-exercise-select'
                     />
                 </header>
             }
@@ -130,6 +134,7 @@ export const CalendarCreateTrainingModal = ({
             }}
             width={CONSTANTS.CREATE_TRAINING_MODAL_WIDTH}
             className='modal__title'
+            data-test-id='modal-create-exercise'
             footer={
                 <>
                     <Divider />

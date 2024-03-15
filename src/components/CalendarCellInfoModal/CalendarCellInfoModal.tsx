@@ -7,6 +7,7 @@ import { CalendarCreateTrainingModal } from './CalendarCreateTrainingModal';
 import { AppContext } from '../../context/AppContext';
 import { push } from 'redux-first-history';
 import { IGetTrainingsResponse } from '../../types/apiTypes';
+import { CloseOutlined } from '@ant-design/icons';
 
 interface IProps {
     date: string;
@@ -43,6 +44,8 @@ export const CalendarCellInfoModal = ({
                 style={{ position: 'absolute', ...modalPosition }}
                 width={CONSTANTS.CREATE_TRAINING_MODAL_WIDTH}
                 className='modal__title'
+                data-test-id='menu-button-calendar'
+                closeIcon={<CloseOutlined data-test-id='modal-create-training-button-close' />}
                 footer={
                     <>
                         <Divider />

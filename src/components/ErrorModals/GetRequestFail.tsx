@@ -20,7 +20,13 @@ export const GetRequestFail = ({
     };
 
     return (
-        <Modal open={isOpen} className='modal-component' closeIcon={null} footer={null}>
+        <Modal
+            open={isOpen}
+            className='modal-component'
+            data-test-id='modal-no-review'
+            closeIcon={null}
+            footer={null}
+        >
             <Result
                 status={CONSTANTS.RESULT_STATUS_TYPE_500}
                 title='Что-то пошло не так'

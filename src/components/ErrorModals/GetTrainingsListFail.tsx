@@ -4,16 +4,19 @@ import { Modal } from 'antd';
 export const GetTrainingsListFail = (setStateOfRepeatRequest: (state: boolean) => void) => {
     Modal.error({
         title: (
-            <h2 className='get-trainings-list-fail__modal-title'>
+            <h2
+                className='get-trainings-list-fail__modal-title'
+                data-test-id='modal-error-user-training-title'
+            >
                 При открытии данных произошла ошибка
             </h2>
         ),
-        content: 'Попробуйте ещё раз',
+        content: <span data-test-id='modal-error-user-training-subtitle'>Попробуйте ещё раз</span>,
         centered: true,
         closable: true,
-        closeIcon: <CloseOutlined />,
+        closeIcon: <CloseOutlined data-test-id='modal-error-user-training-button-close' />,
         icon: <CloseCircleOutlined color='#2f54eb' style={{ color: '#2f54eb' }} />,
-        okText: 'Обновить',
+        okText: <span data-test-id='modal-error-user-training-button'>Обновить</span>,
         onOk: () => {
             setStateOfRepeatRequest(true);
         },

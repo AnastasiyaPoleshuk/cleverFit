@@ -176,7 +176,7 @@ export const CalengarWrapp = ({ trainings }: { trainings: IGetTrainingsResponse[
             return (
                 <ul className='events'>
                     {listData.length
-                        ? listData.map((item) => (
+                        ? listData.map((item, index) => (
                               <li key={item.key} className='trainings__list-item'>
                                   <Badge
                                       color={getStatus(item.key) as BadgeProps['color']}
@@ -187,6 +187,7 @@ export const CalengarWrapp = ({ trainings }: { trainings: IGetTrainingsResponse[
                                       <EditOutlined
                                           style={{ color: '#2f54eb' }}
                                           onClick={() => openModal(CONSTANTS.DRAWER)}
+                                          data-test-id={`modal-update-training-edit-button${index}`}
                                       />
                                   ) : (
                                       ''

@@ -86,7 +86,13 @@ export const AddExercisesDrawer = ({
             onClose={closeDrawer}
             open={isOpen}
             closable={false}
-            extra={<CloseOutlined onClick={closeDrawer} style={{ color: '#8c8c8c' }} />}
+            extra={
+                <CloseOutlined
+                    onClick={closeDrawer}
+                    style={{ color: '#8c8c8c' }}
+                    data-test-id='modal-drawer-right-button-close'
+                />
+            }
         >
             <article className='drawer__body_info'>
                 <div>
@@ -103,7 +109,7 @@ export const AddExercisesDrawer = ({
                 className='add-exercises__form'
             >
                 <Form.List name='exercises' initialValue={currentTrainingExercises}>
-                    {(fields, { add, remove }) => (
+                    {(fields, { add, remove }, index) => (
                         <>
                             {fields.map(({ key, name, ...restField }) => (
                                 <Space
@@ -121,6 +127,7 @@ export const AddExercisesDrawer = ({
                                             type='text'
                                             placeholder='Упражнение'
                                             className='form-input__exercise'
+                                            data-test-id={`modal-drawer-right-input-exercise${index}`}
                                         />
                                     </Form.Item>
                                     <div className='form-item__blok'>
@@ -139,6 +146,7 @@ export const AddExercisesDrawer = ({
                                                 addonBefore='+'
                                                 placeholder='1'
                                                 className='form-item__input'
+                                                data-test-id={`modal-drawer-right-input-approach${index}`}
                                             />
                                         </Form.Item>
                                         <Form.Item
@@ -150,6 +158,7 @@ export const AddExercisesDrawer = ({
                                             <InputNumber
                                                 placeholder='0'
                                                 className='form-item__input'
+                                                data-test-id={`modal-drawer-right-input-weight${index}`}
                                             />
                                         </Form.Item>
                                         <Form.Item
@@ -161,6 +170,7 @@ export const AddExercisesDrawer = ({
                                             <InputNumber
                                                 placeholder='3'
                                                 className='form-item__input'
+                                                data-test-id={`modal-drawer-right-input-quantity${index}`}
                                             />
                                         </Form.Item>
                                     </div>
