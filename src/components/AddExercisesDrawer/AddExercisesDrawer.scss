@@ -1,0 +1,94 @@
+@import '../../App.variables.scss';
+
+.drawer__header {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    &_title {
+        @include h4;
+        margin-left: 6px;
+    }
+}
+
+.drawer__body_info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    @include body-medium;
+    color: $gray-color;
+}
+
+.add-exercises__form {
+    padding: 24px 32px;
+}
+
+.form-input__exercise {
+    width: 100%;
+    display: block;
+    height: 24px;
+}
+
+.form-item__blok:last-child {
+    display: flex;
+    justify-content: space-between;
+}
+
+.form-item {
+    margin: 0;
+
+    &:nth-child(1) .form-item__input {
+        width: 98px;
+    }
+
+    &:nth-child(2) .form-item__input {
+        width: 67px;
+        margin: 0 14px 0 32px;
+        position: relative;
+
+        &::before {
+            content: 'X';
+            position: absolute;
+            top: 5px;
+            right: -12px;
+            color: $gray-color;
+        }
+    }
+
+    &:nth-child(3) .form-item__input {
+        width: 86px;
+    }
+}
+
+.form-item__input {
+    display: inline-block;
+    border-radius: 2px !important;
+}
+
+.form-item__input-label {
+    display: inline-block;
+    padding: 8px;
+    background: rgb(0, 0, 0, 0.06);
+    @include body-small;
+
+    &:nth-child(1) {
+        width: 82px;
+    }
+
+    &:nth-child(2) {
+        width: 49px;
+        margin: 0 14px 0 32px;
+    }
+}
+
+.add-form-item__btn {
+    text-align: left;
+    background-color: rgb(0, 0, 0, 0.06);
+    border-radius: 0 0 6px 6px;
+    height: 40px;
+}
+
+.ant-space-item {
+    width: 100%;
+}

@@ -2,25 +2,41 @@ import React, { useEffect } from 'react';
 
 import './MainPage.scss';
 import { Header } from '@components/header/Header';
-import { NavLink } from 'react-router-dom';
 import { Footer } from '@components/footer/Footer';
 import { push } from 'redux-first-history';
 import { useAppDispatch, useAppSelector } from '@hooks/typed-react-redux-hooks';
 import CONSTANTS from '@utils/constants';
 import { changeAuthState, setToken } from '@redux/slices/UserSlice';
 import { Button } from 'antd';
+import { GetTrainingInfoThunk, GetTrainingListThunk } from '@redux/thunk/TrainingThunk';
+import {
+    changeGetTrainingInfoErrorState,
+    changeGetTrainingInfoSuccessState,
+} from '@redux/slices/CalendarSlice';
+import { cleanError } from '@redux/slices/CalendarSlice';
 
 export const MainPage: React.FC = () => {
-    const { isAuth } = useAppSelector((state) => state.user);
+    const { isAuth, accessToken } = useAppSelector((state) => state.user);
+    const { isGetTrainingInfoSuccess } = useAppSelector((state) => state.calendar);
     const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        if (isGetTrainingInfoSuccess) {
+            dispatch(push(`${CONSTANTS.ROUTER__PATH.CALENDAR__PATH}`));
+            dispatch(GetTrainingListThunk());
+        }
+    }, [isGetTrainingInfoSuccess]);
 
     useEffect(() => {
         const token = localStorage.getItem('jwtToken');
         if (token) {
             dispatch(setToken(token));
             dispatch(changeAuthState(true));
-            dispatch(push(CONSTANTS.ROUTER__PATH.MAIN__PATH));
         }
+
+        dispatch(changeGetTrainingInfoErrorState(false));
+        dispatch(changeGetTrainingInfoSuccessState(false));
+        dispatch(cleanError());
     }, []);
 
     useEffect(() => {
@@ -64,15 +80,19 @@ export const MainPage: React.FC = () => {
                     <div className='main__cards-block'>
                         <div className='card'>
                             <h5 className='card__title'>Расписать тренировки</h5>
-                            <NavLink className='card__link' to='/'>
+                            <Button type='link' className='card__link'>
                                 Тренировки
-                            </NavLink>
+                            </Button>
                         </div>
                         <div className='card'>
                             <h5 className='card__title'>Назначить календарь</h5>
-                            <NavLink className='card__link' to='/'>
+                            <Button
+                                type='link'
+                                className='card__link'
+                                onClick={() => dispatch(GetTrainingInfoThunk(accessToken))}
+                            >
                                 Календарь
-                            </NavLink>
+                            </Button>
                         </div>
                         <div className='card'>
                             <h5 className='card__title'>Заполнить профить</h5>

@@ -19,6 +19,7 @@ import { CheckEmailError } from '@components/CheckPasswordResult/CheckEmailError
 import { ChangePasswordFail } from '@components/CheckPasswordResult/ChangePasswordFail';
 import { ChangePasswordSuccess } from '@components/CheckPasswordResult/ChangePasswordSuccess';
 import { FeedBackPage } from '@pages/FeedBackPage/FeedBackPage';
+import { CalendarPage } from '@pages/CalendarPage/CalendarPage';
 
 export const App = () => {
     return (
@@ -27,6 +28,7 @@ export const App = () => {
                 <Route path='/' element={<Navigate to={CONSTANTS.ROUTER__PATH.MAIN__PATH} />} />
                 <Route path={CONSTANTS.ROUTER__PATH.MAIN__PATH} element={<MainPage />} />
                 <Route path={CONSTANTS.ROUTER__PATH.FEEDBACKS__PATH} element={<FeedBackPage />} />
+                <Route path={CONSTANTS.ROUTER__PATH.CALENDAR__PATH} element={<CalendarPage />} />
             </Route>
             <Route path={`${CONSTANTS.ROUTER__PATH.AUTH__PATH}`} element={<AuthPage />}>
                 <Route index element={<LoginForm />} />

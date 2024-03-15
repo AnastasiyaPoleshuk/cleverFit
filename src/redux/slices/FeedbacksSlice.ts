@@ -39,6 +39,9 @@ const feedbacksSlice = createSlice({
         changeCreateFeedbackErrorState: (state, action: PayloadAction<boolean>) => {
             state.isCreateFeedbackError = action.payload;
         },
+        changeCreateFeedbackSuccessState: (state, action: PayloadAction<boolean>) => {
+            state.isCreateFeedbackSuccess = action.payload;
+        },
         cleanError: (state) => {
             state.error = {
                 statusCode: 0,
@@ -90,6 +93,7 @@ export const {
     changeCreateFeedbackErrorState,
     cleanError,
     changeGetFeedbacksSuccessState,
+    changeCreateFeedbackSuccessState,
 } = feedbacksSlice.actions;
 
 export default feedbacksSlice.reducer;

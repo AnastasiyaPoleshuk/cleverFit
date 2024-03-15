@@ -5,6 +5,7 @@ const CONSTANTS = {
         MAIN__PATH: '/main',
         CHANGE_PASSWORD__PATH: '/change-password',
         FEEDBACKS__PATH: '/feedbacks',
+        CALENDAR__PATH: '/calendar',
         RESULT: {
             RESULT: '/result',
             SUCCESS: {
@@ -27,9 +28,33 @@ const CONSTANTS = {
     CREATE_FEEDBACK_MODAL: 'create feedback modal window',
     CREATE_FEEDBACK_SUCCESS_MODAL: 'create feedback success modal window',
     CREATE_FEEDBACK_ERROR_MODAL: 'create feedback error modal window',
+    ADD_TRAINING_MODAL: 'create or update training',
+    DRAWER: 'open drawer',
     DEFAULT__FEEDBACKS_COUNT: 4,
     DATE_FORMAT: 'DD.MM.YYYY',
     RESULT_STATUS_TYPE_500: '500',
+    RATE_DEFAULT_VALUE: 3,
+    SIDEBAR_KEYS: {
+        CALENDAR: 'calendar',
+        TRAININGS: 'trainings',
+        ACHIEVEMENTS: 'achivements',
+        PROFILE: 'profile',
+    },
+    TRAINING_TYPE: {
+        LEGS: 'legs',
+        HANDS: 'hands',
+        STRENGTH: 'strength',
+        BACK: 'back',
+        CHEST: 'chest',
+    },
+    TRAINING_COLOR: {
+        LEGS: 'red',
+        HANDS: 'cyan',
+        STRENGTH: 'yellow',
+        BACK: 'gold',
+        CHEST: 'green',
+    },
+    CREATE_TRAINING_MODAL_WIDTH: 270,
 };
 
 export default CONSTANTS;

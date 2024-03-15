@@ -15,7 +15,7 @@ export const CreateFeedbackModal = ({
 }: {
     isCreateFeedbackModalOpen: boolean;
 }) => {
-    const [rating, setRating] = useState(0);
+    const [rating, setRating] = useState(CONSTANTS.RATE_DEFAULT_VALUE);
     const [message, setMessage] = useState('');
     const { closeModal } = useContext(AppContext);
     const dispatch = useAppDispatch();
@@ -30,6 +30,12 @@ export const CreateFeedbackModal = ({
             title='Ваш отзыв'
             open={isCreateFeedbackModalOpen}
             onCancel={() => closeModal(CONSTANTS.CREATE_FEEDBACK_MODAL)}
+            styles={{
+                mask: {
+                    backdropFilter: 'blur(10px)',
+                    background: 'rgba(121, 156, 212, 0.2)',
+                },
+            }}
             footer={
                 <Button
                     type='primary'
@@ -42,13 +48,13 @@ export const CreateFeedbackModal = ({
             }
             className='create-feedback'
         >
-            <div className='create-feeedback__modal-content'>
+            <div className='create-feedback__modal-content'>
                 <Rate
                     className='create-feedback__rate'
                     character={({ value, index }) => {
                         return value && index < value ? <StarFilled /> : <StarOutlined />;
                     }}
-                    defaultValue={3}
+                    defaultValue={CONSTANTS.RATE_DEFAULT_VALUE}
                     onChange={(value) => setRating(value)}
                 />
                 <TextArea autoSize={{ minRows: 2 }} onChange={(e) => setMessage(e.target.value)} />

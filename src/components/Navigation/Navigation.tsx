@@ -15,6 +15,8 @@ import CONSTANTS from '@utils/constants';
 import { useAppDispatch, useAppSelector } from '@hooks/typed-react-redux-hooks';
 import { changeAuthState, setToken } from '@redux/slices/UserSlice';
 import { push } from 'redux-first-history';
+import { MenuInfo } from 'rc-menu/lib/interface';
+import { GetTrainingInfoThunk } from '@redux/thunk/TrainingThunk';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -35,21 +37,32 @@ function getItem(
 }
 
 const items: MenuItem[] = [
-    getItem('Календарь', '1', <CalendarIcon />),
-    getItem('Тренировки', '2', <WorkoutIcon />),
-    getItem('Достижения', '3', <AchievementsIcon />),
-    getItem('Профиль', '4', <ProfileIcon />),
+    getItem('Календарь', CONSTANTS.SIDEBAR_KEYS.CALENDAR, <CalendarIcon />),
+    getItem('Тренировки', CONSTANTS.SIDEBAR_KEYS.TRAININGS, <WorkoutIcon />),
+    getItem('Достижения', CONSTANTS.SIDEBAR_KEYS.ACHIEVEMENTS, <AchievementsIcon />),
+    getItem('Профиль', CONSTANTS.SIDEBAR_KEYS.PROFILE, <ProfileIcon />),
 ];
 
 export const Navigation: React.FC = () => {
     const [collapsed, setCollapsed] = useState(window.innerWidth <= 360);
     const [width, setIsMobile] = useState(window.innerWidth);
-    const router = useAppSelector((state) => state.router);
+    const { accessToken } = useAppSelector((state) => state.user);
 
     const dispatch = useAppDispatch();
 
     const toggleCollapsed = () => {
         setCollapsed(!collapsed);
+    };
+
+    const onMenuClicked = (item: MenuInfo) => {
+        switch (item.key) {
+            case CONSTANTS.SIDEBAR_KEYS.CALENDAR:
+                dispatch(GetTrainingInfoThunk(accessToken));
+                break;
+
+            default:
+                break;
+        }
     };
 
     const logOut = () => {
@@ -70,7 +83,10 @@ export const Navigation: React.FC = () => {
                     data-test-id={width <= 360 ? 'sider-switch-mobile' : 'sider-switch'}
                 >
                     {collapsed ? (
-                        <MenuUnfoldOutlined className='menu-btn__icon' style={{ color: '#8C8C8C' }} />
+                        <MenuUnfoldOutlined
+                            className='menu-btn__icon'
+                            style={{ color: '#8C8C8C' }}
+                        />
                     ) : (
                         <MenuFoldOutlined className='menu-btn__icon' style={{ color: '#8C8C8C' }} />
                     )}
@@ -83,23 +99,16 @@ export const Navigation: React.FC = () => {
                     inlineCollapsed={collapsed}
                     items={items}
                     className={collapsed ? 'menu__collapsed' : 'menu'}
+                    onClick={(item) => onMenuClicked(item)}
                 />
             </div>
-            <Button
-                type='link'
-                className={`nav__button-exit ${
-                    router.location?.pathname === CONSTANTS.ROUTER__PATH.FEEDBACKS__PATH
-                        ? 'nav__button-exit-feedbacks'
-                        : null
-                }`}
-                onClick={logOut}
-            >
+            <Button type='link' className='nav__button-exit' onClick={logOut}>
                 {collapsed ? (
                     <ExitIcon />
                 ) : (
                     <>
                         <ExitIcon />
-                        <span>Выход</span>
+                        <span className='nav__button-exit_text'>Выход</span>
                     </>
                 )}
             </Button>

@@ -1,0 +1,27 @@
+@import '../../App.variables.scss';
+
+.button__primary_save-btn,
+.button__primary {
+    border-radius: 2px;
+    width: 100%;
+}
+
+.button__primary_save-btn:hover {
+    outline: none;
+    border: none;
+}
+
+.modal__no-content_text {
+    color: $gray-color;
+    margin-bottom: 16px;
+}
+
+.ant-divider-horizontal {
+    margin: 12px 0;
+}
+
+.training__item {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}

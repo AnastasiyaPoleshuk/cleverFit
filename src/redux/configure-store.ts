@@ -4,6 +4,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import userReducer from './slices/UserSlice';
 import changePasswordReducer from './slices/ChangePasswordSlice';
 import feedbacksReducer from './slices/FeedbacksSlice';
+import calendarReducer from './slices/CalendarSlice';
 
 const { createReduxHistory, routerMiddleware, routerReducer } = createReduxHistoryContext({
     history: createBrowserHistory(),
@@ -16,6 +17,7 @@ export const store = configureStore({
         user: userReducer,
         changePassword: changePasswordReducer,
         feedbacks: feedbacksReducer,
+        calendar: calendarReducer,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(routerMiddleware),
 });

@@ -1,27 +1,35 @@
 @import '../../App.variables.scss';
 
 .main-page {
-    width: 100%;
-    .main__section {
-        background-image: url(../../../public/assets/png/Main\ page_light.png);
-        background-repeat: no-repeat;
-        background-size: cover;
-        min-height: 87vh;
-        padding: 24px 24px 42px;
+    background-image: url(../../../public/assets/png/Main\ page_light.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 
+    @media (max-width: 360px) {
+        padding: 0 0 42px 0;
+    }
+
+    .main__section {
+        height: 100%;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        flex: 1;
+
+        padding: 24px 24px 42px;
 
         @media (max-width: 360px) {
-            padding: 16px 16px 42px;
+            padding: 24px 0 0 0;
 
-            width: 344px;
+            align-items: center;
         }
     }
 
     .main__articles-wrapp {
-        @media (max-width: 834px) {
+        @media (max-width: 833px) {
             width: 520px;
         }
 
@@ -42,7 +50,7 @@
         color: $primary-color-light-9;
         @include h6;
 
-        @media (max-width: 834px) {
+        @media (max-width: 833px) {
             width: 520px;
         }
 
@@ -69,7 +77,7 @@
         margin: 24px 0 18px 0;
         padding: 24px;
 
-        @media (max-width: 834px) {
+        @media (max-width: 833px) {
             width: 520px;
         }
 
@@ -86,7 +94,7 @@
         justify-content: space-between;
         align-items: center;
 
-        @media (max-width: 834px) {
+        @media (max-width: 833px) {
             width: 570px;
             gap: 16px;
         }
@@ -121,7 +129,7 @@
         &:nth-child(1):before {
             content: url(../../../public/assets/svg/main__workout-icon.svg);
             left: 66px;
-            @media (max-width: 834px) {
+            @media (max-width: 833px) {
                 left: 32px;
             }
             @media (max-width: 360px) {
@@ -132,7 +140,7 @@
         &:nth-child(2):before {
             content: url(../../../public/assets/svg/main__celendar-icon.svg);
             left: 68px;
-            @media (max-width: 834px) {
+            @media (max-width: 833px) {
                 left: 32px;
             }
             @media (max-width: 360px) {
@@ -143,18 +151,12 @@
         &:nth-child(3):before {
             content: url(../../../public/assets/svg/main__profile-icon.svg);
             left: 80px;
-            @media (max-width: 834px) {
+            @media (max-width: 833px) {
                 left: 40px;
             }
 
             @media (max-width: 360px) {
                 left: 114px;
-            }
-        }
-
-        &:last-child {
-            .card__link {
-                margin: 13px 0 13px 30px;
             }
         }
 
@@ -172,14 +174,15 @@
         border-bottom: 1px solid $selected-bg-color-light;
         @include h6;
 
-        @media (max-width: 834px) {
+        @media (max-width: 833px) {
             margin: 0 24px;
         }
     }
 
     .card__link {
         display: block;
-        margin: 20px 0 20px 15px;
+        margin: 13px 0 13px 30px;
+
         width: 100%;
         text-align: center;
         @include body-regular;

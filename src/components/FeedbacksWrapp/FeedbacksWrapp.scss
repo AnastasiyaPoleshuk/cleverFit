@@ -11,6 +11,10 @@
     gap: 130px;
     padding: 78px 24px 24px 24px;
 
+    @media (max-width: 833px) {
+        width: 93%;
+    }
+
     @media (max-width: 360px) {
         width: 330px;
         padding: 78px 16px 24px 16px;
@@ -20,7 +24,6 @@
 
     .feedbacks {
         width: 100%;
-        height: 500px;
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
@@ -30,16 +33,18 @@
 
         box-sizing: border-box;
         @media (max-width: 360px) {
-            height: 600px;
+            height: auto;
         }
     }
 
     .collapsed {
         overflow-y: hidden;
+        height: fit-content;
     }
 
     .not-collapsed {
         overflow-y: scroll;
+        height: 500px;
     }
 
     &__btn-wrapp {
@@ -56,11 +61,13 @@
     }
 
     &__btn {
-        border: 1px solid $brand-color-light;
         border-radius: 2px;
         padding: 4px 15px;
+        width: 142px;
+        height: 40px;
 
         &:first-child {
+            border: 1px solid $brand-color-light;
             @media (max-width: 360px) {
                 margin-bottom: 16px;
                 padding: 11px 15px;
@@ -68,9 +75,20 @@
             }
         }
 
-        &:last-child:hover {
+        &:last-child {
             border: none;
             outline: none;
+            @include h6;
+
+            &:hover {
+                border: none;
+                outline: none;
+            }
+
+            &:active {
+                border: none;
+                outline: none;
+            }
         }
 
         @media (max-width: 360px) {

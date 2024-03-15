@@ -1,0 +1,44 @@
+@import '../../App.variables.scss';
+
+.calendar__wrapp {
+    background: $primary-color-light-1;
+    padding: 12px 24px 92px 24px;
+}
+
+.calendar {
+    background: $primary-color-light-1;
+}
+
+.trainings__list-item {
+    display: flex;
+    justify-content: space-between;
+}
+
+.ant-picker-body {
+    background: aliceblue;
+}
+
+.ant-picker-cell-inner {
+    margin: 10px;
+    background: $white-color;
+}
+
+.events {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.events .ant-badge-status {
+    width: 100%;
+    overflow: hidden;
+    font-size: 12px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.notes-month {
+    font-size: 28px;
+    text-align: center;
+}
+.notes-month section {
+    font-size: 28px;
+}

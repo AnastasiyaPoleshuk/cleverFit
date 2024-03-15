@@ -1,10 +1,11 @@
 @import '../../App.variables.scss';
 
 .nav__menu {
-    height: 100vh;
-    flex-grow: 1;
+    flex: 0 0 205px;
+
     transition: 0.3s;
     position: relative;
+
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -16,6 +17,7 @@
         background: $white-color;
         left: -32px;
         top: 0;
+        bottom: 0;
     }
 
     & img {
@@ -93,24 +95,22 @@
 
     .nav__button-exit {
         display: flex;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: center;
         gap: 25px;
-        align-self: flex-start;
-        padding-left: 0;
-        margin-bottom: 16px;
-        color: $text-color;
 
-        border: none;
+        width: 100%;
+        border-top: 1px solid $selected-bg-color-light;
+        border-radius: 0;
+        align-self: flex-start;
+        padding-left: 16px;
+
+        color: $text-color;
         outline: none;
 
-        @media (max-width: 834px) {
-            margin-top: 680px;
-        }
-
-        @media (max-width: 360px) {
-            margin-top: 980px;
-            margin-left: -50px;
+        &:hover {
+            border: none;
+            outline: none;
         }
 
         & img {
@@ -120,63 +120,42 @@
             }
         }
 
-        & span {
+        &_text {
             margin-left: 25px;
-        }
-
-        &-feedbacks {
-            //margin: 510px 0px 0 -119px;
-
-            @media (max-width: 360px) {
-                margin: 435px 0px 0 -46px;
-            }
         }
     }
 }
 
 .not-collapsed__menu {
-    width: 205px;
+    flex: 0 0 205px;
 
     @media (max-width: 360px) {
         left: 0px;
-        width: 105px;
+        flex: 0 0 105px;
         position: absolute;
     }
 }
 
 .collapsed__menu {
-    width: 65px;
+    flex: 0 0 65px;
 
     @media (max-width: 360px) {
         width: 1px;
         left: 0px;
     }
-
-    .nav__button-exit {
-        margin-left: 24px;
-        @media (max-width: 360px) {
-            margin: 435px 0px 0 -46px;
-        }
-
-        &-feedbacks {
-            @media (max-width: 360px) {
-                margin: 435px 0px 0 -46px;
-            }
-        }
-    }
 }
 
 .menu {
-    width: 205px;
+    flex: 0 0 205px;
     height: 240px;
     transition: 0.3;
 
     @media (max-width: 360px) {
-        width: 105px;
+        flex: 0 0 105px;
     }
 
     &__collapsed {
-        width: 65px;
+        flex: 0 0 65px;
 
         @media (max-width: 360px) {
             width: 1px;
@@ -189,7 +168,7 @@
             }
 
             & img {
-                margin: 0 20px 0px 0px !important;
+                margin: 0 35px 0px 0px !important;
                 @media (max-width: 360px) {
                     display: none;
                     margin: 0;
@@ -197,7 +176,7 @@
             }
 
             &-selected img {
-                margin: 0 20px 0px 0px !important;
+                margin: 0 35px 0px 0px !important;
                 @media (max-width: 360px) {
                     display: none;
                     margin: 0;

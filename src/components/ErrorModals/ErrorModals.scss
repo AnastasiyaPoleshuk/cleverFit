@@ -1,0 +1,17 @@
+@import '../../App.variables.scss';
+
+.modal-component {
+    border-radius: 2px !important;
+    @media (max-width: 360px) {
+        padding: 0;
+    }
+}
+
+.result-fail-button {
+    border-radius: 2px;
+    padding: 4px 15px;
+}
+
+.get-trainings-list-fail__modal-title {
+    width: 77%;
+}

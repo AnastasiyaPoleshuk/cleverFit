@@ -1,3 +1,5 @@
+import { ITrainingExercises, ITrainingParameters } from './storeTypes';
+
 export interface IAuthRequest {
     email: string;
     password: string;
@@ -46,4 +48,26 @@ export interface IFeedbacks {
 export interface ICreateFeedbackRequest {
     message: string;
     rating: number;
+}
+
+export interface IGetTrainingsResponse {
+    _id: string;
+    name: string;
+    date: string;
+    isImplementation: boolean;
+    userId: string;
+    parameters: ITrainingParameters;
+    exercises: ITrainingExercises[];
+}
+
+export interface IGetTrainingListResponse {
+    name: string;
+    key: string;
+}
+
+export interface ICreateTrainingRequest {
+    name: string;
+    date: string;
+    isImplementation: boolean;
+    exercises: ITrainingExercises[];
 }

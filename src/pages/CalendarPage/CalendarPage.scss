@@ -1,6 +1,6 @@
 @import '../../App.variables.scss';
 
-.feedback {
+.calendar__page {
     background-image: url(../../../public/assets/png/Main\ page_light.png);
     background-repeat: no-repeat;
     background-size: cover;
@@ -8,15 +8,12 @@
 
     display: flex;
     flex-direction: column;
+    padding-bottom: 42px;
 
     position: relative;
     overflow: hidden;
-}
 
-.feedbacks__wrapp {
-    justify-content: flex-start;
-}
-
-.no-feedbacks {
-    justify-content: center;
+    @media (max-width: 360px) {
+        padding: 0 0 42px 0;
+    }
 }

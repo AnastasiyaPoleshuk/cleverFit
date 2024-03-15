@@ -3,17 +3,18 @@
 .feedback-card {
     border-radius: 2px;
     padding: 16px;
-    width: 1200px;
+    width: 98%;
     height: fit-content;
 
     background-color: $white-color;
+    box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.15);
 
     display: flex;
     justify-content: flex-start;
     align-items: flex-start;
 
     @media (max-width: 360px) {
-        width: 300px;
+        width: 90%;
         flex-direction: column;
     }
 
@@ -25,10 +26,15 @@
         justify-content: center;
         align-items: center;
 
+        @media (max-width: 833px) {
+            margin-right: 24px;
+        }
+
         @media (max-width: 360px) {
+            width: 100%;
             flex-direction: row;
             justify-content: flex-start;
-            align-items: flex-start;
+            align-items: center;
 
             gap: 16px;
             margin: 0;
@@ -48,9 +54,13 @@
     }
 
     .card__rating {
-        width: 80%;
+        width: 100%;
         box-sizing: border-box;
         overflow: hidden;
+
+        @media (max-width: 360px) {
+            overflow: visible;
+        }
     }
 
     .rating-info {

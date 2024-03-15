@@ -1,21 +1,25 @@
 @import './App.variables.scss';
 
 .app {
-    width: 1440px;
-    height: 100%;
     display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    flex: 1 1 auto;
-    box-sizing: border-box;
+    min-height: 100vh;
+    width: 1440px;
 
-    @media (max-width: 834px) {
-        width: 834px;
+    position: relative;
+
+    @media (min-width: 1440px) {
+        width: 1400px;
+    }
+
+    @media (max-width: 1024px) {
+        width: 1000px;
+    }
+
+    @media (max-width: 833px) {
+        width: 833px;
     }
 
     @media (max-width: 360px) {
         width: 360px;
-        position: relative;
-        align-items: center;
     }
 }

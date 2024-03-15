@@ -1,6 +1,9 @@
 # CleverFIT
 
-## Инструкция к спринту №3 https://docs.google.com/document/d/1aVHB_suV1ozIWJK-L7avlFtow9yVetVY/edit?usp=sharing&ouid=107087056934021538327&rtpof=true&sd=true
+## Инструкция к спринту №4 https://docs.google.com/document/d/1xojqpmhGZOsrwH977xSxUjzDtKDt7t6sRdUBfv5JI7c/edit?usp=sharing
+
+## Сыылка на проект Figma: https://www.figma.com/file/8FGrAaiG3waYxeRHNuskHB/maraphon-2024?type=design&node-id=3-11940&mode=design 
+## password: MARAPHON_frontend_2024
 
 ## Установка Node.js, npm, nvm, Yarn
 
