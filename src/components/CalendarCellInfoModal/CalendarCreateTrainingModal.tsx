@@ -61,31 +61,20 @@ export const CalendarCreateTrainingModal = ({
         }
     }, [exercisesData]);
 
-    // const options = trainingsListData.map((item) => {
-    //     if (!trainingsData.length) {
-    //         return {
-    //             value: item.name,
-    //             label: item.name,
-    //         };
-    //     } else if (trainingsData.some((trainingObj) => trainingObj.name !== item.name)) {
-    //         return {
-    //             value: item.name,
-    //             label: item.name,
-    //         };
-    //     }
-    //     return [];
-    // });
     const options = (
         trainingsListData: IGetTrainingListResponse[],
         trainingsData: IGetTrainingsResponse[],
     ) => {
         const namesSet = new Set(trainingsData.map((obj) => obj.name));
 
-        // Фильтрация первого массива, удаляем объекты с именами, которые есть в множестве имен второго массива
         const filteredArr = trainingsListData.filter((obj) => !namesSet.has(obj.name));
-        console.log(filteredArr, trainingsData);
 
-        return filteredArr;
+        return filteredArr.map((item) => {
+            return {
+                label: item.name,
+                value: item.name,
+            };
+        });
     };
 
     const close = () => {
