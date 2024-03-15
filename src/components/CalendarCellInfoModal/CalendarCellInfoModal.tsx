@@ -29,10 +29,6 @@ export const CalendarCellInfoModal = ({
     const { isAddTrainingModalOpen, openModal, closeModal } = useContext(AppContext);
     const dispatch = useAppDispatch();
 
-    useEffect(() => {
-        console.log(trainingsData);
-    }, []);
-
     const redirect = () => {
         dispatch(push(CONSTANTS.ROUTER__PATH.MAIN__PATH));
     };
@@ -42,7 +38,6 @@ export const CalendarCellInfoModal = ({
             <Modal
                 title={`Тренировки на ${date}`}
                 mask={false}
-                maskClosable={false}
                 open={isModalOpen}
                 onCancel={() => setOpen(false)}
                 style={{ position: 'absolute', ...modalPosition }}

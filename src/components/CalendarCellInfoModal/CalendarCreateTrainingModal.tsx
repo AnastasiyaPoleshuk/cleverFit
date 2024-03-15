@@ -44,21 +44,19 @@ export const CalendarCreateTrainingModal = ({
 
     useEffect(() => {
         if (exercisesData.length) {
-            exercisesData.map((exercise) => {
-                setExercises((state) => {
-                    return [
-                        ...state,
-                        <div className='training__item'>
-                            <span>{exercise.name}</span>
+            setExercises(
+                exercisesData.map((exercise) => (
+                    <div className='training__item'>
+                        <span>{exercise.name}</span>
 
-                            <EditOutlined
-                                style={{ color: '#2f54eb' }}
-                                onClick={() => openModal(CONSTANTS.DRAWER)}
-                            />
-                        </div>,
-                    ];
-                });
-            });
+                        <EditOutlined
+                            style={{ color: '#2f54eb' }}
+                            onClick={() => openModal(CONSTANTS.DRAWER)}
+                        />
+                    </div>
+                )),
+            );
+
             setSaveButtonDisabled(false);
         }
     }, [exercisesData]);
