@@ -16,16 +16,8 @@ interface IProps {
     trainingsData: IGetTrainingsResponse[];
     modalPosition: { left: string; top: string };
     closeModal: (type: string) => void;
+    openInfoModal: (data: boolean) => void;
 }
-
-const getTimePeriod = (time: string) => {
-    console.log(moment(time, 'DD.MM.YYYY') > moment(), moment(time, 'DD.MM.YYYY'), moment());
-
-    if (moment(time, 'DD.MM.YYYY') > moment()) {
-        return false;
-    }
-    return true;
-};
 
 export const CalendarCreateTrainingModal = ({
     date,
@@ -34,29 +26,42 @@ export const CalendarCreateTrainingModal = ({
     trainingsData,
     modalPosition,
     closeModal,
+    openInfoModal,
 }: IProps) => {
+    const {
+        openModal,
+        updateAddExercisesData,
+        saveExercisesData,
+        exercisesData,
+        currentExerciseName,
+        addExercisesData,
+    } = useContext(AppContext);
     const [exercises, setExercises] = useState<JSX.Element[]>([]);
     const [saveButtonDisabled, setSaveButtonDisabled] = useState(true);
+    // const [disabled, setDisabled] = useState(exercisesData.length ? false : true);
     const [disabled, setDisabled] = useState(true);
-    const { openModal, updateAddExercisesData, saveExercisesData, exercisesData, currentExerciseName, addExercisesData } =
-        useContext(AppContext);
-    const [selectedExerciseName, setSelectedExerciseName] = useState(currentExerciseName);
+
+    const [selectedExerciseName, setSelectedExerciseName] = useState('');
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        setSelectedExerciseName(currentExerciseName);
-        updateAddExercisesData({name:currentExerciseName, date: date});
-    }, [currentExerciseName]);
+        setSelectedExerciseName(
+            currentExerciseName ? currentExerciseName : 'Выбор типа тренировки',
+        );
+        setDisabled(currentExerciseName ? false : true);
 
+        updateAddExercisesData({ name: currentExerciseName, date: date });
+    }, [currentExerciseName]);
 
     useEffect(() => {
         if (exercisesData.length) {
             setExercises(
-                exercisesData.map((exercise) => (
+                exercisesData.map((exercise, index) => (
                     <div className='training__item'>
                         <span>{exercise.name}</span>
 
                         <EditOutlined
+                            data-test-id={`modal-update-training-edit-button${index}`}
                             style={{ color: '#2f54eb' }}
                             onClick={() => openModal(CONSTANTS.DRAWER)}
                         />
@@ -65,8 +70,7 @@ export const CalendarCreateTrainingModal = ({
             );
 
             setSaveButtonDisabled(false);
-        }
-        else{
+        } else {
             setExercises([]);
         }
     }, [exercisesData]);
@@ -77,7 +81,9 @@ export const CalendarCreateTrainingModal = ({
     ) => {
         const namesSet = new Set(trainingsData.map((obj) => obj.name));
 
-        const filteredArr = trainingsListData.filter((obj) => !namesSet.has(obj.name) || obj.name === currentExerciseName);
+        const filteredArr = trainingsListData.filter(
+            (obj) => !namesSet.has(obj.name) || obj.name === currentExerciseName,
+        );
 
         return filteredArr.map((item) => {
             return {
@@ -88,7 +94,9 @@ export const CalendarCreateTrainingModal = ({
     };
 
     const close = () => {
-        // saveExercisesData([]);
+        setSelectedExerciseName('Выбор типа тренировки');
+        setDisabled(exercisesData.length ? false : true);
+        openInfoModal(true);
         closeModal(CONSTANTS.ADD_TRAINING_MODAL);
     };
 
@@ -98,13 +106,13 @@ export const CalendarCreateTrainingModal = ({
             name: value,
             date,
         });
-        const trainingExercises =  trainingsData.find((training)=>(training.name == value));
+        const trainingExercises = trainingsData.find((training) => training.name == value);
         saveExercisesData(trainingExercises?.exercises || []);
         setSelectedExerciseName(value);
     };
 
     const saveTraining = () => {
-        const id = trainingsData.find((training)=>training.name == addExercisesData.name)?._id;
+        const id = trainingsData.find((training) => training.name == addExercisesData.name)?._id;
         const request = {
             _id: id,
             name: addExercisesData.name,
@@ -113,10 +121,9 @@ export const CalendarCreateTrainingModal = ({
             exercises: exercisesData,
         };
 
-        if (request._id){
+        if (request._id) {
             dispatch(UpdateTrainingThunk(request));
-        }
-        else{
+        } else {
             dispatch(CreateTrainingThunk(request));
         }
         close();
@@ -131,8 +138,8 @@ export const CalendarCreateTrainingModal = ({
                         data-test-id='modal-exercise-training-button-close'
                     />
                     <Select
-                        defaultValue = 'Выбор типа тренировки'
-                        value = {selectedExerciseName}
+                        defaultValue={selectedExerciseName}
+                        value={selectedExerciseName}
                         style={{ width: '92%' }}
                         variant={'borderless'}
                         onChange={addTraining}
@@ -144,6 +151,7 @@ export const CalendarCreateTrainingModal = ({
             mask={false}
             maskClosable={false}
             open={isModalOpen}
+            destroyOnClose={true}
             closable={false}
             onCancel={close}
             style={{ position: 'absolute', ...modalPosition }}

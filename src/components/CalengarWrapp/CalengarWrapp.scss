@@ -7,6 +7,10 @@
 
 .calendar {
     background: $primary-color-light-1;
+
+    @media (max-width: 360px) {
+        background: $white-color;
+    }
 }
 
 .trainings__list-item {
@@ -16,6 +20,10 @@
 
 .ant-picker-body {
     background: aliceblue;
+
+    @media (max-width: 360px) {
+        background: $white-color;
+    }
 }
 
 .ant-picker-cell-inner {

@@ -4,12 +4,12 @@ import { Modal } from 'antd';
 export const GetTrainingsListFail = (setStateOfRepeatRequest: (state: boolean) => void) => {
     Modal.error({
         title: (
-            <h2
+            <span
                 className='get-trainings-list-fail__modal-title'
                 data-test-id='modal-error-user-training-title'
             >
                 При открытии данных произошла ошибка
-            </h2>
+            </span>
         ),
         content: <span data-test-id='modal-error-user-training-subtitle'>Попробуйте ещё раз</span>,
         centered: true,

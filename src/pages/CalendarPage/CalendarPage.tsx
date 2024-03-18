@@ -4,7 +4,7 @@ import './CalendarPage.scss';
 import { CalengarWrapp } from '@components/CalengarWrapp/CalengarWrapp';
 import { useAppDispatch, useAppSelector } from '@hooks/typed-react-redux-hooks';
 import { setToken, changeAuthState } from '@redux/slices/UserSlice';
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import CONSTANTS from '@utils/constants';
 import { push } from 'redux-first-history';
 import { GetTrainingInfoThunk, GetTrainingListThunk } from '@redux/thunk/TrainingThunk';
@@ -22,12 +22,6 @@ export const CalendarPage = () => {
     );
     const dispatch = useAppDispatch();
 
-    const callModalWindow = useCallback(() => {
-        if (isGetTrainingListError) {
-            GetTrainingsListFail(setStateOfRepeatRequest);
-        }
-    }, [isGetTrainingListError]);
-
     useEffect(() => {
         const token = localStorage.getItem('jwtToken');
         if (token) {
@@ -44,7 +38,7 @@ export const CalendarPage = () => {
 
     useEffect(() => {
         if (isRepeatRequestNeeded) {
-            changeGetTrainingListErrorState(false);
+            dispatch(changeGetTrainingListErrorState(false));
             dispatch(GetTrainingListThunk());
             setStateOfRepeatRequest(false);
         }
@@ -59,7 +53,9 @@ export const CalendarPage = () => {
     }, [isAuth]);
 
     useEffect(() => {
-        callModalWindow();
+        if (isGetTrainingListError) {
+            GetTrainingsListFail(setStateOfRepeatRequest);
+        }
     }, [isGetTrainingListError]);
 
     return (

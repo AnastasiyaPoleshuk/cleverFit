@@ -1,11 +1,10 @@
-import { Badge, BadgeProps, Button, Drawer, Form, Input, InputNumber, Space } from 'antd';
+import { Badge, BadgeProps, Button, Checkbox, Drawer, Form, Input, InputNumber, Space } from 'antd';
 import './AddExercisesDrawer.scss';
 import { CloseOutlined, PlusOutlined } from '@ant-design/icons';
 import CONSTANTS from '@utils/constants';
 import { ITrainingExercises } from '../../types/storeTypes';
 import { useContext, useEffect, useState } from 'react';
 import { AppContext } from '../../context/AppContext';
-import { IGetTrainingsResponse } from '../../types/apiTypes';
 
 export interface IExercises {
     approaches?: number;
@@ -23,41 +22,44 @@ interface IProps {
     onClose: (type: string) => void;
     trainingType: string;
     trainingName: string;
-    trainingData: IGetTrainingsResponse[];
     date: string;
 }
+
+const defaultFormListValue = [
+    { approaches: undefined, name: '', replays: undefined, weight: undefined },
+];
 
 export const AddExercisesDrawer = ({
     isOpen,
     onClose,
     trainingType,
     trainingName,
-    trainingData,
     date,
 }: IProps) => {
-    const [currentTrainingExercises, setCurrentTrainingExercises] = useState(
-        trainingData.find((item) => item.name === trainingName)?.exercises,
-    );
     const { saveExercisesData, exercisesData } = useContext(AppContext);
     const [exerciseFields, setExerciseFields] = useState<IExercises[]>(exercisesData);
-/*
+    const [isImplementation, setIsImplementation] = useState(false);
+
     useEffect(() => {
-        setCurrentTrainingExercises(exercisesData)
         setExerciseFields(exercisesData);
     }, [exercisesData]);
-*/
+
     const onValuesChange = (changedValues: IExercises, allValues: IFormValues) => {
         if (allValues.exercises.length) {
-            const exercises = allValues.exercises.map((item) => {
-                if (item.name) {
-                    return {
-                        name: item.name,
-                        replays: item.replays || 1,
-                        weight: item.weight || 0,
-                        approaches: item.approaches || 1,
-                        isImplementation: false,
-                    };
-                }
+            const filteredExercises = allValues.exercises.filter((item) => {
+                return item?.name?.length > 0;
+            });
+
+            const exercises = filteredExercises.map((item) => {
+                const exerciseNameCheck = item ? item.name : null;
+                console.log(item, exerciseNameCheck, !!exerciseNameCheck);
+                return {
+                    name: item.name,
+                    replays: item.replays || 1,
+                    weight: item.weight || 0,
+                    approaches: item.approaches || 1,
+                    isImplementation,
+                };
             });
 
             exercises.length ? setExerciseFields(exercises as ITrainingExercises[]) : null;
@@ -66,6 +68,7 @@ export const AddExercisesDrawer = ({
 
     const closeDrawer = () => {
         exerciseFields.length ? saveExercisesData(exerciseFields as ITrainingExercises[]) : null;
+        setExerciseFields([]);
 
         onClose(CONSTANTS.DRAWER);
     };
@@ -82,13 +85,18 @@ export const AddExercisesDrawer = ({
                     <h4 className='drawer__header_title'>Добавление упражнений</h4>
                 </span>
             }
-            mask={false}
-            styles={{ header: { borderBottom: 'none' }, body: { padding: '0 24px 24px 24px' } }}
+            styles={{
+                header: { borderBottom: 'none' },
+                body: { padding: '0 24px 24px 24px' },
+                mask: { background: 'transparent' },
+            }}
             width={408}
             placement='right'
             onClose={closeDrawer}
             open={isOpen}
             closable={false}
+            destroyOnClose={true}
+            data-test-id='modal-drawer-right'
             extra={
                 <CloseOutlined
                     onClick={closeDrawer}
@@ -111,10 +119,13 @@ export const AddExercisesDrawer = ({
                 autoComplete='off'
                 className='add-exercises__form'
             >
-                <Form.List name='exercises' initialValue={currentTrainingExercises}>
-                    {(fields, { add, remove }, index) => (
+                <Form.List
+                    name='exercises'
+                    initialValue={exercisesData.length ? exerciseFields : defaultFormListValue}
+                >
+                    {(fields, { add, remove }) => (
                         <>
-                            {fields.map(({ key, name, ...restField }) => (
+                            {fields.map(({ key, name, ...restField }, index) => (
                                 <Space
                                     key={key}
                                     style={{ display: 'flex', flexWrap: 'wrap', marginBottom: 8 }}
@@ -131,6 +142,15 @@ export const AddExercisesDrawer = ({
                                             placeholder='Упражнение'
                                             className='form-input__exercise'
                                             data-test-id={`modal-drawer-right-input-exercise${index}`}
+                                            addonAfter={
+                                                <Checkbox
+                                                    style={{ height: '24px !important' }}
+                                                    onChange={() =>
+                                                        setIsImplementation(!isImplementation)
+                                                    }
+                                                    data-test-id={`modal-drawer-right-checkbox-exercise${index}`}
+                                                />
+                                            }
                                         />
                                     </Form.Item>
                                     <div className='form-item__blok'>
@@ -187,7 +207,7 @@ export const AddExercisesDrawer = ({
                                     icon={<PlusOutlined />}
                                     className='add-form-item__btn'
                                 >
-                                    Добавить еще
+                                    Добавить ещё
                                 </Button>
                             </Form.Item>
                         </>

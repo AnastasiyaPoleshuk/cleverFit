@@ -15,13 +15,11 @@ const domNode = document.getElementById('root') as HTMLDivElement;
 const root = createRoot(domNode);
 
 root.render(
-    <React.StrictMode>
-        <Provider store={store}>
-            <AppState>
-                <HistoryRouter history={history}>
-                    <App />
-                </HistoryRouter>
-            </AppState>
-        </Provider>
-    </React.StrictMode>,
+    <Provider store={store}>
+        <AppState>
+            <HistoryRouter history={history}>
+                <App />
+            </HistoryRouter>
+        </AppState>
+    </Provider>,
 );

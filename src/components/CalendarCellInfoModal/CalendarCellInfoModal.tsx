@@ -1,13 +1,13 @@
 import { Button, Divider, Modal } from 'antd';
 import './CalendarCellInfoModal.scss';
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import CONSTANTS from '@utils/constants';
 import { useAppDispatch, useAppSelector } from '../../hooks/index';
 import { CalendarCreateTrainingModal } from './CalendarCreateTrainingModal';
 import { AppContext } from '../../context/AppContext';
-import { push } from 'redux-first-history';
 import { IGetTrainingsResponse } from '../../types/apiTypes';
 import { CloseOutlined } from '@ant-design/icons';
+import moment from 'moment';
 
 interface IProps {
     date: string;
@@ -29,11 +29,37 @@ export const CalendarCellInfoModal = ({
     setOpen,
 }: IProps) => {
     const { trainingList } = useAppSelector((state) => state.calendar);
-    const { isAddTrainingModalOpen, saveExercisesData, saveCurrentExerciseName,openModal, closeModal } = useContext(AppContext);
-    const dispatch = useAppDispatch();
+    const {
+        isAddTrainingModalOpen,
+        saveExercisesData,
+        saveCurrentExerciseName,
+        openModal,
+        closeModal,
+    } = useContext(AppContext);
 
-    const redirect = () => {
-        dispatch(push(CONSTANTS.ROUTER__PATH.MAIN__PATH));
+    const setButtonText = () => {
+        if (trainingsData.length && moment(date, 'DD.MM.YYYY') > moment()) {
+            return 'Добавить тренировку';
+        } else {
+            return 'Создать тренировку';
+        }
+    };
+
+    const buttonDisabledCheck = () => {
+        if (trainingsData.length === trainingList.length) {
+            return true;
+        }
+        if (isAddTrainingDisabled) {
+            return true;
+        }
+        return false;
+    };
+
+    const openCreateTrainingModal = () => {
+        saveExercisesData([]);
+        saveCurrentExerciseName('');
+        openModal(CONSTANTS.ADD_TRAINING_MODAL);
+        setOpen(false);
     };
 
     return (
@@ -45,8 +71,9 @@ export const CalendarCellInfoModal = ({
                 onCancel={() => setOpen(false)}
                 style={{ position: 'absolute', ...modalPosition }}
                 width={CONSTANTS.CREATE_TRAINING_MODAL_WIDTH}
+                destroyOnClose={true}
                 className='modal__title'
-                data-test-id='menu-button-calendar'
+                data-test-id='modal-create-training'
                 closeIcon={<CloseOutlined data-test-id='modal-create-training-button-close' />}
                 footer={
                     <>
@@ -54,16 +81,12 @@ export const CalendarCellInfoModal = ({
                         <Button
                             type='primary'
                             className='button__primary'
-                            disabled={trainingsData.length === trainingList.length || isAddTrainingDisabled}
-                            //? onClick={() => CreateTrainingFail(redirect)}
+                            disabled={buttonDisabledCheck()}
                             onClick={() => {
-                                saveExercisesData([]);
-                                saveCurrentExerciseName('');
-                                openModal(CONSTANTS.ADD_TRAINING_MODAL)}}
+                                openCreateTrainingModal();
+                            }}
                         >
-                            {trainingsData.length > 0
-                                ? 'Добавить Тренировку'
-                                : 'Создать Тренировку'}
+                            {setButtonText()}
                         </Button>
                     </>
                 }
@@ -77,6 +100,7 @@ export const CalendarCellInfoModal = ({
                 trainingsData={trainingsData}
                 modalPosition={modalPosition}
                 closeModal={closeModal}
+                openInfoModal={setOpen}
             />
         </>
     );

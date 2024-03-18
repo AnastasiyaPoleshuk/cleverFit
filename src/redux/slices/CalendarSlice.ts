@@ -160,7 +160,9 @@ const calendarSlice = createSlice({
                 state.isUpdateTrainingSuccess = true;
 
                 state.training = action.payload.data;
-                const index =  state.trainingInfo.findIndex((obj)=>obj._id == action.payload.data._id);
+                const index = state.trainingInfo.findIndex(
+                    (obj) => obj._id == action.payload.data._id,
+                );
                 state.trainingInfo[index] = action.payload.data;
             })
             .addCase(UpdateTrainingThunk.rejected, (state, action) => {
