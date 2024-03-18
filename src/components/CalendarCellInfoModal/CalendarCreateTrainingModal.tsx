@@ -7,7 +7,7 @@ import { IGetTrainingListResponse, IGetTrainingsResponse } from '../../types/api
 import { AppContext } from '../../context/AppContext';
 import moment from 'moment';
 import { useAppDispatch } from '@hooks/typed-react-redux-hooks';
-import { CreateTrainingThunk } from '@redux/thunk/TrainingThunk';
+import { CreateTrainingThunk, UpdateTrainingThunk } from '@redux/thunk/TrainingThunk';
 
 interface IProps {
     date: string;
@@ -38,9 +38,16 @@ export const CalendarCreateTrainingModal = ({
     const [exercises, setExercises] = useState<JSX.Element[]>([]);
     const [saveButtonDisabled, setSaveButtonDisabled] = useState(true);
     const [disabled, setDisabled] = useState(true);
-    const { openModal, updateAddExercisesData, exercisesData, addExercisesData } =
+    const { openModal, updateAddExercisesData, saveExercisesData, exercisesData, currentExerciseName, addExercisesData } =
         useContext(AppContext);
+    const [selectedExerciseName, setSelectedExerciseName] = useState(currentExerciseName);
     const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        setSelectedExerciseName(currentExerciseName);
+        updateAddExercisesData({name:currentExerciseName, date: date});
+    }, [currentExerciseName]);
+
 
     useEffect(() => {
         if (exercisesData.length) {
@@ -59,6 +66,9 @@ export const CalendarCreateTrainingModal = ({
 
             setSaveButtonDisabled(false);
         }
+        else{
+            setExercises([]);
+        }
     }, [exercisesData]);
 
     const options = (
@@ -67,7 +77,7 @@ export const CalendarCreateTrainingModal = ({
     ) => {
         const namesSet = new Set(trainingsData.map((obj) => obj.name));
 
-        const filteredArr = trainingsListData.filter((obj) => !namesSet.has(obj.name));
+        const filteredArr = trainingsListData.filter((obj) => !namesSet.has(obj.name) || obj.name === currentExerciseName);
 
         return filteredArr.map((item) => {
             return {
@@ -78,6 +88,7 @@ export const CalendarCreateTrainingModal = ({
     };
 
     const close = () => {
+        // saveExercisesData([]);
         closeModal(CONSTANTS.ADD_TRAINING_MODAL);
     };
 
@@ -87,17 +98,27 @@ export const CalendarCreateTrainingModal = ({
             name: value,
             date,
         });
+        const trainingExercises =  trainingsData.find((training)=>(training.name == value));
+        saveExercisesData(trainingExercises?.exercises || []);
+        setSelectedExerciseName(value);
     };
 
     const saveTraining = () => {
+        const id = trainingsData.find((training)=>training.name == addExercisesData.name)?._id;
         const request = {
+            _id: id,
             name: addExercisesData.name,
             date: moment(date, 'DD.MM.YYYY').format('YYYY-MM-DDThh:mm:ss.ms'),
-            isImplementation: false,
+            isImplementation: moment(date, 'DD.MM.YYYY') < moment(),
             exercises: exercisesData,
         };
 
-        dispatch(CreateTrainingThunk(request));
+        if (request._id){
+            dispatch(UpdateTrainingThunk(request));
+        }
+        else{
+            dispatch(CreateTrainingThunk(request));
+        }
         close();
     };
 
@@ -110,7 +131,8 @@ export const CalendarCreateTrainingModal = ({
                         data-test-id='modal-exercise-training-button-close'
                     />
                     <Select
-                        defaultValue='Выбор типа тренировки'
+                        defaultValue = 'Выбор типа тренировки'
+                        value = {selectedExerciseName}
                         style={{ width: '92%' }}
                         variant={'borderless'}
                         onChange={addTraining}

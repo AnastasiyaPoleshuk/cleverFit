@@ -17,11 +17,13 @@ export interface IAppContext {
         name: string;
         date: string;
     };
+    currentExerciseName: string;
     openModal: (type: string) => void;
     closeModal: (type: string) => void;
     setStateOfRepeatRequest: (state: boolean) => void;
     updateAddExercisesData: (data: { name: string; date: string }) => void;
     saveExercisesData: (exercisesData: ITrainingExercises[]) => void;
+    saveCurrentExerciseName: (exerciseNam: string) => void;
 }
 
 export const AppContext = createContext<IAppContext>({
@@ -37,11 +39,13 @@ export const AppContext = createContext<IAppContext>({
         name: '',
         date: '',
     },
+    currentExerciseName: '',
     openModal: () => {},
     closeModal: () => {},
     setStateOfRepeatRequest: () => {},
     updateAddExercisesData: () => {},
     saveExercisesData: () => {},
+    saveCurrentExerciseName: () => {},
 });
 
 export const AppState = ({ children }: { children: React.ReactNode }) => {
@@ -56,6 +60,7 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
         name: '',
         date: '',
     });
+    const [currentExerciseName, setCurrentExerciseName] = useState('');
     const [exercisesData, setExercisesData] = useState<ITrainingExercises[]>([]);
 
     const openModal = (type: string) => {
@@ -118,6 +123,10 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
         setAddExercisesData(data);
     };
 
+    const saveCurrentExerciseName = (name: string) =>{
+        setCurrentExerciseName(name);
+    }
+
     const contextValue = useMemo(
         () => ({
             isFeedbacksFailModalOpen,
@@ -128,12 +137,14 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
             isAddTrainingModalOpen,
             addExercisesData,
             exercisesData,
+            currentExerciseName,
             isDrawerOpen,
             openModal,
             closeModal,
             setStateOfRepeatRequest,
             updateAddExercisesData,
             saveExercisesData,
+            saveCurrentExerciseName,
         }),
         [
             isFeedbacksFailModalOpen,
@@ -145,6 +156,7 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
             addExercisesData,
             isDrawerOpen,
             exercisesData,
+            currentExerciseName
         ],
     );
 

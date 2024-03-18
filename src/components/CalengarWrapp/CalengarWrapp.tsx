@@ -96,7 +96,7 @@ export const CalengarWrapp = ({ trainings }: { trainings: IGetTrainingsResponse[
     const [isModalRender, setIsModalRender] = useState(false);
     const [modalPosition, setModalPosition] = useState({ top: '0', left: '0' });
     const [selectedDate, setSelectedDate] = useState<Moment>(moment());
-    const { addExercisesData, isDrawerOpen, closeModal, openModal } = useContext(AppContext);
+    const { addExercisesData, isDrawerOpen, saveExercisesData, saveCurrentExerciseName, closeModal, openModal } = useContext(AppContext);
 
     useEffect(() => {
         isGetTrainingListSuccess ? setIsModalRender(true) : null;
@@ -174,6 +174,15 @@ export const CalengarWrapp = ({ trainings }: { trainings: IGetTrainingsResponse[
         setIsOpenModal(true);
     };
 
+    const editExercisesButtonClick= (date: Moment, exerciseName:string) =>{
+        const currentDayTrainings  = getCurrentDayTrainings(date, trainingInfo);
+        const exercisesToEdit = currentDayTrainings.find((item) => item.name.trim() === exerciseName)?.exercises || [];
+        saveExercisesData(exercisesToEdit);
+        saveCurrentExerciseName(exerciseName);
+        openModal(CONSTANTS.ADD_TRAINING_MODAL);
+    }
+
+
     const dateCellRender = (value: Moment, isModalData: boolean) => {
         if (isGetTrainingListSuccess || isModalData) {
             const listData = getListData(
@@ -195,7 +204,7 @@ export const CalengarWrapp = ({ trainings }: { trainings: IGetTrainingsResponse[
                                   {isModalData ? (
                                       <EditOutlined
                                           style={{ color: '#2f54eb' }}
-                                          onClick={() => openModal(CONSTANTS.DRAWER)}
+                                          onClick={() => editExercisesButtonClick(value, item.name)}
                                           data-test-id={`modal-update-training-edit-button${index}`}
                                       />
                                   ) : (
@@ -226,6 +235,7 @@ export const CalengarWrapp = ({ trainings }: { trainings: IGetTrainingsResponse[
                         JSXContent={cellData}
                         modalPosition={modalPosition}
                         isModalOpen={isOpenModal}
+                        isAddTrainingDisabled={selectedDate < moment()}
                         setOpen={setIsOpenModal}
                     />
                 )}

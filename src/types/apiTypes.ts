@@ -66,6 +66,7 @@ export interface IGetTrainingListResponse {
 }
 
 export interface ICreateTrainingRequest {
+    _id: string | undefined;
     name: string;
     date: string;
     isImplementation: boolean;

@@ -1,11 +1,9 @@
 import { Badge, BadgeProps, Button, Drawer, Form, Input, InputNumber, Space } from 'antd';
-import { Guid } from 'js-guid';
-
 import './AddExercisesDrawer.scss';
 import { CloseOutlined, PlusOutlined } from '@ant-design/icons';
 import CONSTANTS from '@utils/constants';
 import { ITrainingExercises } from '../../types/storeTypes';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { AppContext } from '../../context/AppContext';
 import { IGetTrainingsResponse } from '../../types/apiTypes';
 
@@ -42,7 +40,12 @@ export const AddExercisesDrawer = ({
     );
     const { saveExercisesData, exercisesData } = useContext(AppContext);
     const [exerciseFields, setExerciseFields] = useState<IExercises[]>(exercisesData);
-
+/*
+    useEffect(() => {
+        setCurrentTrainingExercises(exercisesData)
+        setExerciseFields(exercisesData);
+    }, [exercisesData]);
+*/
     const onValuesChange = (changedValues: IExercises, allValues: IFormValues) => {
         if (allValues.exercises.length) {
             const exercises = allValues.exercises.map((item) => {

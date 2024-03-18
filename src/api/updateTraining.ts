@@ -5,7 +5,7 @@ import { api } from './api';
 
 export const updateTraining = async (request: ICreateTrainingRequest) => {
     try {
-        const { data, status } = await api.put<IGetTrainingsResponse>('training', request);
+        const { data, status } = await api.put<IGetTrainingsResponse>('training/' + request._id, request);
 
         return { data, status };
     } catch (error) {

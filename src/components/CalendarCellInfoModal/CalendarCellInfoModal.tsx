@@ -15,6 +15,7 @@ interface IProps {
     JSXContent: JSX.Element;
     trainingsData: IGetTrainingsResponse[];
     modalPosition: { left: string; top: string };
+    isAddTrainingDisabled: boolean;
     setOpen: (isModalOpen: boolean) => void;
 }
 
@@ -24,10 +25,11 @@ export const CalendarCellInfoModal = ({
     trainingsData,
     JSXContent,
     modalPosition,
+    isAddTrainingDisabled,
     setOpen,
 }: IProps) => {
     const { trainingList } = useAppSelector((state) => state.calendar);
-    const { isAddTrainingModalOpen, openModal, closeModal } = useContext(AppContext);
+    const { isAddTrainingModalOpen, saveExercisesData, saveCurrentExerciseName,openModal, closeModal } = useContext(AppContext);
     const dispatch = useAppDispatch();
 
     const redirect = () => {
@@ -52,9 +54,12 @@ export const CalendarCellInfoModal = ({
                         <Button
                             type='primary'
                             className='button__primary'
-                            disabled={trainingsData.length === trainingList.length}
+                            disabled={trainingsData.length === trainingList.length || isAddTrainingDisabled}
                             //? onClick={() => CreateTrainingFail(redirect)}
-                            onClick={() => openModal(CONSTANTS.ADD_TRAINING_MODAL)}
+                            onClick={() => {
+                                saveExercisesData([]);
+                                saveCurrentExerciseName('');
+                                openModal(CONSTANTS.ADD_TRAINING_MODAL)}}
                         >
                             {trainingsData.length > 0
                                 ? 'Добавить Тренировку'
