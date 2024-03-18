@@ -20,6 +20,14 @@
     margin: 12px 0;
 }
 
+.modal__create-training {
+    width: 270px !important;
+
+    @media (max-width: 360px) {
+        width: 312px !important;
+    }
+}
+
 .training__item {
     display: flex;
     justify-content: space-between;

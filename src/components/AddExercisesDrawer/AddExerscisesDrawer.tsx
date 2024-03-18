@@ -90,8 +90,9 @@ export const AddExercisesDrawer = ({
                 body: { padding: '0 24px 24px 24px' },
                 mask: { background: 'transparent' },
             }}
+            className='drawer__body'
             width={408}
-            placement='right'
+            placement={window.innerWidth > 360 ? 'right' : 'bottom'}
             onClose={closeDrawer}
             open={isOpen}
             closable={false}

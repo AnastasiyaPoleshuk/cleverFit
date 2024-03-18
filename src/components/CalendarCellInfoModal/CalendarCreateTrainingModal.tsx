@@ -164,8 +164,7 @@ export const CalendarCreateTrainingModal = ({
                     alignItems: 'center',
                 },
             }}
-            width={CONSTANTS.CREATE_TRAINING_MODAL_WIDTH}
-            className='modal__title'
+            className='modal__create-training'
             data-test-id='modal-create-exercise'
             footer={
                 <>

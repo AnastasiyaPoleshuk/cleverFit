@@ -2,7 +2,7 @@ import { Button, Divider, Modal } from 'antd';
 import './CalendarCellInfoModal.scss';
 import { useContext } from 'react';
 import CONSTANTS from '@utils/constants';
-import { useAppDispatch, useAppSelector } from '../../hooks/index';
+import { useAppSelector } from '../../hooks/index';
 import { CalendarCreateTrainingModal } from './CalendarCreateTrainingModal';
 import { AppContext } from '../../context/AppContext';
 import { IGetTrainingsResponse } from '../../types/apiTypes';
@@ -70,9 +70,8 @@ export const CalendarCellInfoModal = ({
                 open={isModalOpen}
                 onCancel={() => setOpen(false)}
                 style={{ position: 'absolute', ...modalPosition }}
-                width={CONSTANTS.CREATE_TRAINING_MODAL_WIDTH}
                 destroyOnClose={true}
-                className='modal__title'
+                className='modal__create-training'
                 data-test-id='modal-create-training'
                 closeIcon={<CloseOutlined data-test-id='modal-create-training-button-close' />}
                 footer={

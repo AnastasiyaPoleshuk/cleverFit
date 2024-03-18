@@ -55,6 +55,7 @@ const CONSTANTS = {
         CHEST: 'green',
     },
     CREATE_TRAINING_MODAL_WIDTH: 270,
+    CREATE_TRAINING_MODAL_WIDTH_MOBILE: 312,
 };
 
 export default CONSTANTS;

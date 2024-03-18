@@ -15,6 +15,7 @@ import { AppContext } from '../../context/AppContext';
 import { AddExercisesDrawer } from '@components/AddExercisesDrawer/AddExerscisesDrawer';
 import { EditOutlined } from '@ant-design/icons';
 import { CreateTrainingFail } from '@components/ErrorModals/CreateTrainingFail';
+import { useResize } from '@hooks/useResize';
 
 const getListData = (
     value: Moment,
@@ -102,6 +103,7 @@ export const CalengarWrapp = ({ trainings }: { trainings: IGetTrainingsResponse[
     const [isModalRender, setIsModalRender] = useState(false);
     const [modalPosition, setModalPosition] = useState({ top: '0', left: '0' });
     const [selectedDate, setSelectedDate] = useState<Moment>(moment());
+    const { width: windowWidth, isScreenSm } = useResize();
     const {
         addExercisesData,
         isDrawerOpen,
@@ -134,17 +136,24 @@ export const CalengarWrapp = ({ trainings }: { trainings: IGetTrainingsResponse[
         if (!dateElement) return { top: '0', left: '0' };
 
         const cellRect = dateElement.getBoundingClientRect();
-        const rightThreshold = Math.round(window.innerWidth - Math.round(cellRect.left));
+        const rightThreshold = Math.round(windowWidth - Math.round(cellRect.left));
         const modalWidth = 520;
 
-        return {
-            top: `${cellRect.top - 4}px`,
-            left: `${
-                rightThreshold < modalWidth
-                    ? cellRect.right - CONSTANTS.CREATE_TRAINING_MODAL_WIDTH
-                    : cellRect.left
-            }px`,
-        };
+        if (!isScreenSm) {
+            return {
+                top: `${cellRect.top - 4}px`,
+                left: `${
+                    rightThreshold < modalWidth
+                        ? cellRect.right - CONSTANTS.CREATE_TRAINING_MODAL_WIDTH + 14
+                        : cellRect.left
+                }px`,
+            };
+        } else {
+            return {
+                top: '32%',
+                left: 24,
+            };
+        }
     };
 
     const closeAllModals = () => {
@@ -172,8 +181,6 @@ export const CalengarWrapp = ({ trainings }: { trainings: IGetTrainingsResponse[
 
         const newPosition = getModalPosition(dateElement);
         const modalBodyData = dateCellRender(value, true);
-
-        //todo допилить disabled для кнопки в модалке
 
         setModalPosition(newPosition);
         setSelectedDate(value ? value : moment());
@@ -244,12 +251,13 @@ export const CalengarWrapp = ({ trainings }: { trainings: IGetTrainingsResponse[
     return (
         <>
             <div className='calendar__wrapp'>
-                {window.innerWidth <= 360 ? (
+                {windowWidth <= 360 ? (
                     <Calendar
                         locale={calendarLocale}
                         onSelect={onSelect}
                         className='calendar'
                         fullscreen={false}
+                        styles={{ header: { display: 'flex', alignItems: 'baseline' } }}
                     ></Calendar>
                 ) : (
                     <Calendar

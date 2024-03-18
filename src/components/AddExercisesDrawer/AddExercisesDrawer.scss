@@ -11,6 +11,21 @@
     }
 }
 
+.ant-drawer-content-wrapper {
+    @media (max-width: 360px) {
+        height: 550px !important;
+        border-top-right-radius: 24px !important;
+        border-top-left-radius: 24px !important;
+    }
+}
+
+.drawer__body {
+    @media (max-width: 360px) {
+        border-top-right-radius: 24px !important;
+        border-top-left-radius: 24px !important;
+    }
+}
+
 .drawer__body_info {
     display: flex;
     justify-content: space-between;
@@ -20,8 +35,18 @@
     color: $gray-color;
 }
 
+.ant-drawer-body {
+    @media (max-width: 360px) {
+        padding: 16px;
+    }
+}
+
 .add-exercises__form {
     padding: 24px 32px;
+
+    @media (max-width: 360px) {
+        padding: 24px 0px;
+    }
 }
 
 .form-input__exercise {
