@@ -1,6 +1,17 @@
-import { Badge, BadgeProps, Button, Checkbox, Drawer, Form, Input, InputNumber, Space } from 'antd';
+import {
+    Badge,
+    BadgeProps,
+    Button,
+    Checkbox,
+    Drawer,
+    Form,
+    FormListFieldData,
+    Input,
+    InputNumber,
+    Space,
+} from 'antd';
 import './AddExercisesDrawer.scss';
-import { CloseOutlined, PlusOutlined } from '@ant-design/icons';
+import { CloseOutlined, MinusOutlined, PlusOutlined } from '@ant-design/icons';
 import CONSTANTS from '@utils/constants';
 import { ITrainingExercises } from '../../types/storeTypes';
 import { useContext, useEffect, useState } from 'react';
@@ -38,30 +49,78 @@ export const AddExercisesDrawer = ({
 }: IProps) => {
     const { saveExercisesData, exercisesData } = useContext(AppContext);
     const [exerciseFields, setExerciseFields] = useState<IExercises[]>(exercisesData);
-    const [isImplementation, setIsImplementation] = useState(false);
+    const [isImplementationArr, setIsImplementation] = useState<{ value: boolean; id: number }[]>([
+        { value: false, id: 0 },
+    ]);
+    const [isRemoveButtonDisabled, setIsRemoveButtonDisabled] = useState(true);
 
     useEffect(() => {
         setExerciseFields(exercisesData);
+
+        exercisesData.forEach((item) => {
+            setIsImplementation((state) => {
+                return [...state, { value: item.isImplementation, id: isImplementationArr.length }];
+            });
+        });
+
+        const activeCheckbox = exercisesData.find((item) => {
+            return item.isImplementation === true;
+        });
+
+        if (activeCheckbox) {
+            setIsRemoveButtonDisabled(false);
+        }
     }, [exercisesData]);
 
     const onValuesChange = (changedValues: IExercises, allValues: IFormValues) => {
         if (allValues.exercises.length) {
-            const filteredExercises = allValues.exercises.filter((item) => {
+            const filteredExercises = allValues.exercises.filter((item, index) => {
+                if (item?.name?.length < 0) {
+                    setIsImplementation(isImplementationArr.slice(index, 1));
+                }
                 return item?.name?.length > 0;
             });
 
-            const exercises = filteredExercises.map((item) => {
-                const exerciseNameCheck = item ? item.name : null;
+            const activeCheckbox = isImplementationArr.find((item) => {
+                return item.value === true;
+            });
+
+            if (activeCheckbox) {
+                setIsRemoveButtonDisabled(false);
+            }
+
+            const exercises = filteredExercises.map((item, index) => {
                 return {
                     name: item.name,
                     replays: item.replays || 1,
                     weight: item.weight || 0,
                     approaches: item.approaches || 1,
-                    isImplementation,
+                    isImplementation: isImplementationArr[index].value,
                 };
             });
 
             exercises.length ? setExerciseFields(exercises as ITrainingExercises[]) : null;
+        }
+    };
+
+    const addField = (add: () => void) => {
+        setIsImplementation((state) => {
+            return [...state, { value: false, id: isImplementationArr.length }];
+        });
+        add();
+    };
+
+    const changeCheckboxState = (index: number) => {
+        const currentElement = isImplementationArr.find((item) => {
+            return item.id === index;
+        });
+
+        if (currentElement) {
+            currentElement.value = !currentElement.value;
+            isImplementationArr[index] = currentElement;
+            setIsImplementation(isImplementationArr);
+
+            setIsRemoveButtonDisabled(currentElement.value ? false : true);
         }
     };
 
@@ -72,8 +131,21 @@ export const AddExercisesDrawer = ({
         onClose(CONSTANTS.DRAWER);
     };
 
-    const addField = (add: (defaultValue?: any, insertIndex?: number | undefined) => void) => {
-        add();
+    const removeItem = (remove: (field: number) => void, fields: FormListFieldData[]) => {
+        const checkedItem = isImplementationArr.find((item) => item.value === true);
+
+        if (checkedItem) {
+            const itemForDelete = fields.find((item, index) => {
+                if (index === checkedItem.id) {
+                    return item;
+                }
+                return null;
+            });
+
+            if (itemForDelete) {
+                remove(itemForDelete.name);
+            }
+        }
     };
 
     return (
@@ -149,9 +221,7 @@ export const AddExercisesDrawer = ({
                                             addonAfter={
                                                 <Checkbox
                                                     style={{ height: '24px !important' }}
-                                                    onChange={() =>
-                                                        setIsImplementation(!isImplementation)
-                                                    }
+                                                    onChange={() => changeCheckboxState(index)}
                                                     data-test-id={`modal-drawer-right-checkbox-exercise${index}`}
                                                 />
                                             }
@@ -203,17 +273,34 @@ export const AddExercisesDrawer = ({
                                     </div>
                                 </Space>
                             ))}
-                            <Form.Item>
-                                <Button
-                                    type='link'
-                                    onClick={() => add()}
-                                    block
-                                    icon={<PlusOutlined />}
-                                    className='add-form-item__btn'
-                                >
-                                    Добавить ещё
-                                </Button>
-                            </Form.Item>
+                            <div className='buttons-group'>
+                                <Form.Item>
+                                    <Button
+                                        type='link'
+                                        onClick={() => addField(() => add())}
+                                        block
+                                        icon={<PlusOutlined />}
+                                        className='add-form-item__btn'
+                                    >
+                                        Добавить ещё
+                                    </Button>
+                                </Form.Item>
+                                {fields.length ? (
+                                    <Form.Item>
+                                        <Button
+                                            type='link'
+                                            // onClick={() => removeItem((field) => remove, fields))
+                                            onClick={() => removeItem(remove, fields)}
+                                            block
+                                            icon={<MinusOutlined />}
+                                            className='remove-form-item__btn'
+                                            disabled={isRemoveButtonDisabled}
+                                        >
+                                            Удалить
+                                        </Button>
+                                    </Form.Item>
+                                ) : null}
+                            </div>
                         </>
                     )}
                 </Form.List>

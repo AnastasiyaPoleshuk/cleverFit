@@ -13,7 +13,6 @@ import moment from 'moment';
 import { CalendarCellInfoModal } from '@components/CalendarCellInfoModal/CalendarCellInfoModal';
 import { AppContext } from '../../context/AppContext';
 import { AddExercisesDrawer } from '@components/AddExercisesDrawer/AddExerscisesDrawer';
-import { EditOutlined } from '@ant-design/icons';
 import { CreateTrainingFail } from '@components/ErrorModals/CreateTrainingFail';
 import { useResize } from '@hooks/useResize';
 
@@ -200,18 +199,8 @@ export const CalengarWrapp = ({ trainings }: { trainings: IGetTrainingsResponse[
         setIsOpenModal(true);
     };
 
-    const editExercisesButtonClick = (date: Moment, exerciseName: string) => {
-        setIsOpenModal(false);
-        const currentDayTrainings = getCurrentDayTrainings(date, trainingInfo);
-        const exercisesToEdit =
-            currentDayTrainings.find((item) => item.name.trim() === exerciseName)?.exercises || [];
-        saveExercisesData(exercisesToEdit);
-        saveCurrentExerciseName(exerciseName);
-        openModal(CONSTANTS.ADD_TRAINING_MODAL);
-    };
-
-    const dateCellRender = (value: Moment, isModalData: boolean) => {
-        if (isGetTrainingListSuccess || isModalData) {
+    const dateCellRender = (value: Moment) => {
+        if (isGetTrainingListSuccess) {
             const listData = getListData(
                 value,
                 trainings,
@@ -227,16 +216,6 @@ export const CalengarWrapp = ({ trainings }: { trainings: IGetTrainingsResponse[
                                       color={getStatus(item.key) as BadgeProps['color']}
                                       text={item.name}
                                   />
-
-                                  {isModalData ? (
-                                      <EditOutlined
-                                          style={{ color: '#2f54eb' }}
-                                          onClick={() => editExercisesButtonClick(value, item.name)}
-                                          data-test-id={`modal-update-training-edit-button${index}`}
-                                      />
-                                  ) : (
-                                      ''
-                                  )}
                               </li>
                           ))
                         : ''}
@@ -259,7 +238,7 @@ export const CalengarWrapp = ({ trainings }: { trainings: IGetTrainingsResponse[
                 ) : (
                     <Calendar
                         locale={calendarLocale}
-                        cellRender={(value: Moment) => dateCellRender(value, false)}
+                        cellRender={(value: Moment) => dateCellRender(value)}
                         onSelect={onSelect}
                         style={{ background: 'transperant' }}
                         className='calendar'
@@ -270,7 +249,6 @@ export const CalengarWrapp = ({ trainings }: { trainings: IGetTrainingsResponse[
                     <CalendarCellInfoModal
                         date={selectedDate.format('DD.MM.YYYY')}
                         trainingsData={getCurrentDayTrainings(selectedDate, trainingInfo)}
-                        JSXContent={cellData}
                         modalPosition={modalPosition}
                         isModalOpen={isOpenModal}
                         isAddTrainingDisabled={selectedDate < moment()}
