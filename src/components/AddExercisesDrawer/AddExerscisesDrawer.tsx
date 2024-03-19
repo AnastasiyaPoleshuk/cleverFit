@@ -22,6 +22,7 @@ export interface IExercises {
     name?: string;
     replays?: number;
     weight?: number;
+    isImplementation?: boolean;
 }
 
 export interface IFormValues {
@@ -49,7 +50,7 @@ export const AddExercisesDrawer = ({
 }: IProps) => {
     const { saveExercisesData, exercisesData } = useContext(AppContext);
     const [exerciseFields, setExerciseFields] = useState<IExercises[]>(exercisesData);
-    const [isImplementationArr, setIsImplementation] = useState<{ value: boolean; id: number }[]>([
+    const [implementationArr, setImplementationArr] = useState<{ value: boolean; id: number }[]>([
         { value: false, id: 0 },
     ]);
     const [isRemoveButtonDisabled, setIsRemoveButtonDisabled] = useState(true);
@@ -61,45 +62,43 @@ export const AddExercisesDrawer = ({
             return { value: exercise.isImplementation, id: index };
         });
 
-        setIsImplementation(checkboxData);
+        setImplementationArr(checkboxData);
 
         const activeCheckbox = exercisesData.find((item) => {
             return item.isImplementation === true;
         });
-        console.log('useEffect activeCheckbox: ', activeCheckbox);
 
         if (activeCheckbox) {
             setIsRemoveButtonDisabled(false);
         }
     }, [exercisesData]);
 
-    const onValuesChange = (changedValues: IExercises, allValues: IFormValues) => {
+    const onValuesChange = (changedValues: IFormValues, allValues: IFormValues) => {
         if (allValues.exercises.length) {
             const filteredExercises = allValues.exercises.filter((item, index) => {
                 if (item?.name?.length < 0) {
-                    setIsImplementation(isImplementationArr.slice(index, 1));
+                    setImplementationArr(implementationArr.slice(index, 1));
                 }
                 return item?.name?.length > 0;
             });
 
-            const activeCheckbox = isImplementationArr.find((item) => {
+            const activeCheckbox = implementationArr.find((item) => {
                 return item.value === true;
             });
-            console.log('valueChange activeCheckbox: ', allValues);
 
             if (activeCheckbox) {
                 setIsRemoveButtonDisabled(false);
             }
 
             const exercises = filteredExercises.map((item, index) => {
-                console.log('request: ', isImplementationArr);
-
                 return {
                     name: item.name,
                     replays: item.replays || 1,
                     weight: item.weight || 0,
                     approaches: item.approaches || 1,
-                    isImplementation: isImplementationArr[index].value,
+                    isImplementation:
+                        changedValues.exercises[changedValues.exercises.length - 1]
+                            ?.isImplementation || false,
                 };
             });
 
@@ -108,21 +107,21 @@ export const AddExercisesDrawer = ({
     };
 
     const addField = (add: () => void) => {
-        setIsImplementation((state) => {
-            return [...state, { value: false, id: isImplementationArr.length }];
+        setImplementationArr((state) => {
+            return [...state, { value: false, id: implementationArr.length }];
         });
         add();
     };
 
     const changeCheckboxState = (index: number) => {
-        const currentElement = isImplementationArr.find((item) => {
+        const currentElement = implementationArr.find((item) => {
             return item.id === index;
         });
 
         if (currentElement) {
             currentElement.value = !currentElement.value;
-            isImplementationArr[index] = currentElement;
-            setIsImplementation(isImplementationArr);
+            implementationArr[index] = currentElement;
+            setImplementationArr(implementationArr);
             setIsRemoveButtonDisabled(currentElement.value ? false : true);
         }
     };
@@ -136,7 +135,7 @@ export const AddExercisesDrawer = ({
     };
 
     const removeItem = (remove: (field: number) => void, fields: FormListFieldData[]) => {
-        const checkedItem = isImplementationArr.find((item) => item.value === true);
+        const checkedItem = implementationArr.find((item) => item.value === true);
 
         if (checkedItem) {
             const itemForDelete = fields.find((item, index) => {
@@ -147,11 +146,9 @@ export const AddExercisesDrawer = ({
             });
 
             if (itemForDelete) {
-                const filteredArr = isImplementationArr.filter((item) => item.value !== true);
-                setIsImplementation(
+                const filteredArr = implementationArr.filter((item) => item.value !== true);
+                setImplementationArr(
                     filteredArr.map((item, index) => {
-                        console.log(filteredArr, item, index);
-
                         return { value: item.value, id: index };
                     }),
                 );
@@ -234,11 +231,18 @@ export const AddExercisesDrawer = ({
                                             className='form-input__exercise'
                                             data-test-id={`modal-drawer-right-input-exercise${index}`}
                                             addonAfter={
-                                                <Checkbox
-                                                    style={{ height: '24px !important' }}
-                                                    onChange={() => changeCheckboxState(index)}
-                                                    data-test-id={`modal-drawer-right-checkbox-exercise${index}`}
-                                                />
+                                                <Form.Item
+                                                    {...restField}
+                                                    name={[name, 'isImplementation']}
+                                                    className='form-item'
+                                                    rules={[{ required: false }]}
+                                                >
+                                                    <Checkbox
+                                                        style={{ height: '24px !important' }}
+                                                        onChange={() => changeCheckboxState(index)}
+                                                        data-test-id={`modal-drawer-right-checkbox-exercise${index}`}
+                                                    />
+                                                </Form.Item>
                                             }
                                         />
                                     </Form.Item>

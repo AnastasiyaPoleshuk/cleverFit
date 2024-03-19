@@ -122,7 +122,7 @@ export const CalengarWrapp = ({ trainings }: { trainings: IGetTrainingsResponse[
     useEffect(() => {
         if (isCreateTrainingSuccess) {
             getCurrentDayTrainings(selectedDate, trainingInfo);
-            const modalBodyData = dateCellRender(selectedDate, true);
+            const modalBodyData = dateCellRender(selectedDate);
 
             setCellData(modalBodyData as JSX.Element);
         }

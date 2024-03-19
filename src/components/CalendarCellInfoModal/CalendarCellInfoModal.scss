@@ -33,3 +33,17 @@
     justify-content: space-between;
     width: 100%;
 }
+
+.trainings__list-item__disabled {
+    color: $gray-color;
+}
+
+.edit-training__button {
+    border: none;
+    outline: none;
+
+    &:hover {
+        border: none;
+        outline: none;
+    }
+}

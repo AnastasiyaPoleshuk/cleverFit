@@ -3,7 +3,6 @@ import './CalendarCellInfoModal.scss';
 import { useContext } from 'react';
 import CONSTANTS from '@utils/constants';
 import { useAppSelector } from '../../hooks/index';
-import { CalendarCreateTrainingModal } from './CalendarCreateTrainingModal';
 import { AppContext } from '../../context/AppContext';
 import { IGetTrainingListResponse, IGetTrainingsResponse } from '../../types/apiTypes';
 import { CloseOutlined, EditOutlined } from '@ant-design/icons';
@@ -40,6 +39,7 @@ const getTrainingsData = (
     date: Moment,
     trainingList: IGetTrainingListResponse[],
 ) => {
+    const isImplementationArr: boolean[] = [];
     const currentDayTrainingsList = trainingsData.map((training) => {
         if (!training.date) {
             return;
@@ -52,16 +52,25 @@ const getTrainingsData = (
             const currentTraining = trainingList.find(
                 (listItem) => listItem.name === training.name,
             );
-            currentTraining ? trainings.push(currentTraining as IGetTrainingListResponse) : null;
+            if (currentTraining) {
+                trainings.push(currentTraining as IGetTrainingListResponse);
+                isImplementationArr.push(training.isImplementation);
+            }
             return currentTraining;
         }
         return;
     });
 
     if (currentDayTrainingsList?.length) {
-        return currentDayTrainingsList.filter(Boolean);
+        return {
+            currentTrainingsList: currentDayTrainingsList.filter(Boolean),
+            isImplementationArr,
+        };
     }
-    return [];
+    return {
+        currentTrainingsList: [],
+        isImplementationArr,
+    };
 };
 
 export const CalendarCellInfoModal = ({
@@ -102,23 +111,29 @@ export const CalendarCellInfoModal = ({
     };
 
     const openCreateTrainingModal = () => {
-        saveExercisesData([]);
-        saveCurrentExerciseName('');
-        openModal(CONSTANTS.ADD_TRAINING_MODAL);
         setOpen(false);
+
+        setTimeout(() => {
+            saveExercisesData([]);
+            saveCurrentExerciseName('');
+            openModal(CONSTANTS.ADD_TRAINING_MODAL);
+        }, 100);
     };
 
     const editExercisesButtonClick = (date: Moment, exerciseName: string) => {
         setOpen(false);
-        const exercisesToEdit =
-            trainingsData.find((item) => item.name.trim() === exerciseName)?.exercises || [];
-        saveExercisesData(exercisesToEdit);
-        saveCurrentExerciseName(exerciseName);
-        openModal(CONSTANTS.ADD_TRAINING_MODAL);
+
+        setTimeout(() => {
+            const exercisesToEdit =
+                trainingsData.find((item) => item.name.trim() === exerciseName)?.exercises || [];
+            saveExercisesData(exercisesToEdit);
+            saveCurrentExerciseName(exerciseName);
+            openModal(CONSTANTS.ADD_TRAINING_MODAL);
+        }, 100);
     };
 
     const createTrainingsList = () => {
-        const currentTrainingsList = getTrainingsData(
+        const { currentTrainingsList, isImplementationArr } = getTrainingsData(
             trainingsData,
             moment(date, 'DD.MM.YYYY'),
             trainingList,
@@ -128,22 +143,31 @@ export const CalendarCellInfoModal = ({
             <ul className='events'>
                 {currentTrainingsList.length ? (
                     currentTrainingsList.map((item, index) => (
-                        <li key={item?.key} className='trainings__list-item'>
+                        <li
+                            key={item?.key}
+                            className={`trainings__list-item ${
+                                isImplementationArr[index] ? 'trainings__list-item__disabled' : ''
+                            }`}
+                        >
                             <Badge
                                 color={getStatus(item ? item.key : '') as BadgeProps['color']}
                                 text={item?.name}
                             />
 
-                            <EditOutlined
-                                style={{ color: '#2f54eb' }}
+                            <Button
+                                type='default'
+                                className='edit-training__button'
+                                data-test-id={`modal-update-training-edit-button${index}`}
+                                disabled={isImplementationArr[index]}
                                 onClick={() =>
                                     editExercisesButtonClick(
                                         moment(date, 'DD.MM.YYYY'),
                                         item ? item.name : '',
                                     )
                                 }
-                                data-test-id={`modal-update-training-edit-button${index}`}
-                            />
+                            >
+                                <EditOutlined style={{ color: '#2f54eb' }} />
+                            </Button>
                         </li>
                     ))
                 ) : (
