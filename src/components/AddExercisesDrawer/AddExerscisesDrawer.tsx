@@ -52,7 +52,6 @@ export const AddExercisesDrawer = ({
 
             const exercises = filteredExercises.map((item) => {
                 const exerciseNameCheck = item ? item.name : null;
-                console.log(item, exerciseNameCheck, !!exerciseNameCheck);
                 return {
                     name: item.name,
                     replays: item.replays || 1,
@@ -82,7 +81,11 @@ export const AddExercisesDrawer = ({
             title={
                 <span className='drawer__header'>
                     <PlusOutlined />
-                    <h4 className='drawer__header_title'>Добавление упражнений</h4>
+                    <h4 className='drawer__header_title'>
+                        {exercisesData.length
+                            ? 'Редактирование упражнений'
+                            : 'Добавление упражнений'}
+                    </h4>
                 </span>
             }
             styles={{

@@ -6,8 +6,6 @@ export const useResize = () => {
 
     useEffect(() => {
         const handleResize = (event) => {
-            console.log(event.target.innerWidth);
-
             setWidth(event.target.innerWidth);
         };
         window.addEventListener('resize', handleResize);

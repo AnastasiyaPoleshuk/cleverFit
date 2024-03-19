@@ -38,7 +38,6 @@ export const CalendarCreateTrainingModal = ({
     } = useContext(AppContext);
     const [exercises, setExercises] = useState<JSX.Element[]>([]);
     const [saveButtonDisabled, setSaveButtonDisabled] = useState(true);
-    // const [disabled, setDisabled] = useState(exercisesData.length ? false : true);
     const [disabled, setDisabled] = useState(true);
 
     const [selectedExerciseName, setSelectedExerciseName] = useState('');
@@ -95,7 +94,7 @@ export const CalendarCreateTrainingModal = ({
 
     const close = () => {
         setSelectedExerciseName('Выбор типа тренировки');
-        setDisabled(exercisesData.length ? false : true);
+        setDisabled(true);
         openInfoModal(true);
         closeModal(CONSTANTS.ADD_TRAINING_MODAL);
     };
@@ -179,7 +178,7 @@ export const CalendarCreateTrainingModal = ({
                     <Button
                         type='link'
                         className='button__primary_save-btn'
-                        disabled={saveButtonDisabled}
+                        disabled={exercisesData.length ? false : true}
                         onClick={saveTraining}
                     >
                         Сохранить

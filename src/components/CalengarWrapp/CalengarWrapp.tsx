@@ -6,7 +6,7 @@ import locale from 'antd/es/locale/ru_RU';
 
 import './CalengarWrapp.scss';
 import { useAppSelector } from '@hooks/typed-react-redux-hooks';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useLayoutEffect, useState } from 'react';
 import CONSTANTS from '@utils/constants';
 import { IGetTrainingListResponse, IGetTrainingsResponse } from '../../types/apiTypes';
 import moment from 'moment';
@@ -128,7 +128,7 @@ export const CalengarWrapp = ({ trainings }: { trainings: IGetTrainingsResponse[
 
     useEffect(() => {
         if (isCreateTrainingError) {
-            CreateTrainingFail(() => closeAllModals());
+            CreateTrainingFail(() => setIsOpenModal(false));
         }
     }, [isCreateTrainingError]);
 
@@ -154,10 +154,6 @@ export const CalengarWrapp = ({ trainings }: { trainings: IGetTrainingsResponse[
                 left: 24,
             };
         }
-    };
-
-    const closeAllModals = () => {
-        setIsOpenModal(false);
     };
 
     const onSelect = (value: Moment) => {
@@ -205,6 +201,7 @@ export const CalengarWrapp = ({ trainings }: { trainings: IGetTrainingsResponse[
     };
 
     const editExercisesButtonClick = (date: Moment, exerciseName: string) => {
+        setIsOpenModal(false);
         const currentDayTrainings = getCurrentDayTrainings(date, trainingInfo);
         const exercisesToEdit =
             currentDayTrainings.find((item) => item.name.trim() === exerciseName)?.exercises || [];
