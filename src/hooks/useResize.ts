@@ -1,4 +1,3 @@
-// use-resize.js
 import { useState, useEffect } from 'react';
 
 export const useResize = () => {

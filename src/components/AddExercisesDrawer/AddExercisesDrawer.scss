@@ -63,10 +63,12 @@
 .form-item__blok:last-child {
     display: flex;
     justify-content: space-between;
+    margin-bottom: 8px;
 }
 
 .form-item {
     margin: 0;
+    height: 24px;
 
     &:nth-child(1) .form-item__input {
         width: 98px;

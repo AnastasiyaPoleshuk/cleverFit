@@ -6,7 +6,6 @@ export interface ITrainingParameters {
 }
 
 export interface ITrainingExercises {
-    // _id: string;
     name: string;
     replays: number;
     weight: number;

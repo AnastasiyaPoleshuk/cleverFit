@@ -32,6 +32,7 @@ export const CalendarCreateTrainingModal = ({
         openModal,
         updateAddExercisesData,
         saveExercisesData,
+        saveExercisesDataToUpdate,
         exercisesData,
         currentExerciseName,
         addExercisesData,
@@ -128,6 +129,7 @@ export const CalendarCreateTrainingModal = ({
         };
 
         if (request._id) {
+            saveExercisesDataToUpdate({ data: exercisesData, id: id ? id : '' });
             dispatch(UpdateTrainingThunk(request));
         } else {
             dispatch(CreateTrainingThunk(request));

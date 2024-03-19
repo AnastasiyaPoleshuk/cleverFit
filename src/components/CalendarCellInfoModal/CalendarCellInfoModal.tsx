@@ -1,12 +1,13 @@
 import { Badge, BadgeProps, Button, Divider, Empty, Modal } from 'antd';
 import './CalendarCellInfoModal.scss';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import CONSTANTS from '@utils/constants';
-import { useAppSelector } from '../../hooks/index';
+import { useAppDispatch, useAppSelector } from '../../hooks/index';
 import { AppContext } from '../../context/AppContext';
 import { IGetTrainingListResponse, IGetTrainingsResponse } from '../../types/apiTypes';
 import { CloseOutlined, EditOutlined } from '@ant-design/icons';
 import moment, { Moment } from 'moment';
+import { updateTrainingsState } from '@redux/slices/CalendarSlice';
 
 interface IProps {
     date: string;
@@ -87,7 +88,15 @@ export const CalendarCellInfoModal = ({
     setOpen,
 }: IProps) => {
     const { trainingList, isUpdateTrainingSuccess } = useAppSelector((state) => state.calendar);
-    const { saveExercisesData, saveCurrentExerciseName, openModal } = useContext(AppContext);
+    const { saveExercisesData, saveCurrentExerciseName, openModal, exercisesDataToUpdate } =
+        useContext(AppContext);
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        if (isUpdateTrainingSuccess) {
+            dispatch(updateTrainingsState(exercisesDataToUpdate));
+        }
+    }, [isUpdateTrainingSuccess]);
 
     const setButtonText = () => {
         if (moment(date, 'DD.MM.YYYY').day() >= moment().day()) {

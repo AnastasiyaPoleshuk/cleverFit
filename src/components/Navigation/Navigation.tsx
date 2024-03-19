@@ -2,7 +2,7 @@ import './Navigation.scss';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Button, Menu } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { CalendarIcon } from './Iconscomponents/CalendarIcon';
 import { ProfileIcon } from './Iconscomponents/ProfileIcon';
@@ -48,6 +48,10 @@ export const Navigation: React.FC = () => {
     const { width: windowWidth, isScreenSm } = useResize();
     const [collapsed, setCollapsed] = useState(isScreenSm);
     const { accessToken } = useAppSelector((state) => state.user);
+
+    useEffect(() => {
+        setCollapsed(isScreenSm);
+    }, []);
 
     const dispatch = useAppDispatch();
 

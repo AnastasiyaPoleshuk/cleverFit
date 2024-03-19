@@ -10,6 +10,7 @@ import {
     GetTrainingListThunk,
     UpdateTrainingThunk,
 } from '@redux/thunk/TrainingThunk';
+import { ITrainingExercises } from '../../types/storeTypes';
 
 interface IInitialState {
     trainingInfo: IGetTrainingsResponse[];
@@ -87,6 +88,13 @@ const calendarSlice = createSlice({
         },
         changeUpdateTrainingSuccessState: (state, action: PayloadAction<boolean>) => {
             state.isUpdateTrainingSuccess = action.payload;
+        },
+        updateTrainingsState: (
+            state,
+            action: PayloadAction<{ data: ITrainingExercises[]; id: string }>,
+        ) => {
+            const index = state.trainingInfo.findIndex((obj) => obj._id === action.payload.id);
+            state.trainingInfo[index].exercises = action.payload.data;
         },
         cleanError: (state) => {
             state.error = {
@@ -180,6 +188,7 @@ export const {
     cleanError,
     changeGetTrainingListErrorState,
     changeGetTrainingListSuccessState,
+    updateTrainingsState,
 } = calendarSlice.actions;
 
 export default calendarSlice.reducer;

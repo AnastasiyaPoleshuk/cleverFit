@@ -6,7 +6,7 @@ import locale from 'antd/es/locale/ru_RU';
 
 import './CalengarWrapp.scss';
 import { useAppSelector } from '@hooks/typed-react-redux-hooks';
-import { useContext, useEffect, useLayoutEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import CONSTANTS from '@utils/constants';
 import { IGetTrainingListResponse, IGetTrainingsResponse } from '../../types/apiTypes';
 import moment from 'moment';
@@ -105,15 +105,8 @@ export const CalengarWrapp = ({ trainings }: { trainings: IGetTrainingsResponse[
     const [modalPosition, setModalPosition] = useState({ top: '0', left: '0' });
     const [selectedDate, setSelectedDate] = useState<Moment>(moment());
     const { width: windowWidth, isScreenSm } = useResize();
-    const {
-        addExercisesData,
-        isDrawerOpen,
-        isAddTrainingModalOpen,
-        saveExercisesData,
-        saveCurrentExerciseName,
-        closeModal,
-        openModal,
-    } = useContext(AppContext);
+    const { addExercisesData, isDrawerOpen, isAddTrainingModalOpen, closeModal } =
+        useContext(AppContext);
 
     useEffect(() => {
         isGetTrainingListSuccess ? setIsModalRender(true) : null;
@@ -230,7 +223,7 @@ export const CalengarWrapp = ({ trainings }: { trainings: IGetTrainingsResponse[
     return (
         <>
             <div className='calendar__wrapp'>
-                {windowWidth <= 360 ? (
+                {windowWidth <= 361 ? (
                     <Calendar
                         locale={calendarLocale}
                         onSelect={onSelect}

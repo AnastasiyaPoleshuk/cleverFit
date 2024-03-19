@@ -244,6 +244,7 @@ export const AddExercisesDrawer = ({
                                                     <Checkbox
                                                         style={{ height: '24px !important' }}
                                                         onChange={() => changeCheckboxState(index)}
+                                                        className='form-input__exercise'
                                                         data-test-id={`modal-drawer-right-checkbox-exercise${index}`}
                                                     />
                                                 </Form.Item>

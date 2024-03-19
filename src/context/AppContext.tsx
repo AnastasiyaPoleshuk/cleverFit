@@ -17,6 +17,10 @@ export interface IAppContext {
         name: string;
         date: string;
     };
+    exercisesDataToUpdate: {
+        data: ITrainingExercises[];
+        id: string;
+    };
     currentExerciseName: string;
     openModal: (type: string) => void;
     closeModal: (type: string) => void;
@@ -24,6 +28,7 @@ export interface IAppContext {
     updateAddExercisesData: (data: { name: string; date: string }) => void;
     saveExercisesData: (exercisesData: ITrainingExercises[]) => void;
     saveCurrentExerciseName: (exerciseNam: string) => void;
+    saveExercisesDataToUpdate: (data: { data: ITrainingExercises[]; id: string }) => void;
 }
 
 export const AppContext = createContext<IAppContext>({
@@ -39,6 +44,10 @@ export const AppContext = createContext<IAppContext>({
         name: '',
         date: '',
     },
+    exercisesDataToUpdate: {
+        data: [],
+        id: '',
+    },
     currentExerciseName: '',
     openModal: () => {},
     closeModal: () => {},
@@ -46,6 +55,7 @@ export const AppContext = createContext<IAppContext>({
     updateAddExercisesData: () => {},
     saveExercisesData: () => {},
     saveCurrentExerciseName: () => {},
+    saveExercisesDataToUpdate: () => {},
 });
 
 export const AppState = ({ children }: { children: React.ReactNode }) => {
@@ -62,6 +72,10 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
     });
     const [currentExerciseName, setCurrentExerciseName] = useState('');
     const [exercisesData, setExercisesData] = useState<ITrainingExercises[]>([]);
+    const [exercisesDataToUpdate, setExercisesDataToUpdate] = useState<{
+        data: ITrainingExercises[];
+        id: string;
+    }>([]);
 
     const openModal = (type: string) => {
         window.scrollTo({ top: 0 });
@@ -119,13 +133,17 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
         setExercisesData(data);
     };
 
+    const saveExercisesDataToUpdate = (data: { data: ITrainingExercises[]; id: string }) => {
+        setExercisesDataToUpdate(data);
+    };
+
     const updateAddExercisesData = (data: { name: string; date: string }) => {
         setAddExercisesData(data);
     };
 
-    const saveCurrentExerciseName = (name: string) =>{
+    const saveCurrentExerciseName = (name: string) => {
         setCurrentExerciseName(name);
-    }
+    };
 
     const contextValue = useMemo(
         () => ({
@@ -139,12 +157,14 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
             exercisesData,
             currentExerciseName,
             isDrawerOpen,
+            exercisesDataToUpdate,
             openModal,
             closeModal,
             setStateOfRepeatRequest,
             updateAddExercisesData,
             saveExercisesData,
             saveCurrentExerciseName,
+            saveExercisesDataToUpdate,
         }),
         [
             isFeedbacksFailModalOpen,
@@ -156,7 +176,8 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
             addExercisesData,
             isDrawerOpen,
             exercisesData,
-            currentExerciseName
+            currentExerciseName,
+            exercisesDataToUpdate,
         ],
     );
 
