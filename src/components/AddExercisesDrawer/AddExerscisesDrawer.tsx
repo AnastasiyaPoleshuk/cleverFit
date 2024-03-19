@@ -16,6 +16,7 @@ import CONSTANTS from '@utils/constants';
 import { ITrainingExercises } from '../../types/storeTypes';
 import { useContext, useEffect, useState } from 'react';
 import { AppContext } from '../../context/AppContext';
+import { useFocus } from '@hooks/useFocus';
 
 export interface IExercises {
     approaches?: number;
@@ -54,6 +55,7 @@ export const AddExercisesDrawer = ({
         { value: false, id: 0 },
     ]);
     const [isRemoveButtonDisabled, setIsRemoveButtonDisabled] = useState(true);
+    const [inputRef, setInputFocus] = useFocus();
 
     useEffect(() => {
         setExerciseFields(exercisesData);
@@ -230,6 +232,8 @@ export const AddExercisesDrawer = ({
                                             placeholder='Упражнение'
                                             className='form-input__exercise'
                                             data-test-id={`modal-drawer-right-input-exercise${index}`}
+                                            ref={inputRef}
+                                            onChange={setInputFocus}
                                             addonAfter={
                                                 <Form.Item
                                                     {...restField}
