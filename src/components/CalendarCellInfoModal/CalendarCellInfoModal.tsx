@@ -38,6 +38,7 @@ const getTrainingsData = (
     trainingsData: IGetTrainingsResponse[],
     date: Moment,
     trainingList: IGetTrainingListResponse[],
+    isUpdateTrainingSuccess: boolean,
 ) => {
     const isImplementationArr: boolean[] = [];
     const currentDayTrainingsList = trainingsData.map((training) => {
@@ -54,7 +55,11 @@ const getTrainingsData = (
             );
             if (currentTraining) {
                 trainings.push(currentTraining as IGetTrainingListResponse);
-                isImplementationArr.push(training.isImplementation);
+                if (isUpdateTrainingSuccess && date.date() <= moment().date()) {
+                    isImplementationArr.push(true);
+                } else {
+                    isImplementationArr.push(false);
+                }
             }
             return currentTraining;
         }
@@ -81,14 +86,8 @@ export const CalendarCellInfoModal = ({
     isAddTrainingDisabled,
     setOpen,
 }: IProps) => {
-    const { trainingList } = useAppSelector((state) => state.calendar);
-    const {
-        isAddTrainingModalOpen,
-        saveExercisesData,
-        saveCurrentExerciseName,
-        openModal,
-        closeModal,
-    } = useContext(AppContext);
+    const { trainingList, isUpdateTrainingSuccess } = useAppSelector((state) => state.calendar);
+    const { saveExercisesData, saveCurrentExerciseName, openModal } = useContext(AppContext);
 
     const setButtonText = () => {
         if (moment(date, 'DD.MM.YYYY').day() >= moment().day()) {
@@ -137,6 +136,7 @@ export const CalendarCellInfoModal = ({
             trainingsData,
             moment(date, 'DD.MM.YYYY'),
             trainingList,
+            isUpdateTrainingSuccess,
         );
 
         return (
