@@ -193,15 +193,6 @@ export const CalendarCellInfoModal = ({
             >
                 {createTrainingsList()}
             </Modal>
-            <CalendarCreateTrainingModal
-                date={date}
-                isModalOpen={isAddTrainingModalOpen}
-                trainingsListData={trainingList}
-                trainingsData={trainingsData}
-                modalPosition={modalPosition}
-                closeModal={closeModal}
-                openInfoModal={setOpen}
-            />
         </>
     );
 };

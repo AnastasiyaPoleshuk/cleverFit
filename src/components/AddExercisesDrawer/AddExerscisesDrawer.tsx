@@ -57,15 +57,16 @@ export const AddExercisesDrawer = ({
     useEffect(() => {
         setExerciseFields(exercisesData);
 
-        exercisesData.forEach((item) => {
-            setIsImplementation((state) => {
-                return [...state, { value: item.isImplementation, id: isImplementationArr.length }];
-            });
+        const checkboxData = exercisesData.map((exercise, index) => {
+            return { value: exercise.isImplementation, id: index };
         });
+
+        setIsImplementation(checkboxData);
 
         const activeCheckbox = exercisesData.find((item) => {
             return item.isImplementation === true;
         });
+        console.log('useEffect activeCheckbox: ', activeCheckbox);
 
         if (activeCheckbox) {
             setIsRemoveButtonDisabled(false);
@@ -84,12 +85,15 @@ export const AddExercisesDrawer = ({
             const activeCheckbox = isImplementationArr.find((item) => {
                 return item.value === true;
             });
+            console.log('valueChange activeCheckbox: ', allValues);
 
             if (activeCheckbox) {
                 setIsRemoveButtonDisabled(false);
             }
 
             const exercises = filteredExercises.map((item, index) => {
+                console.log('request: ', isImplementationArr);
+
                 return {
                     name: item.name,
                     replays: item.replays || 1,
@@ -119,7 +123,6 @@ export const AddExercisesDrawer = ({
             currentElement.value = !currentElement.value;
             isImplementationArr[index] = currentElement;
             setIsImplementation(isImplementationArr);
-
             setIsRemoveButtonDisabled(currentElement.value ? false : true);
         }
     };
@@ -127,6 +130,7 @@ export const AddExercisesDrawer = ({
     const closeDrawer = () => {
         exerciseFields.length ? saveExercisesData(exerciseFields as ITrainingExercises[]) : null;
         setExerciseFields([]);
+        setIsRemoveButtonDisabled(true);
 
         onClose(CONSTANTS.DRAWER);
     };
@@ -143,7 +147,18 @@ export const AddExercisesDrawer = ({
             });
 
             if (itemForDelete) {
+                const filteredArr = isImplementationArr.filter((item) => item.value !== true);
+                setIsImplementation(
+                    filteredArr.map((item, index) => {
+                        console.log(filteredArr, item, index);
+
+                        return { value: item.value, id: index };
+                    }),
+                );
+
                 remove(itemForDelete.name);
+
+                setIsRemoveButtonDisabled(true);
             }
         }
     };
@@ -289,7 +304,6 @@ export const AddExercisesDrawer = ({
                                     <Form.Item>
                                         <Button
                                             type='link'
-                                            // onClick={() => removeItem((field) => remove, fields))
                                             onClick={() => removeItem(remove, fields)}
                                             block
                                             icon={<MinusOutlined />}

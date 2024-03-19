@@ -39,6 +39,7 @@ export const CalendarCreateTrainingModal = ({
     const [exercises, setExercises] = useState<JSX.Element[]>([]);
     const [saveButtonDisabled, setSaveButtonDisabled] = useState(true);
     const [disabled, setDisabled] = useState(true);
+    const [isExerciseChanged, setIsExerciseChanged] = useState(false);
 
     const [selectedExerciseName, setSelectedExerciseName] = useState('');
     const dispatch = useAppDispatch();
@@ -62,7 +63,7 @@ export const CalendarCreateTrainingModal = ({
                         <EditOutlined
                             data-test-id={`modal-update-training-edit-button${index}`}
                             style={{ color: '#2f54eb' }}
-                            onClick={() => openModal(CONSTANTS.DRAWER)}
+                            onClick={() => openDrawer()}
                         />
                     </div>
                 )),
@@ -73,6 +74,11 @@ export const CalendarCreateTrainingModal = ({
             setExercises([]);
         }
     }, [exercisesData]);
+
+    const openDrawer = () => {
+        openModal(CONSTANTS.DRAWER);
+        setIsExerciseChanged(true);
+    };
 
     const options = (
         trainingsListData: IGetTrainingListResponse[],
@@ -100,6 +106,7 @@ export const CalendarCreateTrainingModal = ({
     };
 
     const addTraining = (value: string) => {
+        setIsExerciseChanged(false);
         setDisabled(false);
         updateAddExercisesData({
             name: value,
@@ -181,7 +188,7 @@ export const CalendarCreateTrainingModal = ({
                         disabled={exercisesData.length ? false : true}
                         onClick={saveTraining}
                     >
-                        Сохранить
+                        {isExerciseChanged ? 'Сохранить изменения' : 'Сохранить'}
                     </Button>
                 </>
             }

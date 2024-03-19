@@ -15,6 +15,7 @@ import { AppContext } from '../../context/AppContext';
 import { AddExercisesDrawer } from '@components/AddExercisesDrawer/AddExerscisesDrawer';
 import { CreateTrainingFail } from '@components/ErrorModals/CreateTrainingFail';
 import { useResize } from '@hooks/useResize';
+import { CalendarCreateTrainingModal } from '@components/CalendarCellInfoModal/CalendarCreateTrainingModal';
 
 const getListData = (
     value: Moment,
@@ -94,6 +95,7 @@ export const CalengarWrapp = ({ trainings }: { trainings: IGetTrainingsResponse[
         isCreateTrainingSuccess,
         isGetTrainingListSuccess,
         isCreateTrainingError,
+        isUpdateTrainingError,
         trainingList,
         trainingInfo,
     } = useAppSelector((state) => state.calendar);
@@ -106,6 +108,7 @@ export const CalengarWrapp = ({ trainings }: { trainings: IGetTrainingsResponse[
     const {
         addExercisesData,
         isDrawerOpen,
+        isAddTrainingModalOpen,
         saveExercisesData,
         saveCurrentExerciseName,
         closeModal,
@@ -126,10 +129,10 @@ export const CalengarWrapp = ({ trainings }: { trainings: IGetTrainingsResponse[
     }, [trainingInfo]);
 
     useEffect(() => {
-        if (isCreateTrainingError) {
+        if (isCreateTrainingError || isUpdateTrainingError) {
             CreateTrainingFail(() => setIsOpenModal(false));
         }
-    }, [isCreateTrainingError]);
+    }, [isCreateTrainingError, isUpdateTrainingError]);
 
     const getModalPosition = (dateElement: Element | null) => {
         if (!dateElement) return { top: '0', left: '0' };
@@ -175,7 +178,7 @@ export const CalengarWrapp = ({ trainings }: { trainings: IGetTrainingsResponse[
         }
 
         const newPosition = getModalPosition(dateElement);
-        const modalBodyData = dateCellRender(value, true);
+        const modalBodyData = dateCellRender(value);
 
         setModalPosition(newPosition);
         setSelectedDate(value ? value : moment());
@@ -255,6 +258,15 @@ export const CalengarWrapp = ({ trainings }: { trainings: IGetTrainingsResponse[
                         setOpen={setIsOpenModal}
                     />
                 )}
+                <CalendarCreateTrainingModal
+                    date={selectedDate.format('DD.MM.YYYY')}
+                    isModalOpen={isAddTrainingModalOpen}
+                    trainingsListData={trainingList}
+                    trainingsData={getCurrentDayTrainings(selectedDate, trainingInfo)}
+                    modalPosition={modalPosition}
+                    closeModal={closeModal}
+                    openInfoModal={setIsOpenModal}
+                />
             </div>
             <AddExercisesDrawer
                 isOpen={isDrawerOpen}
