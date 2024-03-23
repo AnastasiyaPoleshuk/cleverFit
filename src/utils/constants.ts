@@ -10,6 +10,7 @@ const CONSTANTS = {
         FEEDBACKS__PATH: '/feedbacks',
         CALENDAR__PATH: '/calendar',
         PROFILE__PATH: '/profile',
+        SETTINGS__PATH: '/settings',
         RESULT: {
             RESULT: '/result',
             SUCCESS: {

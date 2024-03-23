@@ -20,13 +20,6 @@
         bottom: 0;
     }
 
-    & img {
-        margin: 0 24px 64px 0;
-        @media (max-width: 360px) {
-            width: 72px;
-        }
-    }
-
     &-section {
         display: flex;
         flex-direction: column;
@@ -38,6 +31,19 @@
         margin: 10px 0 73px 0;
         @media (max-width: 360px) {
             display: none;
+        }
+    }
+
+    .nav__menu-section_btn {
+        background: none;
+        border: none;
+        margin: 0 24px 64px 0;
+        @media (max-width: 360px) {
+            width: 72px;
+        }
+        &:hover {
+            outline: none;
+            border: none;
         }
     }
 

@@ -19,8 +19,8 @@ export const RegisterUserThunk = createAsyncThunk(
     },
 );
 
-export const GetUserThunk = createAsyncThunk('user/getUser', async () => {
-    const response = await getUser();
+export const GetUserThunk = createAsyncThunk('user/getUser', async (token: string) => {
+    const response = await getUser(token);
     return response;
 });
 

@@ -14,6 +14,7 @@ import {
     changeGetTrainingInfoSuccessState,
 } from '@redux/slices/CalendarSlice';
 import { cleanError } from '@redux/slices/CalendarSlice';
+import { GetUserThunk } from '@redux/thunk/userThunks';
 
 export const MainPage: React.FC = () => {
     const { isAuth, accessToken } = useAppSelector((state) => state.user);
@@ -29,6 +30,7 @@ export const MainPage: React.FC = () => {
 
     useEffect(() => {
         const token = localStorage.getItem('jwtToken');
+        dispatch(GetUserThunk(token || accessToken));
         if (token) {
             dispatch(setToken(token));
             dispatch(changeAuthState(true));

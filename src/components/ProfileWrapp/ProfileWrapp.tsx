@@ -15,16 +15,17 @@ import { useEffect, useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import CONSTANTS, { calendarLocale } from '@utils/constants';
 import { RcFile } from 'antd/es/upload';
-import { UploadAvatarThunk } from '@redux/thunk/userThunks';
-import { IRequestError } from '../../types/apiTypes';
+import { UpdateUserThunk, UploadAvatarThunk } from '@redux/thunk/userThunks';
+import { IRequestError, IUpdateUser } from '../../types/apiTypes';
 import { BigImage } from '@components/ProfileModals/BigImage';
 import { UpdateUserFail } from '@components/ProfileModals/UpdateUserFail';
 import { UpdateUserSuccess } from '@components/ProfileModals/UpdateUserSuccess';
+import moment from 'moment';
 
-interface IUploadFile {
-    uid: string;
-    name: string;
-    status: string;
+interface IUpdateUserForm {
+    firstName?: string;
+    lastName?: string;
+    birthday?: string;
     url: string;
 }
 
@@ -41,13 +42,14 @@ export const ProfileWrapp = () => {
     const [previewImage, setPreviewImage] = useState('');
     const [previewTitle, setPreviewTitle] = useState('');
     const [uploadError, setUploadError] = useState<IRequestError>();
+    const [isErr, setIsError] = useState(false);
     const [avatar, setAvatar] = useState<UploadFile>();
     const [isValidEmail, setIsValidEmail] = useState(true);
     const [isValidPassword, setIsValidPassword] = useState(true);
     const [isPasswordsMatch, setIsVPasswordsMatch] = useState(true);
-    const [submitButtonDisabled, setSubmitButtonDisabled] = useState(true);
+    const [submitButtonDisabled, setSubmitButtonDisabled] = useState(false);
+    const [isPasswordRequired, setIsPasswordRequired] = useState(false);
     const [password, setPassword] = useState('');
-    const [registrationData, setRegistrationData] = useState({ email: '', password: '' });
     const {
         user,
         isUploadAvatarSuccess,
@@ -82,8 +84,10 @@ export const ProfileWrapp = () => {
         }
     }, [isUpdateUserError]);
 
-    const saveChanges = (values: any) => {
-        return;
+    const saveChanges = (values: IUpdateUser) => {
+        console.log(values);
+
+        dispatch(UpdateUserThunk(values));
     };
 
     const handlePreview = async (file: UploadFile) => {
@@ -98,7 +102,9 @@ export const ProfileWrapp = () => {
     const uploadButton = (
         <div>
             <PlusOutlined />
-            <div style={{ marginTop: 6, width: 'min-content' }}>Загрузить фото профиля</div>
+            <div style={{ marginTop: 6, width: 'min-content' }} data-test-id='profile-avatar'>
+                Загрузить фото профиля
+            </div>
         </div>
     );
 
@@ -127,7 +133,7 @@ export const ProfileWrapp = () => {
     const beforeUpload = (file: UploadFile) => {
         if (file.size > 625000) {
             // BigImage();
-            UpdateUserSuccess();
+            setIsError(true);
             console.log(file.size);
             return false;
         }
@@ -166,34 +172,54 @@ export const ProfileWrapp = () => {
         }
     };
 
+    const getInitialValues = () => {
+        const initialValues: IUpdateUser = {
+            email: '',
+        };
+        if (user.firstName) {
+            initialValues.firstName = user.firstName;
+        }
+        if (user.lastName) {
+            initialValues.lastName = user.lastName;
+        }
+        if (user.birthday) {
+            initialValues.birthday = moment(user.birthday).format('DD.MM.YYYY');
+        }
+        if (user.email) {
+            initialValues.email = user.email;
+        }
+        if (user.email) {
+            initialValues.email = user.email;
+        }
+        console.log('initialValues: ', initialValues);
+
+        return initialValues;
+    };
+
+    const setRequired = () => {
+        setSubmitButtonDisabled(true);
+        setIsPasswordRequired(true);
+    };
+
     return (
         <div className='profile-wrapp'>
             <Form
                 name='update user'
-                initialValues={{ remember: true }}
+                initialValues={getInitialValues()}
                 onFinish={saveChanges}
                 className='update-user__form'
             >
                 <div className='personal-info__form-blok'>
                     <h2 className='personal-info__form-title'>Личная информация</h2>
 
-                    <Space align='start' style={{ width: '100%' }}>
+                    <div style={{ width: '100%', display: 'flex', alignItems: 'flex-start' }}>
                         <Upload
-                            // action={`${CONSTANTS.URL}upload-image`}
-                            // headers={{
-                            //     'Content-Type': 'multipart/form-data',
-                            //     Authorization: `Bearer ${accessToken}`,
-                            // }}
                             customRequest={customRequest}
                             beforeUpload={beforeUpload}
                             listType='picture-card'
                             onPreview={handlePreview}
                             onChange={handleChange}
-                            style={{
-                                padding: ' 0 17px 14px 17px',
-                                width: 'fit-content !important',
-                            }}
-                            data-test-id='profile-avatar'
+                            className='upload-avatar'
                         >
                             {avatar ? null : uploadButton}
                         </Upload>
@@ -203,13 +229,13 @@ export const ProfileWrapp = () => {
                                 width: '100%',
                             }}
                         >
-                            <Form.Item name='firstName'>
+                            <Form.Item name='firstName' className='update-user__form-item'>
                                 <Input placeholder='Имя' data-test-id='profile-name' />
                             </Form.Item>
-                            <Form.Item name='lastName'>
+                            <Form.Item name='lastName' className='update-user__form-item'>
                                 <Input placeholder='Фамилия' data-test-id='profile-surname' />
                             </Form.Item>
-                            <Form.Item name='birthday'>
+                            <Form.Item name='birthday' className='update-user__form-item'>
                                 <DatePicker
                                     placeholder='Дата рождения'
                                     size='large'
@@ -223,7 +249,7 @@ export const ProfileWrapp = () => {
                                 />
                             </Form.Item>
                         </Space>
-                    </Space>
+                    </div>
                 </div>
                 <div className='personal-info__form-blok'>
                     <h2 className='personal-info__form-title'>Приватность и авторизация</h2>
@@ -231,37 +257,43 @@ export const ProfileWrapp = () => {
                         name='email'
                         rules={[{ required: true }]}
                         validateStatus={isValidEmail ? 'success' : 'error'}
+                        className='update-user__form-item'
                     >
                         <Input
                             addonBefore='email:'
                             data-test-id='profile-email'
                             onChange={(e) => CheckEmail(e.target.value)}
+                            className='update-user__form-item'
                         />
                     </Form.Item>
 
                     <Form.Item
                         name='password'
-                        rules={[{ required: true, message: 'пожалуйста, введите параль' }]}
+                        rules={[
+                            { required: isPasswordRequired, message: 'пожалуйста, введите параль' },
+                        ]}
                         validateStatus={isValidPassword ? 'success' : 'error'}
                         help='Пароль не менее 8 символов, с заглавной буквой и цифрой'
+                        className='update-user__form-item'
                     >
                         <Input.Password
-                            // className='form__input'
                             size='small'
                             placeholder='Пароль'
                             onChange={(e) => CheckPassword(e.target.value)}
+                            // onFocus={() => console.log('focus')}
+                            onFocus={() => setRequired()}
                             data-test-id='profile-password'
                         />
                     </Form.Item>
 
                     <Form.Item
                         name='passwordRepeat'
-                        rules={[{ required: true }]}
+                        rules={[{ required: isPasswordRequired }]}
                         validateStatus={isPasswordsMatch ? 'success' : 'error'}
                         help={isPasswordsMatch ? '' : 'Пароли не совпадают'}
+                        className='update-user__form-item'
                     >
                         <Input.Password
-                            // className='form__input'
                             size='small'
                             placeholder='Пароль'
                             onChange={(e) => CheckPasswordsMatch(e.target.value)}
@@ -273,6 +305,7 @@ export const ProfileWrapp = () => {
                     <Button
                         type='primary'
                         data-test-id='profile-submit'
+                        htmlType='submit'
                         disabled={submitButtonDisabled}
                         style={{ borderRadius: 2, width: 206, height: 40, marginTop: 24 }}
                     >
@@ -288,6 +321,7 @@ export const ProfileWrapp = () => {
             >
                 <img alt='example' style={{ width: '100%' }} src={previewImage} />
             </Modal>
+            {isErr && <UpdateUserSuccess />}
         </div>
     );
 };

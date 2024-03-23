@@ -1,7 +1,7 @@
 @import '../../App.variables.scss';
 
 .profile-wrapp {
-    width: 96%;
+    // width: 96%;
 
     flex: 1;
     background-color: $white-color;
@@ -23,4 +23,13 @@
 
         @include h5;
     }
+
+    .update-user__form-item {
+        margin-bottom: 12px !important;
+    }
+}
+
+.upload-avatar {
+    width: fit-content !important;
+    margin-right: 24px;
 }

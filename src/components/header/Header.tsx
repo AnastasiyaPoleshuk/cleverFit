@@ -59,7 +59,11 @@ export const Header = () => {
                         <i />
                     )}
 
-                    <button className='header__info-settings-btn' data-test-id='header-settings'>
+                    <button
+                        className='header__info-settings-btn'
+                        data-test-id='header-settings'
+                        onClick={() => dispatch(push(`${CONSTANTS.ROUTER__PATH.SETTINGS__PATH}`))}
+                    >
                         <SettingOutlined />
                         <p>Настройки</p>
                     </button>
