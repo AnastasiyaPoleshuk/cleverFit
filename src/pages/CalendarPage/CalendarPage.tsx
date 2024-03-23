@@ -4,7 +4,7 @@ import './CalendarPage.scss';
 import { CalengarWrapp } from '@components/CalengarWrapp/CalengarWrapp';
 import { useAppDispatch, useAppSelector } from '@hooks/typed-react-redux-hooks';
 import { setToken, changeAuthState } from '@redux/slices/UserSlice';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useLayoutEffect, useState } from 'react';
 import CONSTANTS from '@utils/constants';
 import { push } from 'redux-first-history';
 import { GetTrainingInfoThunk, GetTrainingListThunk } from '@redux/thunk/TrainingThunk';
@@ -52,7 +52,7 @@ export const CalendarPage = () => {
         }
     }, [isAuth]);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (isGetTrainingListError) {
             GetTrainingsListFail(setStateOfRepeatRequest);
         }

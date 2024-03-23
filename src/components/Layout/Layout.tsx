@@ -10,6 +10,7 @@ import { push } from 'redux-first-history';
 import CONSTANTS from '@utils/constants';
 import { changeGetFeedbacksErrorState } from '@redux/slices/FeedbacksSlice';
 import { changeGetTrainingInfoErrorState } from '@redux/slices/CalendarSlice';
+import { GetUserThunk } from '@redux/thunk/userThunks';
 
 export const Layout = () => {
     const [queryParams, setQueryParams] = useSearchParams();
@@ -26,6 +27,7 @@ export const Layout = () => {
         if (queryParams.get('accessToken')) {
             localStorage.setItem('jwtToken', queryParams.get('accessToken') as string);
             dispatch(changeAuthState(true));
+            dispatch(GetUserThunk());
             dispatch(setToken(queryParams.get('accessToken') as string));
             dispatch(push(CONSTANTS.ROUTER__PATH.MAIN__PATH));
         }

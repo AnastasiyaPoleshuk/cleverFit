@@ -64,6 +64,9 @@ export const Navigation: React.FC = () => {
             case CONSTANTS.SIDEBAR_KEYS.CALENDAR:
                 dispatch(GetTrainingInfoThunk(accessToken));
                 break;
+            case CONSTANTS.SIDEBAR_KEYS.PROFILE:
+                dispatch(push(`${CONSTANTS.ROUTER__PATH.PROFILE__PATH}`));
+                break;
 
             default:
                 break;

@@ -1,11 +1,15 @@
+import locale from 'antd/es/locale/ru_RU';
+
 const CONSTANTS = {
     URL: 'https://marathon-api.clevertec.ru/',
+    AVATAR_URL: 'https://training-api.clevertec.ru/',
     ROUTER__PATH: {
         AUTH__PATH: '/auth',
         MAIN__PATH: '/main',
         CHANGE_PASSWORD__PATH: '/change-password',
         FEEDBACKS__PATH: '/feedbacks',
         CALENDAR__PATH: '/calendar',
+        PROFILE__PATH: '/profile',
         RESULT: {
             RESULT: '/result',
             SUCCESS: {
@@ -59,3 +63,27 @@ const CONSTANTS = {
 };
 
 export default CONSTANTS;
+
+export const calendarLocale = {
+    lang: {
+        ...locale.Calendar?.lang,
+        shortWeekDays: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+        shortMonths: [
+            'Янв',
+            'Февр',
+            'Мар',
+            'Апр',
+            'Май',
+            'Июн',
+            'Июл',
+            'Авг',
+            'Сен',
+            'Окт',
+            'Ноя',
+            'Дек',
+        ],
+    },
+    timePickerLocale: {
+        ...locale.Calendar?.timePickerLocale,
+    },
+};

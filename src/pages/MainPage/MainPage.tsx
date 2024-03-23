@@ -97,7 +97,14 @@ export const MainPage: React.FC = () => {
                         </div>
                         <div className='card'>
                             <h5 className='card__title'>Заполнить профить</h5>
-                            <Button type='link' className='card__link'>
+                            <Button
+                                type='link'
+                                className='card__link'
+                                data-test-id='menu-button-profile'
+                                onClick={() =>
+                                    dispatch(push(`${CONSTANTS.ROUTER__PATH.PROFILE__PATH}`))
+                                }
+                            >
                                 Профиль
                             </Button>
                         </div>

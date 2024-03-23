@@ -20,6 +20,7 @@ import { ChangePasswordFail } from '@components/CheckPasswordResult/ChangePasswo
 import { ChangePasswordSuccess } from '@components/CheckPasswordResult/ChangePasswordSuccess';
 import { FeedBackPage } from '@pages/FeedBackPage/FeedBackPage';
 import { CalendarPage } from '@pages/CalendarPage/CalendarPage';
+import { ProfilePage } from '@pages/ProfilePage/ProfilePage';
 
 export const App = () => {
     return (
@@ -29,6 +30,7 @@ export const App = () => {
                 <Route path={CONSTANTS.ROUTER__PATH.MAIN__PATH} element={<MainPage />} />
                 <Route path={CONSTANTS.ROUTER__PATH.FEEDBACKS__PATH} element={<FeedBackPage />} />
                 <Route path={CONSTANTS.ROUTER__PATH.CALENDAR__PATH} element={<CalendarPage />} />
+                <Route path={CONSTANTS.ROUTER__PATH.PROFILE__PATH} element={<ProfilePage />} />
             </Route>
             <Route path={`${CONSTANTS.ROUTER__PATH.AUTH__PATH}`} element={<AuthPage />}>
                 <Route index element={<LoginForm />} />

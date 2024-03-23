@@ -22,6 +22,13 @@
     justify-content: space-between;
 }
 
+.ant-picker-calendar-date-content {
+    overflow-y: hidden !important;
+}
+
+.ant-badge-status-text {
+    font-size: 12px !important;
+}
 .ant-picker-calendar-header {
     @media (max-width: 360px) {
         display: flex !important;

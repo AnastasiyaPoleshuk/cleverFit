@@ -2,12 +2,10 @@ import { Badge, BadgeProps, Calendar, Empty } from 'antd';
 import { Moment } from 'moment';
 import 'moment/locale/ru';
 
-import locale from 'antd/es/locale/ru_RU';
-
 import './CalengarWrapp.scss';
 import { useAppSelector } from '@hooks/typed-react-redux-hooks';
 import { useContext, useEffect, useState } from 'react';
-import CONSTANTS from '@utils/constants';
+import CONSTANTS, { calendarLocale } from '@utils/constants';
 import { IGetTrainingListResponse, IGetTrainingsResponse } from '../../types/apiTypes';
 import moment from 'moment';
 import { CalendarCellInfoModal } from '@components/CalendarCellInfoModal/CalendarCellInfoModal';
@@ -47,30 +45,6 @@ const getListData = (
 };
 const getCurrentDayTrainings = (day: Moment, allTrainingsArr: IGetTrainingsResponse[]) => {
     return allTrainingsArr.filter((item) => moment(item.date).format('DD') === day.format('DD'));
-};
-
-const calendarLocale = {
-    lang: {
-        ...locale.Calendar?.lang,
-        shortWeekDays: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
-        shortMonths: [
-            'Янв',
-            'Февр',
-            'Мар',
-            'Апр',
-            'Май',
-            'Июн',
-            'Июл',
-            'Авг',
-            'Сен',
-            'Окт',
-            'Ноя',
-            'Дек',
-        ],
-    },
-    timePickerLocale: {
-        ...locale.Calendar?.timePickerLocale,
-    },
 };
 
 const getStatus = (key: string) => {
@@ -123,6 +97,7 @@ export const CalengarWrapp = ({ trainings }: { trainings: IGetTrainingsResponse[
 
     useEffect(() => {
         if (isCreateTrainingError || isUpdateTrainingError) {
+            setIsOpenModal(false);
             CreateTrainingFail(() => setIsOpenModal(false));
         }
     }, [isCreateTrainingError, isUpdateTrainingError]);

@@ -22,6 +22,10 @@ export const Header = () => {
                 setPageName('Календарь');
                 setIsMain(false);
                 break;
+            case CONSTANTS.ROUTER__PATH.PROFILE__PATH:
+                setPageName('Профиль');
+                setIsMain(false);
+                break;
 
             default:
                 setPageName('');
@@ -55,7 +59,7 @@ export const Header = () => {
                         <i />
                     )}
 
-                    <button className='header__info-settings-btn'>
+                    <button className='header__info-settings-btn' data-test-id='header-settings'>
                         <SettingOutlined />
                         <p>Настройки</p>
                     </button>
