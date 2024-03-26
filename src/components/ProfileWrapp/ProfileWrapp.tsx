@@ -15,8 +15,8 @@ import { useEffect, useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import CONSTANTS, { calendarLocale } from '@utils/constants';
 import { RcFile } from 'antd/es/upload';
-import { UpdateUserThunk, UploadAvatarThunk } from '@redux/thunk/userThunks';
-import { IRequestError, IUpdateUser } from '../../types/apiTypes';
+import { GetUserThunk, UpdateUserThunk, UploadAvatarThunk } from '@redux/thunk/userThunks';
+import { IRequestError, IUpdateUser, IUser } from '../../types/apiTypes';
 import { BigImage } from '@components/ProfileModals/BigImage';
 import { UpdateUserFail } from '@components/ProfileModals/UpdateUserFail';
 import { UpdateUserSuccess } from '@components/ProfileModals/UpdateUserSuccess';
@@ -43,7 +43,7 @@ export const ProfileWrapp = () => {
     const [previewTitle, setPreviewTitle] = useState('');
     const [uploadError, setUploadError] = useState<IRequestError>();
     const [isErr, setIsError] = useState(false);
-    const [avatar, setAvatar] = useState<UploadFile>();
+    const [avatar, setAvatar] = useState<UploadFile[]>([]);
     const [isValidEmail, setIsValidEmail] = useState(true);
     const [isValidPassword, setIsValidPassword] = useState(true);
     const [isPasswordsMatch, setIsVPasswordsMatch] = useState(true);
@@ -59,22 +59,30 @@ export const ProfileWrapp = () => {
         isUpdateUserError,
     } = useAppSelector((state) => state.user);
     const dispatch = useAppDispatch();
+    const [avatarUrl, setAvatarUrl] = useState<string>(user.imgSrc);
 
     useEffect(() => {
-        if (user.imgSrc) {
-            setAvatar({ uid: '0', name: 'avatar', status: 'done', url: user.imgSrc });
+        setAvatarUrl(user.imgSrc);
+        setSubmitButtonDisabled(true);
+        if (avatarUrl) {
+            setAvatar([{ uid: '0', name: 'avatar', status: 'done', url: avatarUrl }]);
         }
     }, []);
 
     useEffect(() => {
         if (isUploadAvatarSuccess) {
-            setAvatar({ uid: '0', name: 'avatar', status: 'done', url: user.imgSrc });
+            setAvatarUrl(user.imgSrc);
+            setSubmitButtonDisabled(false);
+            setAvatar([{ uid: '0', name: 'avatar', status: 'done', url: `${CONSTANTS.AVATAR_URL}${user?.imgSrc}` }]);
         }
     }, [isUploadAvatarSuccess]);
 
     useEffect(() => {
         if (isUploadAvatarError) {
-            setUploadError(error);
+            setSubmitButtonDisabled(true);
+            setAvatar([]);
+            //TODO Переделать BigImage что бы он процессил любые ошибки
+            BigImage(error);
         }
     }, [isUploadAvatarError]);
 
@@ -111,33 +119,22 @@ export const ProfileWrapp = () => {
     const handleChange: UploadProps['onChange'] = async ({ file }) => {
         console.log(file);
 
-        if (file.status === 'error') {
-            setSubmitButtonDisabled(true);
+        const status = file.status ;
+        if (status && status == 'removed'){
+            setAvatarUrl('');
+            setAvatar([{ uid: '0', name: 'image.png', status: 'error' }]);
         }
-        // if (file.status === 'uploading') {
-        // }
-        if (file.status === 'done') {
-            setSubmitButtonDisabled(false);
-            setAvatar(file);
+        if (status && status == 'uploading'){
+            setAvatar([{ uid: '0', percent:50, name: 'image.png', status: 'uploading' }]);
         }
     };
 
     const customRequest: UploadProps['customRequest'] = (options) => {
         const { onSuccess, onError, file, onProgress } = options;
 
-        dispatch(UploadAvatarThunk({ token: accessToken, file }));
-
-        onError(uploadError);
-    };
-
-    const beforeUpload = (file: UploadFile) => {
-        if (file.size > 625000) {
-            // BigImage();
-            setIsError(true);
-            console.log(file.size);
-            return false;
-        }
-        return true;
+        const formData = new FormData();
+        formData.append('file', file); 
+        dispatch(UploadAvatarThunk({ token: accessToken, file: formData }));
     };
 
     const CheckEmail = (data: string) => {
@@ -215,13 +212,13 @@ export const ProfileWrapp = () => {
                     <div style={{ width: '100%', display: 'flex', alignItems: 'flex-start' }}>
                         <Upload
                             customRequest={customRequest}
-                            beforeUpload={beforeUpload}
                             listType='picture-card'
+                            fileList={avatar}
                             onPreview={handlePreview}
                             onChange={handleChange}
                             className='upload-avatar'
                         >
-                            {avatar ? null : uploadButton}
+                            {avatar.length > 0  ? null : uploadButton}
                         </Upload>
                         <Space
                             direction='vertical'

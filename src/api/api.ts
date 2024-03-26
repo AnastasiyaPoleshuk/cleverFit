@@ -11,3 +11,10 @@ export const apiSetHeader = (name: string, value: string) => {
         api.defaults.headers[name] = value;
     }
 };
+
+export const apiSetContentTypeHeader = (value: string) => {
+    if (value) {
+        api.defaults.headers.common['Content-Type'] = value
+    }
+};
+

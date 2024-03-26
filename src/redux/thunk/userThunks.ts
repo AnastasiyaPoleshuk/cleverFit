@@ -30,8 +30,8 @@ export const UpdateUserThunk = createAsyncThunk('user/updateUser', async (reques
 });
 
 export const UploadAvatarThunk = createAsyncThunk(
-    'user/uploaDAvatar',
-    async (request: { token: string; file: string }) => {
+    'user/uploadAvatar',
+    async (request: { token: string; file: FormData }) => {
         const response = await uploadAvatar(request);
         return response;
     },

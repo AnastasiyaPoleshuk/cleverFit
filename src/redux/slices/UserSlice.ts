@@ -155,6 +155,8 @@ const userSlice = createSlice({
         builder
             .addCase(UploadAvatarThunk.pending, (state) => {
                 state.isLoading = true;
+                state.isUploadAvatarError = false;
+                state.isUploadAvatarSuccess = false;
             })
             .addCase(UploadAvatarThunk.fulfilled, (state, action) => {
                 state.isLoading = false;
@@ -162,6 +164,7 @@ const userSlice = createSlice({
                 state.isUploadAvatarSuccess = true;
 
                 state.avatarFile = action.payload.data;
+                state.user.imgSrc = action.payload.data.url;
             })
             .addCase(UploadAvatarThunk.rejected, (state, action) => {
                 state.isLoading = false;

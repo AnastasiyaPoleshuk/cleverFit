@@ -1,6 +1,7 @@
+import { IRequestError } from '../../types/apiTypes';
 import { Modal } from 'antd';
 
-export const BigImage = () => {
+export const BigImage = (error: IRequestError) => {
     Modal.error({
         title: (
             <span className='create-trainings-list-fail__modal-title'>Файл слишком большой</span>
