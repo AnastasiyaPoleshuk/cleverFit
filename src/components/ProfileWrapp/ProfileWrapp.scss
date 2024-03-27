@@ -7,8 +7,16 @@
     margin: 24px;
     padding: 24px;
 
+    @media (max-width: 360px) {
+        margin: 24px 0;
+        padding: 16px 24px;
+    }
+
     .update-user__form {
         width: 480px;
+        @media (max-width: 360px) {
+            width: 312px;
+        }
     }
 
     .personal-info__form-blok {
@@ -22,8 +30,45 @@
         @include h5;
     }
 
+    .personal-info__form-blok-item {
+        width: 100%;
+        display: flex;
+        align-items: flex-start;
+
+        @media (max-width: 360px) {
+            flex-direction: column-reverse;
+        }
+    }
+
+    .mobile__upload-box {
+        width: 312px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .mobile__upload-title {
+        @include body-small;
+    }
+
+    .mobile__upload-btn {
+        border-radius: 2px !important;
+    }
+
     .update-user__form-item {
         margin-bottom: 12px !important;
+    }
+
+    .form__submit-btn {
+        width: 206px;
+        height: 40px;
+        margin-top: 24px;
+        border-radius: 2px;
+
+        @media (max-width: 360px) {
+            width: 312px;
+            margin-top: 0;
+        }
     }
 }
 

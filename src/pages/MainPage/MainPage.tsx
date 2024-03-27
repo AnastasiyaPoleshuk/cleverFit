@@ -44,10 +44,11 @@ export const MainPage: React.FC = () => {
         if (!isAuth) {
             dispatch(push(`${CONSTANTS.ROUTER__PATH.AUTH__PATH}`));
         } else {
-            const token = localStorage.getItem('jwtToken');
-
             dispatch(push(CONSTANTS.ROUTER__PATH.MAIN__PATH));
-            dispatch(GetUserThunk(accessToken));
+
+            setTimeout(() => {
+                dispatch(GetUserThunk(accessToken));
+            }, 1000);
         }
     }, [isAuth]);
 

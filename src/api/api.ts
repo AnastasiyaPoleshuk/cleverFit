@@ -17,3 +17,9 @@ export const apiSetContentTypeHeader = (value: string) => {
         api.defaults.headers.common['Content-Type'] = value;
     }
 };
+
+export const apiRemoveContentTypeHeader = (value: string) => {
+    if (value) {
+        api.defaults.headers.common['Content-Type'] = value;
+    }
+};

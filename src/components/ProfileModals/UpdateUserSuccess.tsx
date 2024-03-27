@@ -12,7 +12,9 @@ export const UpdateUserSuccess = () => {
                 position: 'absolute',
                 zIndex: 100,
                 bottom: 80,
+                borderRadius: 2,
                 left: '50%',
+                transform: 'translate(-50%)',
             }}
         />
     );

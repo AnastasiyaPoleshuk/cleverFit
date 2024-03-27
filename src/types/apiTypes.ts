@@ -1,3 +1,4 @@
+import { Moment } from 'moment';
 import { ITrainingExercises, ITrainingParameters } from './storeTypes';
 
 export interface IAuthRequest {
@@ -92,7 +93,7 @@ export interface IUpdateUser {
     password?: string;
     firstName?: string;
     lastName?: string;
-    birthday?: string;
+    birthday?: Moment;
     imgSrc?: string;
     readyForJointTraining?: boolean;
     sendNotification?: boolean;

@@ -126,6 +126,10 @@
     &__title {
         @include h4;
     }
+
+    .header__info-settings-btn {
+        margin: 0;
+    }
 }
 
 .settings-header {
