@@ -1,8 +1,15 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { IUser, IRequestError, IUploadAvatarResponse } from '../../types/apiTypes';
 import {
+    IUser,
+    IRequestError,
+    IUploadAvatarResponse,
+    ITariffListResponse,
+} from '../../types/apiTypes';
+import {
+    GetTariffListThunk,
     GetUserThunk,
     LoginUserThunk,
+    PostTariffThunk,
     UpdateUserThunk,
     UploadAvatarThunk,
 } from '../thunk/userThunks';
@@ -18,12 +25,17 @@ interface IInitialState {
     isRegisterError: boolean;
     user: IUser;
     avatarFile: IUploadAvatarResponse;
+    tariff: ITariffListResponse[];
     isGetUserError: boolean;
     isGetUserSuccess: boolean;
     isUpdateUserError: boolean;
     isUpdateUserSuccess: boolean;
     isUploadAvatarError: boolean;
     isUploadAvatarSuccess: boolean;
+    isGetTariffError: boolean;
+    isGetTariffSuccess: boolean;
+    isPostTariffError: boolean;
+    isPostTariffSuccess: boolean;
 }
 
 const initialState: IInitialState = {
@@ -55,12 +67,17 @@ const initialState: IInitialState = {
         name: '',
         url: '',
     },
+    tariff: [],
     isGetUserError: false,
     isGetUserSuccess: false,
     isUpdateUserError: false,
     isUpdateUserSuccess: false,
     isUploadAvatarError: false,
     isUploadAvatarSuccess: false,
+    isGetTariffError: false,
+    isGetTariffSuccess: false,
+    isPostTariffError: false,
+    isPostTariffSuccess: false,
 };
 
 const userSlice = createSlice({
@@ -170,6 +187,42 @@ const userSlice = createSlice({
                 state.isLoading = false;
                 state.isUploadAvatarError = true;
                 state.isUploadAvatarSuccess = false;
+
+                state.error = JSON.parse(action.error.message as string);
+            });
+        builder
+            .addCase(GetTariffListThunk.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(GetTariffListThunk.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isGetTariffError = false;
+                state.isGetTariffSuccess = true;
+
+                state.tariff = action.payload.data;
+            })
+            .addCase(GetTariffListThunk.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isGetTariffError = true;
+                state.isGetTariffSuccess = false;
+
+                state.error = JSON.parse(action.error.message as string);
+            });
+        builder
+            .addCase(PostTariffThunk.pending, (state) => {
+                state.isLoading = true;
+                state.isPostTariffError = false;
+                state.isPostTariffSuccess = false;
+            })
+            .addCase(PostTariffThunk.fulfilled, (state) => {
+                state.isLoading = false;
+                state.isPostTariffError = false;
+                state.isPostTariffSuccess = true;
+            })
+            .addCase(PostTariffThunk.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isPostTariffError = true;
+                state.isPostTariffSuccess = false;
 
                 state.error = JSON.parse(action.error.message as string);
             });

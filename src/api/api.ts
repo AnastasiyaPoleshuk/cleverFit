@@ -14,7 +14,6 @@ export const apiSetHeader = (name: string, value: string) => {
 
 export const apiSetContentTypeHeader = (value: string) => {
     if (value) {
-        api.defaults.headers.common['Content-Type'] = value
+        api.defaults.headers.common['Content-Type'] = value;
     }
 };
-

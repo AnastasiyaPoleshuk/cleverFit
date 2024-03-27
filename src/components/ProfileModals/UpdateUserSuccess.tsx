@@ -7,6 +7,7 @@ export const UpdateUserSuccess = () => {
             type='success'
             showIcon
             closable
+            data-test-id='alert'
             style={{
                 position: 'absolute',
                 zIndex: 100,

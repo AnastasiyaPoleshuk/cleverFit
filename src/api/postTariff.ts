@@ -1,19 +1,11 @@
 import axios from 'axios';
-import { IUploadAvatarResponse, IRequestError } from '../types/apiTypes';
+import { IPostTariffRequest, IRequestError } from '../types/apiTypes';
 
-import { api, apiSetContentTypeHeader, apiSetHeader } from './api';
+import { api } from './api';
 
-export const uploadAvatar = async (request: { token: string; file: FormData }) => {
+export const postTariff = async (request: IPostTariffRequest) => {
     try {
-        apiSetHeader('Content-Type', 'multipart/form-data');
-        apiSetHeader('Authorization', `Bearer ${request.token}`);
-        apiSetContentTypeHeader('multipart/form-data');
-
-        const { data, status } = await api.post<IUploadAvatarResponse>(
-            'upload-image',
-            request.file,
-        );
-
+        const { data, status } = await api.post<object>('tariff', request);
         return { data, status };
     } catch (error) {
         if (axios.isAxiosError(error)) {

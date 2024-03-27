@@ -29,12 +29,7 @@ export const FeedBackPage = () => {
         isLoading,
     } = useAppSelector((state) => state.feedbacks);
     const { isAuth, accessToken } = useAppSelector((state) => state.user);
-    const {
-        isCreateFeedbackModalOpen,
-        isCreateFeedbackSuccessModalOpen,
-        isCreateFeedbackErrorModalOpen,
-        openModal,
-    } = useContext(AppContext);
+    const { openModal } = useContext(AppContext);
     const [isFeedbacks, setIsFeedbacks] = useState(true);
     const dispatch = useAppDispatch();
 
@@ -81,13 +76,6 @@ export const FeedBackPage = () => {
         <div className={`feedback ${isFeedbacks ? 'feedbacks__wrapp' : 'no-feedbacks'}`}>
             <Header />
             {isFeedbacks ? <FeedbacksWrapp /> : <NoFeedbacksBlok />}
-            <CreateFeedbackModal isCreateFeedbackModalOpen={isCreateFeedbackModalOpen} />
-            <CreateFeedbackSuccessModal
-                isCreateFeedbackSuccessModalOpen={isCreateFeedbackSuccessModalOpen}
-            />
-            <CreateFeedbackFailModal
-                isCreateFeedbackErrorModalOpen={isCreateFeedbackErrorModalOpen}
-            />
         </div>
     );
 };

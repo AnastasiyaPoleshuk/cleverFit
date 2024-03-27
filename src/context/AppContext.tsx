@@ -12,6 +12,8 @@ export interface IAppContext {
     isRepeatRequestNeeded: boolean;
     isAddTrainingModalOpen: boolean;
     isDrawerOpen: boolean;
+    isTariffDrawerOpen: boolean;
+    isChangeTariffInfoModalOpen: boolean;
     exercisesData: ITrainingExercises[];
     addExercisesData: {
         name: string;
@@ -25,6 +27,7 @@ export interface IAppContext {
     openModal: (type: string) => void;
     closeModal: (type: string) => void;
     setStateOfRepeatRequest: (state: boolean) => void;
+    setTariffDrawerStatus: (state: boolean) => void;
     updateAddExercisesData: (data: { name: string; date: string }) => void;
     saveExercisesData: (exercisesData: ITrainingExercises[]) => void;
     saveCurrentExerciseName: (exerciseNam: string) => void;
@@ -39,6 +42,8 @@ export const AppContext = createContext<IAppContext>({
     isRepeatRequestNeeded: false,
     isAddTrainingModalOpen: false,
     isDrawerOpen: false,
+    isChangeTariffInfoModalOpen: false,
+    isTariffDrawerOpen: false,
     exercisesData: [],
     addExercisesData: {
         name: '',
@@ -56,6 +61,7 @@ export const AppContext = createContext<IAppContext>({
     saveExercisesData: () => {},
     saveCurrentExerciseName: () => {},
     saveExercisesDataToUpdate: () => {},
+    setTariffDrawerStatus: () => {},
 });
 
 export const AppState = ({ children }: { children: React.ReactNode }) => {
@@ -66,6 +72,8 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
     const [isRepeatRequestNeeded, setIsRepeatRequestNeeded] = useState(false);
     const [isAddTrainingModalOpen, setIsAddTrainingModalOpen] = useState(false);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const [isTariffDrawerOpen, setIsTariffDrawerOpen] = useState(false);
+    const [isChangeTariffInfoModalOpen, setIsChangeTariffInfoModalOpen] = useState(false);
     const [addExercisesData, setAddExercisesData] = useState({
         name: '',
         date: '',
@@ -99,6 +107,9 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
             case CONSTANTS.DRAWER:
                 setIsDrawerOpen(true);
                 break;
+            case CONSTANTS.CHANGE_TARIFF_INFO_MODAL:
+                setIsChangeTariffInfoModalOpen(true);
+                break;
         }
     };
 
@@ -121,6 +132,9 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
                 break;
             case CONSTANTS.DRAWER:
                 setIsDrawerOpen(false);
+                break;
+            case CONSTANTS.CHANGE_TARIFF_INFO_MODAL:
+                setIsChangeTariffInfoModalOpen(false);
                 break;
         }
     };
@@ -145,6 +159,10 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
         setCurrentExerciseName(name);
     };
 
+    const setTariffDrawerStatus = (status: boolean) => {
+        setIsTariffDrawerOpen(status);
+    };
+
     const contextValue = useMemo(
         () => ({
             isFeedbacksFailModalOpen,
@@ -158,6 +176,8 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
             currentExerciseName,
             isDrawerOpen,
             exercisesDataToUpdate,
+            isTariffDrawerOpen,
+            isChangeTariffInfoModalOpen,
             openModal,
             closeModal,
             setStateOfRepeatRequest,
@@ -165,6 +185,7 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
             saveExercisesData,
             saveCurrentExerciseName,
             saveExercisesDataToUpdate,
+            setTariffDrawerStatus,
         }),
         [
             isFeedbacksFailModalOpen,
@@ -178,6 +199,8 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
             exercisesData,
             currentExerciseName,
             exercisesDataToUpdate,
+            isTariffDrawerOpen,
+            isChangeTariffInfoModalOpen,
         ],
     );
 

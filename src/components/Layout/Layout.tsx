@@ -10,6 +10,9 @@ import { push } from 'redux-first-history';
 import CONSTANTS from '@utils/constants';
 import { changeGetFeedbacksErrorState } from '@redux/slices/FeedbacksSlice';
 import { changeGetTrainingInfoErrorState } from '@redux/slices/CalendarSlice';
+import { CreateFeedbackModal } from '@components/CreateFeedbackModal/CreateFeedbackModal';
+import { CreateFeedbackFailModal } from '@components/FeedbacksResult/CreateFeedbackFailModal';
+import { CreateFeedbackSuccessModal } from '@components/FeedbacksResult/CreateFeedbackSuccessModal';
 
 export const Layout = () => {
     const [queryParams, setQueryParams] = useSearchParams();
@@ -19,7 +22,12 @@ export const Layout = () => {
     const { isLoading: isLoadingTrainingInfo, isGetTrainingInfoError } = useAppSelector(
         (state) => state.calendar,
     );
-    const { isFeedbacksFailModalOpen } = useContext(AppContext);
+    const {
+        isFeedbacksFailModalOpen,
+        isCreateFeedbackModalOpen,
+        isCreateFeedbackSuccessModalOpen,
+        isCreateFeedbackErrorModalOpen,
+    } = useContext(AppContext);
     const dispatch = useAppDispatch();
 
     useEffect(() => {
@@ -46,6 +54,13 @@ export const Layout = () => {
             <GetRequestFail
                 isOpen={isGetTrainingInfoError}
                 changeErrorState={changeGetTrainingInfoErrorState}
+            />
+            <CreateFeedbackModal isCreateFeedbackModalOpen={isCreateFeedbackModalOpen} />
+            <CreateFeedbackSuccessModal
+                isCreateFeedbackSuccessModalOpen={isCreateFeedbackSuccessModalOpen}
+            />
+            <CreateFeedbackFailModal
+                isCreateFeedbackErrorModalOpen={isCreateFeedbackErrorModalOpen}
             />
         </div>
     );

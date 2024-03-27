@@ -1,0 +1,39 @@
+@import '../../App.variables.scss';
+
+.tariff-drawer__title {
+    @include h4;
+}
+
+.tariff-advantages__rows {
+    margin: 16px 0;
+}
+
+.tariff-submit__btn {
+    border-radius: 2px;
+    padding: 4px 15px;
+    width: 344px;
+    height: 40px;
+}
+
+.ant-table-cell:not(:first-child) {
+    text-align: center;
+}
+
+.ant-table-cell {
+    border-bottom: none !important;
+    padding: 8px 0 !important;
+}
+
+.prise__title {
+    @include body-strong;
+    margin-top: 74px;
+    margin-bottom: 24px;
+}
+
+.prise__prise {
+    @include h5;
+}
+
+.prise__table-wrapp {
+    width: 100%;
+}

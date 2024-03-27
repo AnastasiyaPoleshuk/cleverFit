@@ -1,0 +1,117 @@
+@import '../../App.variables.scss';
+
+.settings-wrapp {
+    flex: 1;
+    background-color: $white-color;
+    border-radius: 8px;
+    margin: 24px;
+    padding: 24px;
+
+    .settings-wrapp__title {
+        @include h4;
+        margin-bottom: 16px;
+    }
+
+    .tariff__content {
+        width: 505px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 25px;
+    }
+
+    .tariff__card {
+        border-radius: 2px;
+        width: 240px;
+        box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.15);
+    }
+
+    .card__header {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        padding: 16px;
+    }
+
+    .card__header-title {
+        @include h5;
+    }
+
+    .card__header-button {
+        border: none;
+        outline: none;
+
+        &:hover {
+            border: none;
+            outline: none;
+        }
+
+        &:active {
+            border: none;
+            outline: none;
+        }
+    }
+
+    .card__img {
+        width: 240px;
+        height: 149px;
+        background-size: cover;
+    }
+
+    .card__footer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        height: 95px;
+
+        .card__footer-text {
+            @include h5;
+            width: min-content;
+            color: $primary-color-light-9;
+        }
+
+        .card__footer-button {
+            height: 40px;
+            border-radius: 2px;
+        }
+    }
+
+    .advantages__box {
+        width: 505px;
+        margin-top: 24px;
+    }
+
+    .advantage-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 16px 0;
+    }
+
+    .advantage-item__disabled {
+        color: $gray-color-light;
+    }
+
+    .advantage-item__title-box {
+        display: flex;
+        gap: 4px;
+    }
+
+    .advantage-item__title {
+        @include body-strong;
+    }
+
+    .feedbacks-btns__wrapp {
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-end;
+        margin-top: 96px;
+
+        @media (max-width: 360px) {
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+    }
+}

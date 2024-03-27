@@ -1,10 +1,12 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { IAuthRequest, IUpdateUser } from '../../types/apiTypes';
+import { IAuthRequest, IPostTariffRequest, IUpdateUser } from '../../types/apiTypes';
 import { authUser } from '../../api/loginUser';
 import { registerUser } from '../../api/registerUser';
 import { getUser } from '../../api/getUser';
 import { updateUser } from '../../api/updateUser';
 import { uploadAvatar } from '../../api/uploadAvatar';
+import { getTariff } from '../../api/getTariff';
+import { postTariff } from '../../api/postTariff';
 
 export const LoginUserThunk = createAsyncThunk('user/loginUser', async (request: IAuthRequest) => {
     const response = await authUser(request);
@@ -33,6 +35,19 @@ export const UploadAvatarThunk = createAsyncThunk(
     'user/uploadAvatar',
     async (request: { token: string; file: FormData }) => {
         const response = await uploadAvatar(request);
+        return response;
+    },
+);
+
+export const GetTariffListThunk = createAsyncThunk('user/uploaDAvatar', async () => {
+    const response = await getTariff();
+    return response;
+});
+
+export const PostTariffThunk = createAsyncThunk(
+    'user/postTariff',
+    async (request: IPostTariffRequest) => {
+        const response = await postTariff(request);
         return response;
     },
 );

@@ -102,3 +102,18 @@ export interface IUploadAvatarResponse {
     name: string;
     url: string;
 }
+
+export interface ITariffListResponse {
+    _id: string;
+    name: string;
+    periods: {
+        text: string;
+        cost: number;
+        days: number;
+    }[];
+}
+
+export interface IPostTariffRequest {
+    tariffId: string;
+    days: number;
+}
