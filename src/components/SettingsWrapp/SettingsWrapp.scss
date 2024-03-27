@@ -7,6 +7,11 @@
     margin: 24px;
     padding: 24px;
 
+    @media (max-width: 360px) {
+        margin: 24px 0;
+        padding: 16px 24px;
+    }
+
     .settings-wrapp__title {
         @include h4;
         margin-bottom: 16px;
@@ -17,12 +22,21 @@
         display: flex;
         flex-wrap: wrap;
         gap: 25px;
+
+        @media (max-width: 360px) {
+            width: 360px;
+            flex-direction: column;
+        }
     }
 
     .tariff__card {
         border-radius: 2px;
         width: 240px;
         box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.15);
+
+        @media (max-width: 360px) {
+            width: 312px;
+        }
     }
 
     .card__header {
@@ -55,6 +69,10 @@
         width: 240px;
         height: 149px;
         background-size: cover;
+
+        @media (max-width: 360px) {
+            width: 312px;
+        }
     }
 
     .card__footer {
@@ -79,6 +97,10 @@
     .advantages__box {
         width: 505px;
         margin-top: 24px;
+
+        @media (max-width: 360px) {
+            width: 312px;
+        }
     }
 
     .advantage-item {
@@ -95,6 +117,16 @@
     .advantage-item__title-box {
         display: flex;
         gap: 4px;
+
+        @media (max-width: 360px) {
+            width: 63%;
+        }
+    }
+
+    .advantage-item__icon {
+        @media (max-width: 360px) {
+            align-self: flex-start;
+        }
     }
 
     .advantage-item__title {

@@ -47,7 +47,7 @@ export const MainPage: React.FC = () => {
             const token = localStorage.getItem('jwtToken');
 
             dispatch(push(CONSTANTS.ROUTER__PATH.MAIN__PATH));
-            dispatch(GetUserThunk(token || accessToken));
+            dispatch(GetUserThunk(accessToken));
         }
     }, [isAuth]);
 

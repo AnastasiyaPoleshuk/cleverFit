@@ -4,12 +4,14 @@ import { CheckCircleFilled } from '@ant-design/icons';
 import { AppContext } from '../../context/AppContext';
 import { useContext } from 'react';
 import CONSTANTS from '@utils/constants';
-import { useAppDispatch } from '@hooks/typed-react-redux-hooks';
+import { useAppDispatch, useAppSelector } from '@hooks/typed-react-redux-hooks';
 import { setToken, changeAuthState } from '@redux/slices/UserSlice';
 import { push } from 'redux-first-history';
 
 export const ChangeTariffInfoModal = ({ isModalOpen }: { isModalOpen: boolean }) => {
     const { closeModal } = useContext(AppContext);
+    const { user } = useAppSelector((state) => state.user);
+
     const dispatch = useAppDispatch();
 
     const logOut = () => {
@@ -31,7 +33,7 @@ export const ChangeTariffInfoModal = ({ isModalOpen }: { isModalOpen: boolean })
                 status='success'
                 icon={<CheckCircleFilled style={{ color: '#2f54eb' }} />}
                 title='Чек для оплаты у вас на почте'
-                subTitle='Мы отправили инструкцию для оплаты вам на e-mail victorbyden@gmail.com. После подтверждения оплаты войдите в приложение заново.'
+                subTitle={`Мы отправили инструкцию для оплаты вам на e-mail ${user.email}. После подтверждения оплаты войдите в приложение заново.`}
                 extra='Не пришло письмо? Проверьте папку Спам.'
             />
         </Modal>

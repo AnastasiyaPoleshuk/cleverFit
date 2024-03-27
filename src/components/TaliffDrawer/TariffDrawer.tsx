@@ -1,4 +1,4 @@
-import { Drawer, Radio, RadioChangeEvent, Table, Tag } from 'antd';
+import { Drawer, Radio, RadioChangeEvent, Table, Tag, Button } from 'antd';
 import './TariffDrawer.scss';
 import {
     CheckCircleFilled,
@@ -7,11 +7,11 @@ import {
     CloseOutlined,
 } from '@ant-design/icons';
 import { AppContext } from '../../context/AppContext';
-import { useContext, useLayoutEffect, useState } from 'react';
+import { useContext, useEffect, useLayoutEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@hooks/typed-react-redux-hooks';
-import { Button } from 'antd/es/radio';
 import { PostTariffThunk } from '@redux/thunk/userThunks';
 import moment from 'moment';
+import { useResize } from '@hooks/useResize';
 
 const AdvantagesTableColumns = [
     {
@@ -65,6 +65,8 @@ interface PriseTableData {
 
 export const TariffDrawer = () => {
     const [days, setDays] = useState(0);
+    const { width: windowWidth, isScreenSm } = useResize();
+    const [isMobile, setIsMobile] = useState(isScreenSm);
     const [submitButtonDisabled, setSubmitButtonDisabled] = useState(true);
     const [priseTableDataSource, setPriseTableDataSource] = useState<PriseTableData[]>([]);
     const [advantagesTableDataSource, setAdvantagesTableDataSource] = useState<
@@ -74,14 +76,22 @@ export const TariffDrawer = () => {
     const { tariff, user } = useAppSelector((state) => state.user);
     const dispatch = useAppDispatch();
 
+    useEffect(() => {
+        setIsMobile(isScreenSm);
+    }, [windowWidth]);
+
     useLayoutEffect(() => {
         if (tariff.length) {
             const priseTableData = tariff[0].periods.map((item, index) => {
                 return {
                     key: `${index++}`,
                     period: <span>{item.text}</span>,
-                    prise: <h5 className='prise__prise'>{`${item.cost}$`}</h5>,
-                    isChecked: <Radio value={item.days} />,
+                    prise: (
+                        <h5 className='prise__prise'>{`${item.cost
+                            .toString()
+                            .replace('.', ',')}$`}</h5>
+                    ),
+                    isChecked: <Radio value={item.days} data-test-id={`tariff-${item.cost}`} />,
                 };
             });
 
@@ -176,16 +186,21 @@ export const TariffDrawer = () => {
         setTariffDrawerStatus(false);
     };
 
+    const changeTariff = () => {
+        dispatch(PostTariffThunk({ tariffId: tariff[0]._id, days }));
+        closeDrawer();
+    };
+
     return (
         <Drawer
             title={<h4 className='tariff-drawer__title'>Сравнить тарифы</h4>}
             styles={{
-                header: { borderBottom: 'none', marginBottom: 40 },
-                body: { padding: '0 24px 24px 24px' },
+                header: { borderBottom: 'none' },
+                body: { padding: '0 24px 0 24px' },
             }}
             data-test-id='tariff-sider'
             width={408}
-            placement={window.innerWidth > 360 ? 'right' : 'bottom'}
+            placement={isMobile ? 'bottom' : 'right'}
             open={isTariffDrawerOpen}
             closable={false}
             destroyOnClose={true}
@@ -193,13 +208,17 @@ export const TariffDrawer = () => {
             maskClosable={false}
             className='tariff-drawer'
             footer={
-                <Button
-                    disabled={submitButtonDisabled}
-                    onClick={() => dispatch(PostTariffThunk({ tariffId: tariff[0]._id, days }))}
-                    className='tariff-submit__btn'
-                >
-                    Выбрать и оплатить
-                </Button>
+                user.tariff ? null : (
+                    <Button
+                        type='primary'
+                        disabled={submitButtonDisabled}
+                        onClick={changeTariff}
+                        className='tariff-submit__btn'
+                        data-test-id='tariff-submit'
+                    >
+                        Выбрать и оплатить
+                    </Button>
+                )
             }
             extra={
                 <CloseOutlined
@@ -234,6 +253,7 @@ export const TariffDrawer = () => {
                         pagination={false}
                         showHeader={false}
                         rowClassName='tariff-advantages__rows'
+                        data-test-id='tariff-cost'
                     />
                 </Radio.Group>
             )}

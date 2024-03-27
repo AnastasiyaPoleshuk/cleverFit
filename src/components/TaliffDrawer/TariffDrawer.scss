@@ -1,18 +1,39 @@
 @import '../../App.variables.scss';
 
+.tariff-drawer {
+    @media (max-width: 360px) {
+        height: 550px !important;
+        border-top-right-radius: 24px !important;
+        border-top-left-radius: 24px !important;
+        width: 312px;
+    }
+}
+
 .tariff-drawer__title {
     @include h4;
+    margin-bottom: 40;
+    @media (max-width: 360px) {
+        margin-bottom: 0;
+    }
 }
 
 .tariff-advantages__rows {
     margin: 16px 0;
+    @media (max-width: 360px) {
+        margin: 8px 0;
+    }
 }
 
 .tariff-submit__btn {
-    border-radius: 2px;
+    border-radius: 2px !important;
     padding: 4px 15px;
     width: 344px;
     height: 40px;
+    text-align: center;
+
+    @media (max-width: 360px) {
+        width: 312px;
+    }
 }
 
 .ant-table-cell:not(:first-child) {
@@ -22,12 +43,21 @@
 .ant-table-cell {
     border-bottom: none !important;
     padding: 8px 0 !important;
+
+    @media (max-width: 360px) {
+        padding: 4px 0 !important;
+    }
 }
 
 .prise__title {
     @include body-strong;
     margin-top: 74px;
     margin-bottom: 24px;
+
+    @media (max-width: 360px) {
+        margin-top: 24px;
+        margin-bottom: 12px;
+    }
 }
 
 .prise__prise {
