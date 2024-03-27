@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /// <reference types="cypress" />
 
 const DATA_TEST_ID = {
@@ -49,26 +50,59 @@ describe('Sprint 5', () => {
         }
     }
 
-    beforeEach(() => {
+    function beforeEach(testName: string) {
         cy.visit('/');
         cy.intercept('POST', 'auth/login', { accessToken: 'SUPERUSER' }).as('login');
         cy.visit('/auth');
         cy.get('[data-test-id=login-email]').type('valadzkoaliaksei@tut.by');
         cy.get('[data-test-id=login-password]').type('1234qqQQ');
         cy.get('[data-test-id=login-submit-button]').click();
+
+        if (testName === 'profile') {
+            cy.intercept('GET', 'me', {
+                statusCode: 200,
+                body: {
+                    email: 'valadzkoaliaksei@tut.by',
+                    readyForJointTraining: false,
+                    sendNotification: false,
+                },
+            }).as('getUser');
+        }
+
+        if (testName === 'profileGoogle') {
+            cy.intercept('GET', 'me', {
+                statusCode: 200,
+                body: {
+                    email: 'thebestdeveloperintheworld@gmail.com',
+                    imgSrc: 'https://lh3.googleusercontent.com/a/ACg8ocK7Zxx6eMSuA-4_oUDsUIoh-RERhwB6mjReSs5L_kjQeg=s96-c',
+                    readyForJointTraining: false,
+                    sendNotification: false,
+                },
+            }).as('getUser');
+        }
+
+        if (testName === 'settingsPro') {
+            cy.intercept('GET', 'me', {
+                statusCode: 200,
+                body: {
+                    email: 'valadzkoaliaksei@tut.by',
+                    readyForJointTraining: true,
+                    sendNotification: false,
+                    tariff: {
+                        tariffId: '65df21ca9013cb64beacbd56',
+                        expired: '2025-03-09T10:18:40.805Z',
+                    },
+                },
+            }).as('getUser');
+        }
+
         cy.url().should('include', '/main');
-    });
+    }
 
     it('profile page', () => {
         // получение данных пользователя при входе
-        cy.intercept('GET', 'me', {
-            statusCode: 200,
-            body: {
-                email: 'valadzkoaliaksei@tut.by',
-                readyForJointTraining: false,
-                sendNotification: false,
-            },
-        }).as('getUser');
+        beforeEach('profile');
+        cy.wait(1000);
         cy.wait('@getUser');
 
         // страница профиля без аватара
@@ -191,368 +225,342 @@ describe('Sprint 5', () => {
         cy.get(`[data-test-id=${DATA_TEST_ID.profileSubmit}]`).should('be.enabled');
         cy.get(`[data-test-id=${DATA_TEST_ID.profileSubmit}]`).click();
         cy.wait('@updateUserWithError');
-        cy.wait(1000);
         takeScreenshots('profile-modal-error', resolutionLaptop);
     });
 
-    // it('profile page with google photo', () => {
-    //     cy.intercept('GET', 'me', {
-    //         statusCode: 200,
-    //         body: {
-    //             email: 'thebestdeveloperintheworld@gmail.com',
-    //             imgSrc: 'https://lh3.googleusercontent.com/a/ACg8ocK7Zxx6eMSuA-4_oUDsUIoh-RERhwB6mjReSs5L_kjQeg=s96-c',
-    //             readyForJointTraining: false,
-    //             sendNotification: false,
-    //         },
-    //     }).as('getUser');
-    //     cy.wait('@getUser');
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.menuButtonProfile}]`).click();
-    //     cy.url().should('include', '/profile');
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.profileAvatar}]`).within(() => {
-    //         cy.get('img')
-    //             .should('have.attr', 'src')
-    //             .should(
-    //                 'include',
-    //                 'https://lh3.googleusercontent.com/a/ACg8ocK7Zxx6eMSuA-4_oUDsUIoh-RERhwB6mjReSs5L_kjQeg=s96-c',
-    //             );
-    //     });
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.profileSubmit}]`).should('be.disabled');
+    it('profile page with google photo', () => {
+        beforeEach('profileGoogle');
+        cy.wait(1000);
 
-    //     // кнопка назад
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.headerSettings}]`).click();
-    //     cy.url().should('include', '/settings');
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.settingsBack}]`).click();
-    //     cy.url().should('include', '/profile');
-    // });
+        cy.wait('@getUser');
+        cy.get(`[data-test-id=${DATA_TEST_ID.menuButtonProfile}]`).click();
+        cy.url().should('include', '/profile');
+        cy.get(`[data-test-id=${DATA_TEST_ID.profileAvatar}]`).within(() => {
+            cy.get('img')
+                .should('have.attr', 'src')
+                .should(
+                    'include',
+                    'https://lh3.googleusercontent.com/a/ACg8ocK7Zxx6eMSuA-4_oUDsUIoh-RERhwB6mjReSs5L_kjQeg=s96-c',
+                );
+        });
+        cy.get(`[data-test-id=${DATA_TEST_ID.profileSubmit}]`).should('be.disabled');
 
-    // it('settings page', () => {
-    //     cy.intercept('GET', 'me', {
-    //         statusCode: 200,
-    //         body: {
-    //             email: 'valadzkoaliaksei@tut.by',
-    //             readyForJointTraining: false,
-    //             sendNotification: false,
-    //         },
-    //     }).as('getUser');
-    //     cy.intercept('GET', 'tariff-list', {
-    //         statusCode: 200,
-    //         body: [
-    //             {
-    //                 _id: '65df21ca9013cb64beacbd56',
-    //                 name: 'Pro',
-    //                 periods: [
-    //                     {
-    //                         text: '6 месяцев',
-    //                         cost: 5.5,
-    //                         days: 182,
-    //                     },
-    //                     {
-    //                         text: '9 месяцев',
-    //                         cost: 8.5,
-    //                         days: 274,
-    //                     },
-    //                     {
-    //                         text: '12 месяцев',
-    //                         cost: 10,
-    //                         days: 365,
-    //                     },
-    //                 ],
-    //             },
-    //         ],
-    //     }).as('getTarifList');
-    //     cy.wait('@getUser');
+        // кнопка назад
+        cy.get(`[data-test-id=${DATA_TEST_ID.headerSettings}]`).click();
+        cy.url().should('include', '/settings');
+        cy.get(`[data-test-id=${DATA_TEST_ID.settingsBack}]`).click();
+        cy.url().should('include', '/profile');
+    });
 
-    //     // кнопка назад
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.headerSettings}]`).click();
-    //     cy.wait('@getTarifList');
-    //     cy.url().should('include', '/settings');
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.settingsBack}]`).click();
-    //     cy.url().should('include', '/main');
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.headerSettings}]`).click();
+    it('settings page', () => {
+        beforeEach('profile');
+        cy.wait(1000);
 
-    //     // карточки
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.proTarifCard}]`).within(() => {
-    //         cy.get(`[data-test-id=${DATA_TEST_ID.activateTariffBtn}]`).should('be.visible');
-    //     });
+        cy.wait('@getUser');
+        cy.intercept('GET', 'tariff-list', {
+            statusCode: 200,
+            body: [
+                {
+                    _id: '65df21ca9013cb64beacbd56',
+                    name: 'Pro',
+                    periods: [
+                        {
+                            text: '6 месяцев',
+                            cost: 5.5,
+                            days: 182,
+                        },
+                        {
+                            text: '9 месяцев',
+                            cost: 8.5,
+                            days: 274,
+                        },
+                        {
+                            text: '12 месяцев',
+                            cost: 10,
+                            days: 365,
+                        },
+                    ],
+                },
+            ],
+        }).as('getTarifList');
 
-    //     // опции
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.tariffTrainings}]`).should(
-    //         'have.attr',
-    //         'aria-checked',
-    //         'false',
-    //     );
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.tariffNotifications}]`).should(
-    //         'have.attr',
-    //         'aria-checked',
-    //         'false',
-    //     );
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.tariffTheme}]`).should(
-    //         'have.attr',
-    //         'aria-checked',
-    //         'false',
-    //     );
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.tariffTheme}]`).should('be.disabled');
-    //     takeScreenshots('default-settings-page', resolutionLaptop);
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.tariffTrainingsIcon}]`).trigger('mouseover');
-    //     cy.contains('включеная функция позволит участвовать в совместных тренировках').should(
-    //         'be.visible',
-    //     );
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.tariffTrainingsIcon}]`).trigger('mouseout');
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.tariffNotificationsIcon}]`).trigger('mouseover');
-    //     cy.contains('включеная функция позволит получать уведомления об активностях').should(
-    //         'be.visible',
-    //     );
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.tariffNotificationsIcon}]`).trigger('mouseout');
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.tariffThemeIcon}]`).trigger('mouseover');
-    //     cy.contains('темная тема доступна для PRO tarif').should('be.visible');
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.tariffThemeIcon}]`).trigger('mouseout');
+        // кнопка назад
+        cy.get(`[data-test-id=${DATA_TEST_ID.headerSettings}]`).click();
+        cy.wait('@getTarifList');
+        cy.url().should('include', '/settings');
+        cy.get(`[data-test-id=${DATA_TEST_ID.settingsBack}]`).click();
+        cy.url().should('include', '/main');
+        cy.get(`[data-test-id=${DATA_TEST_ID.headerSettings}]`).click();
 
-    //     // сайдер
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.tariffSider}]`).should('not.exist');
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.proTarifCard}]`).within(() => {
-    //         cy.contains('Подробнее').click();
-    //     });
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.tariffSider}]`).should('exist').should('be.visible');
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.tariffCost}]`).contains('6 месяцев');
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.tariffCost}]`).contains('9 месяцев');
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.tariffCost}]`).contains('12 месяцев');
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.tariffCost}]`).contains('5,5');
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.tariffCost}]`).contains('8,5');
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.tariffCost}]`).contains('10');
-    //     takeScreenshots('settings-page-with-sider', resolutionMobile);
+        // карточки
+        cy.get(`[data-test-id=${DATA_TEST_ID.proTarifCard}]`).within(() => {
+            cy.get(`[data-test-id=${DATA_TEST_ID.activateTariffBtn}]`).should('be.visible');
+        });
 
-    //     // отправить запрос, модалка
-    //     cy.intercept('POST', 'tariff', {
-    //         statusCode: 200,
-    //         body: {},
-    //     }).as('buyTarif');
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.tariffSubmit}]`).should('be.disabled');
-    //     cy.get('[data-test-id=tariff-10]').click();
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.tariffSubmit}]`).should('be.enabled');
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.tariffSubmit}]`).click();
-    //     cy.wait('@buyTarif');
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.tariffModalSuccess}]`)
-    //         .contains('valadzkoaliaksei@tut.by')
-    //         .should('be.visible');
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.tariffSider}]`).should('not.exist');
-    //     takeScreenshots('buy-tariff-success', resolutionLaptop);
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.tariffModalSuccess}]`).within(() => {
-    //         cy.get('button').first().click();
-    //     });
-    //     cy.url().should('include', '/auth');
-    // });
+        // опции
+        cy.get(`[data-test-id=${DATA_TEST_ID.tariffTrainings}]`).should(
+            'have.attr',
+            'aria-checked',
+            'false',
+        );
+        cy.get(`[data-test-id=${DATA_TEST_ID.tariffNotifications}]`).should(
+            'have.attr',
+            'aria-checked',
+            'false',
+        );
+        cy.get(`[data-test-id=${DATA_TEST_ID.tariffTheme}]`).should(
+            'have.attr',
+            'aria-checked',
+            'false',
+        );
+        cy.get(`[data-test-id=${DATA_TEST_ID.tariffTheme}]`).should('be.disabled');
+        takeScreenshots('default-settings-page', resolutionLaptop);
+        cy.get(`[data-test-id=${DATA_TEST_ID.tariffTrainingsIcon}]`).trigger('mouseover');
+        cy.contains('включеная функция позволит участвовать в совместных тренировках').should(
+            'be.visible',
+        );
+        cy.get(`[data-test-id=${DATA_TEST_ID.tariffTrainingsIcon}]`).trigger('mouseout');
+        cy.get(`[data-test-id=${DATA_TEST_ID.tariffNotificationsIcon}]`).trigger('mouseover');
+        cy.contains('включеная функция позволит получать уведомления об активностях').should(
+            'be.visible',
+        );
+        cy.get(`[data-test-id=${DATA_TEST_ID.tariffNotificationsIcon}]`).trigger('mouseout');
+        cy.get(`[data-test-id=${DATA_TEST_ID.tariffThemeIcon}]`).trigger('mouseover');
+        cy.contains('темная тема доступна для PRO tarif').should('be.visible');
+        cy.get(`[data-test-id=${DATA_TEST_ID.tariffThemeIcon}]`).trigger('mouseout');
 
-    // it('settings page pro', () => {
-    //     cy.intercept('GET', 'me', {
-    //         statusCode: 200,
-    //         body: {
-    //             email: 'valadzkoaliaksei@tut.by',
-    //             readyForJointTraining: true,
-    //             sendNotification: false,
-    //             tariff: {
-    //                 tariffId: '65df21ca9013cb64beacbd56',
-    //                 expired: '2025-03-09T10:18:40.805Z',
-    //             },
-    //         },
-    //     }).as('getUser');
-    //     cy.intercept('GET', 'tariff-list', {
-    //         statusCode: 200,
-    //         body: [
-    //             {
-    //                 _id: '65df21ca9013cb64beacbd56',
-    //                 name: 'Pro',
-    //                 periods: [
-    //                     {
-    //                         text: '6 месяцев',
-    //                         cost: 5.5,
-    //                         days: 182,
-    //                     },
-    //                     {
-    //                         text: '9 месяцев',
-    //                         cost: 8.5,
-    //                         days: 274,
-    //                     },
-    //                     {
-    //                         text: '12 месяцев',
-    //                         cost: 10,
-    //                         days: 365,
-    //                     },
-    //                 ],
-    //             },
-    //         ],
-    //     }).as('getTarifList');
-    //     cy.wait('@getUser');
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.headerSettings}]`).click();
+        // сайдер
+        cy.get(`[data-test-id=${DATA_TEST_ID.tariffSider}]`).should('not.exist');
+        cy.get(`[data-test-id=${DATA_TEST_ID.proTarifCard}]`).within(() => {
+            cy.contains('Подробнее').click();
+        });
+        cy.get(`[data-test-id=${DATA_TEST_ID.tariffSider}]`).should('exist').should('be.visible');
+        cy.get(`[data-test-id=${DATA_TEST_ID.tariffCost}]`).contains('6 месяцев');
+        cy.get(`[data-test-id=${DATA_TEST_ID.tariffCost}]`).contains('9 месяцев');
+        cy.get(`[data-test-id=${DATA_TEST_ID.tariffCost}]`).contains('12 месяцев');
+        cy.get(`[data-test-id=${DATA_TEST_ID.tariffCost}]`).contains('5,5');
+        cy.get(`[data-test-id=${DATA_TEST_ID.tariffCost}]`).contains('8,5');
+        cy.get(`[data-test-id=${DATA_TEST_ID.tariffCost}]`).contains('10');
+        takeScreenshots('settings-page-with-sider', resolutionMobile);
 
-    //     // карточки
-    //     cy.wait('@getTarifList');
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.proTarifCard}]`).within(() => {
-    //         cy.contains('до 09.03').should('be.visible');
-    //     });
-    //     takeScreenshots('settings-pro-cards', resolutionMobile);
+        // отправить запрос, модалка
+        cy.intercept('POST', 'tariff', {
+            statusCode: 200,
+            body: {},
+        }).as('buyTarif');
+        cy.get(`[data-test-id=${DATA_TEST_ID.tariffSubmit}]`).should('be.disabled');
+        cy.get('[data-test-id=tariff-10]').click();
+        cy.get(`[data-test-id=${DATA_TEST_ID.tariffSubmit}]`).should('be.enabled');
+        cy.get(`[data-test-id=${DATA_TEST_ID.tariffSubmit}]`).click();
+        cy.wait('@buyTarif');
+        cy.get(`[data-test-id=${DATA_TEST_ID.tariffModalSuccess}]`)
+            .contains('valadzkoaliaksei@tut.by')
+            .should('be.visible');
+        cy.get(`[data-test-id=${DATA_TEST_ID.tariffSider}]`).should('not.exist');
+        takeScreenshots('buy-tariff-success', resolutionLaptop);
+        cy.get(`[data-test-id=${DATA_TEST_ID.tariffModalSuccess}]`).within(() => {
+            cy.get('button').first().click();
+        });
+        cy.url().should('include', '/auth');
+    });
 
-    //     // опции
-    //     cy.intercept('PUT', 'user', {
-    //         statusCode: 200,
-    //         body: {
-    //             email: 'valadzkoaliaksei@tut.by',
-    //             readyForJointTraining: false,
-    //             sendNotification: false,
-    //             tariff: {
-    //                 tariffId: '65df21ca9013cb64beacbd56',
-    //                 expired: '2025-03-09T10:18:40.805Z',
-    //             },
-    //         },
-    //     }).as('updateUserTrainings');
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.tariffTrainings}]`).should(
-    //         'have.attr',
-    //         'aria-checked',
-    //         'true',
-    //     );
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.tariffNotifications}]`).should(
-    //         'have.attr',
-    //         'aria-checked',
-    //         'false',
-    //     );
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.tariffTheme}]`).should(
-    //         'have.attr',
-    //         'aria-checked',
-    //         'false',
-    //     );
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.tariffTheme}]`).should('be.enabled');
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.tariffTrainings}]`).click();
-    //     cy.wait('@updateUserTrainings');
-    //     cy.intercept('PUT', 'user', {
-    //         statusCode: 200,
-    //         body: {
-    //             email: 'valadzkoaliaksei@tut.by',
-    //             readyForJointTraining: false,
-    //             sendNotification: true,
-    //             tariff: {
-    //                 tariffId: '65df21ca9013cb64beacbd56',
-    //                 expired: '2025-03-09T10:18:40.805Z',
-    //             },
-    //         },
-    //     }).as('updateUserNotifications');
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.tariffTrainings}]`).should(
-    //         'have.attr',
-    //         'aria-checked',
-    //         'false',
-    //     );
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.tariffNotifications}]`).click();
-    //     cy.wait('@updateUserNotifications');
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.tariffNotifications}]`).should(
-    //         'have.attr',
-    //         'aria-checked',
-    //         'true',
-    //     );
+    it('settings page pro', () => {
+        beforeEach('settingsPro');
+        cy.intercept('GET', 'tariff-list', {
+            statusCode: 200,
+            body: [
+                {
+                    _id: '65df21ca9013cb64beacbd56',
+                    name: 'Pro',
+                    periods: [
+                        {
+                            text: '6 месяцев',
+                            cost: 5.5,
+                            days: 182,
+                        },
+                        {
+                            text: '9 месяцев',
+                            cost: 8.5,
+                            days: 274,
+                        },
+                        {
+                            text: '12 месяцев',
+                            cost: 10,
+                            days: 365,
+                        },
+                    ],
+                },
+            ],
+        }).as('getTarifList');
+        cy.wait(1000);
 
-    //     // сайдер
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.proTarifCard}]`).within(() => {
-    //         cy.contains('Подробнее').click();
-    //     });
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.tariffSider}]`)
-    //         .should('exist')
-    //         .should('be.visible')
-    //         .within(() => {
-    //             cy.contains('до 09.03').should('be.visible');
-    //             cy.contains('Выбрать и оплатить').should('not.exist');
-    //             cy.get(`[data-test-id=${DATA_TEST_ID.tariffCost}]`).should('not.exist');
-    //         });
-    //     takeScreenshots('settings-sider-pro', resolutionTablet);
-    // });
+        cy.wait('@getUser');
+        cy.get(`[data-test-id=${DATA_TEST_ID.headerSettings}]`).click();
 
-    // it('feedbacks', () => {
-    //     cy.intercept('GET', 'me', {
-    //         statusCode: 200,
-    //         body: {
-    //             email: 'valadzkoaliaksei@tut.by',
-    //             readyForJointTraining: false,
-    //             sendNotification: false,
-    //         },
-    //     }).as('getUser');
-    //     cy.intercept('GET', 'tariff-list', {
-    //         statusCode: 200,
-    //         body: [
-    //             {
-    //                 _id: '65df21ca9013cb64beacbd56',
-    //                 name: 'Pro',
-    //                 periods: [
-    //                     {
-    //                         text: '6 месяцев',
-    //                         cost: 5.5,
-    //                         days: 182,
-    //                     },
-    //                     {
-    //                         text: '9 месяцев',
-    //                         cost: 8.5,
-    //                         days: 274,
-    //                     },
-    //                     {
-    //                         text: '12 месяцев',
-    //                         cost: 10,
-    //                         days: 365,
-    //                     },
-    //                 ],
-    //             },
-    //         ],
-    //     }).as('getTarifList');
-    //     cy.wait('@getUser');
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.headerSettings}]`).click();
-    //     cy.wait('@getTarifList');
-    //     cy.intercept('GET', 'feedback', {
-    //         statusCode: 200,
-    //         body: [
-    //             {
-    //                 id: '65e4568855c4a5796d525e57',
-    //                 fullName: null,
-    //                 imageSrc: null,
-    //                 message: 'sadfsdafsd',
-    //                 rating: 3,
-    //                 createdAt: '2024-03-03T10:52:56.749Z',
-    //             },
-    //             {
-    //                 id: '65e4568855c4a5796d525579',
-    //                 fullName: 'Канье',
-    //                 message: 'первый',
-    //                 rating: 3,
-    //                 imageSrc:
-    //                     'https://training-api.clevertec.ru/media/avatar/65df1fc091548a261a8f8c97.png',
-    //                 createdAt: '2021-03-03T10:52:58.749Z',
-    //             },
-    //             {
-    //                 id: '65e4568855c4a5796d525e58',
-    //                 fullName: 'Бабай Бабай',
-    //                 imageSrc: null,
-    //                 message: 'текст',
-    //                 rating: 3,
-    //                 createdAt: '2024-03-03T10:52:57.749Z',
-    //             },
-    //             {
-    //                 id: '65e4566b55c4a5796d525bd7',
-    //                 fullName: 'Гена Букин',
-    //                 imageSrc:
-    //                     'https://lh3.googleusercontent.com/a/ACg8ocIs5m7cLVsb2UqRVPpFTv_imE_EOSlNMdwidbUNPqE0=s96-c',
-    //                 message: 'really cool app',
-    //                 rating: 5,
-    //                 createdAt: '2025-03-03T10:52:27.796Z',
-    //             },
-    //         ],
-    //     }).as('getFeedbacks');
+        // карточки
+        cy.wait('@getTarifList');
+        cy.get(`[data-test-id=${DATA_TEST_ID.proTarifCard}]`).within(() => {
+            cy.contains('до 09.03').should('be.visible');
+        });
+        takeScreenshots('settings-pro-cards', resolutionMobile);
 
-    //     cy.contains('Смотреть все отзывы').click();
-    //     cy.url().should('include', '/feedbacks');
-    //     cy.wait('@getFeedbacks');
-    //     takeScreenshots('feedbacks with photo', resolutionLaptop);
-    //     cy.go('back');
+        // опции
+        cy.intercept('PUT', 'user', {
+            statusCode: 200,
+            body: {
+                email: 'valadzkoaliaksei@tut.by',
+                readyForJointTraining: false,
+                sendNotification: false,
+                tariff: {
+                    tariffId: '65df21ca9013cb64beacbd56',
+                    expired: '2025-03-09T10:18:40.805Z',
+                },
+            },
+        }).as('updateUserTrainings');
+        cy.get(`[data-test-id=${DATA_TEST_ID.tariffTrainings}]`).should(
+            'have.attr',
+            'aria-checked',
+            'true',
+        );
+        cy.get(`[data-test-id=${DATA_TEST_ID.tariffNotifications}]`).should(
+            'have.attr',
+            'aria-checked',
+            'false',
+        );
+        cy.get(`[data-test-id=${DATA_TEST_ID.tariffTheme}]`).should(
+            'have.attr',
+            'aria-checked',
+            'false',
+        );
+        cy.get(`[data-test-id=${DATA_TEST_ID.tariffTheme}]`).should('be.enabled');
+        cy.get(`[data-test-id=${DATA_TEST_ID.tariffTrainings}]`).click();
+        cy.wait('@updateUserTrainings');
+        cy.intercept('PUT', 'user', {
+            statusCode: 200,
+            body: {
+                email: 'valadzkoaliaksei@tut.by',
+                readyForJointTraining: false,
+                sendNotification: true,
+                tariff: {
+                    tariffId: '65df21ca9013cb64beacbd56',
+                    expired: '2025-03-09T10:18:40.805Z',
+                },
+            },
+        }).as('updateUserNotifications');
+        cy.get(`[data-test-id=${DATA_TEST_ID.tariffTrainings}]`).should(
+            'have.attr',
+            'aria-checked',
+            'false',
+        );
+        cy.get(`[data-test-id=${DATA_TEST_ID.tariffNotifications}]`).click();
+        cy.wait('@updateUserNotifications');
+        cy.get(`[data-test-id=${DATA_TEST_ID.tariffNotifications}]`).should(
+            'have.attr',
+            'aria-checked',
+            'true',
+        );
 
-    //     cy.intercept('POST', 'feedback', {
-    //         statusCode: 200,
-    //         body: {},
-    //     }).as('postFeedback');
-    //     cy.contains('Написать отзыв').click();
-    //     cy.get('.ant-modal ul li').eq(4).click();
-    //     cy.get(`[data-test-id=${DATA_TEST_ID.newReviewSubmitBtn}]`).click();
-    //     cy.wait('@postFeedback');
-    // });
+        // сайдер
+        cy.get(`[data-test-id=${DATA_TEST_ID.proTarifCard}]`).within(() => {
+            cy.contains('Подробнее').click();
+        });
+        cy.get(`[data-test-id=${DATA_TEST_ID.tariffSider}]`)
+            .should('exist')
+            .should('be.visible')
+            .within(() => {
+                cy.contains('до 09.03').should('be.visible');
+                cy.contains('Выбрать и оплатить').should('not.exist');
+                cy.get(`[data-test-id=${DATA_TEST_ID.tariffCost}]`).should('not.exist');
+            });
+        takeScreenshots('settings-sider-pro', resolutionTablet);
+    });
+
+    it('feedbacks', () => {
+        beforeEach('profile');
+        cy.intercept('GET', 'tariff-list', {
+            statusCode: 200,
+            body: [
+                {
+                    _id: '65df21ca9013cb64beacbd56',
+                    name: 'Pro',
+                    periods: [
+                        {
+                            text: '6 месяцев',
+                            cost: 5.5,
+                            days: 182,
+                        },
+                        {
+                            text: '9 месяцев',
+                            cost: 8.5,
+                            days: 274,
+                        },
+                        {
+                            text: '12 месяцев',
+                            cost: 10,
+                            days: 365,
+                        },
+                    ],
+                },
+            ],
+        }).as('getTarifList');
+        cy.wait(1000);
+
+        cy.wait('@getUser');
+        cy.get(`[data-test-id=${DATA_TEST_ID.headerSettings}]`).click();
+        cy.wait('@getTarifList');
+        cy.intercept('GET', 'feedback', {
+            statusCode: 200,
+            body: [
+                {
+                    id: '65e4568855c4a5796d525e57',
+                    fullName: null,
+                    imageSrc: null,
+                    message: 'sadfsdafsd',
+                    rating: 3,
+                    createdAt: '2024-03-03T10:52:56.749Z',
+                },
+                {
+                    id: '65e4568855c4a5796d525579',
+                    fullName: 'Канье',
+                    message: 'первый',
+                    rating: 3,
+                    imageSrc:
+                        'https://training-api.clevertec.ru/media/avatar/65df1fc091548a261a8f8c97.png',
+                    createdAt: '2021-03-03T10:52:58.749Z',
+                },
+                {
+                    id: '65e4568855c4a5796d525e58',
+                    fullName: 'Бабай Бабай',
+                    imageSrc: null,
+                    message: 'текст',
+                    rating: 3,
+                    createdAt: '2024-03-03T10:52:57.749Z',
+                },
+                {
+                    id: '65e4566b55c4a5796d525bd7',
+                    fullName: 'Гена Букин',
+                    imageSrc:
+                        'https://lh3.googleusercontent.com/a/ACg8ocIs5m7cLVsb2UqRVPpFTv_imE_EOSlNMdwidbUNPqE0=s96-c',
+                    message: 'really cool app',
+                    rating: 5,
+                    createdAt: '2025-03-03T10:52:27.796Z',
+                },
+            ],
+        }).as('getFeedbacks');
+
+        cy.contains('Смотреть все отзывы').click();
+        cy.url().should('include', '/feedbacks');
+        cy.wait('@getFeedbacks');
+        takeScreenshots('feedbacks with photo', resolutionLaptop);
+        cy.go('back');
+
+        cy.intercept('POST', 'feedback', {
+            statusCode: 200,
+            body: {},
+        }).as('postFeedback');
+        cy.contains('Написать отзыв').click();
+        cy.get('.ant-modal ul li').eq(4).click();
+        cy.get(`[data-test-id=${DATA_TEST_ID.newReviewSubmitBtn}]`).click();
+        cy.wait('@postFeedback');
+    });
 });
