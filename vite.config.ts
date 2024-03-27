@@ -3,13 +3,13 @@ import path from 'path';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
     plugins: [react()],
     server: {
         host: true,
         port: 3000,
     },
-    // base: '/AnastasiyaPoleshuk/',
+    base: command === 'build' ? '/AnastasiyaPoleshuk/' : '/',
     resolve: {
         alias: {
             '@public': path.resolve(__dirname, 'public'),
@@ -22,4 +22,4 @@ export default defineConfig({
             '@utils': path.resolve(__dirname, 'src/utils'),
         },
     },
-});
+}));
