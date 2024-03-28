@@ -51,7 +51,14 @@ export const ProfileWrapp = () => {
         setAvatarUrl(user.imgSrc);
         setSubmitButtonDisabled(true);
         if (avatarUrl) {
-            setAvatar([{ uid: '0', name: 'avatar', status: 'done', url: avatarUrl }]);
+            setAvatar([
+                {
+                    uid: '0',
+                    name: 'avatar',
+                    status: 'done',
+                    url: `${CONSTANTS.AVATAR_URL}${avatarUrl}`,
+                },
+            ]);
         }
     }, []);
 
@@ -92,7 +99,12 @@ export const ProfileWrapp = () => {
     }, [isUpdateUserError]);
 
     const saveChanges = (values: IUpdateUser) => {
-        dispatch(UpdateUserThunk(values));
+        dispatch(
+            UpdateUserThunk({
+                ...values,
+                imgSrc: avatarUrl,
+            }),
+        );
         setSubmitButtonDisabled(true);
     };
 
