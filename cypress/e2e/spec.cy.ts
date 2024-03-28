@@ -102,7 +102,6 @@ describe('Sprint 5', () => {
     it('profile page', () => {
         // получение данных пользователя при входе
         beforeEach('profile');
-        cy.wait(1000);
         cy.wait('@getUser');
 
         // страница профиля без аватара
@@ -230,7 +229,6 @@ describe('Sprint 5', () => {
 
     it('profile page with google photo', () => {
         beforeEach('profileGoogle');
-        cy.wait(1000);
 
         cy.wait('@getUser');
         cy.get(`[data-test-id=${DATA_TEST_ID.menuButtonProfile}]`).click();
@@ -254,7 +252,6 @@ describe('Sprint 5', () => {
 
     it('settings page', () => {
         beforeEach('profile');
-        cy.wait(1000);
 
         cy.wait('@getUser');
         cy.intercept('GET', 'tariff-list', {
@@ -392,7 +389,6 @@ describe('Sprint 5', () => {
                 },
             ],
         }).as('getTarifList');
-        cy.wait(1000);
 
         cy.wait('@getUser');
         cy.get(`[data-test-id=${DATA_TEST_ID.headerSettings}]`).click();
@@ -503,8 +499,6 @@ describe('Sprint 5', () => {
                 },
             ],
         }).as('getTarifList');
-        cy.wait(1000);
-
         cy.wait('@getUser');
         cy.get(`[data-test-id=${DATA_TEST_ID.headerSettings}]`).click();
         cy.wait('@getTarifList');

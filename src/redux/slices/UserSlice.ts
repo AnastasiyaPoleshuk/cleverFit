@@ -93,6 +93,9 @@ const userSlice = createSlice({
         changeAuthState: (state, action: PayloadAction<boolean>) => {
             state.isAuth = action.payload;
         },
+        changeUpdateUserSuccessState: (state, action: PayloadAction<boolean>) => {
+            state.isUpdateUserSuccess = action.payload;
+        },
         changeIsPostTariffSuccessState: (state, action: PayloadAction<boolean>) => {
             state.isPostTariffSuccess = action.payload;
         },
@@ -231,6 +234,7 @@ export const {
     changeAuthState,
     setToken,
     changeIsPostTariffSuccessState,
+    changeUpdateUserSuccessState,
 } = userSlice.actions;
 
 export default userSlice.reducer;

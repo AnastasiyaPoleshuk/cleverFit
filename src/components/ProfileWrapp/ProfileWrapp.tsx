@@ -21,6 +21,7 @@ import { UpdateUserFail } from '@components/ProfileModals/UpdateUserFail';
 import { UpdateUserSuccess } from '@components/ProfileModals/UpdateUserSuccess';
 import moment from 'moment';
 import { useResize } from '@hooks/useResize';
+import { changeUpdateUserSuccessState } from '@redux/slices/UserSlice';
 
 export const ProfileWrapp = () => {
     const [previewOpen, setPreviewOpen] = useState(false);
@@ -34,7 +35,7 @@ export const ProfileWrapp = () => {
     const [submitButtonDisabled, setSubmitButtonDisabled] = useState(false);
     const [isPasswordRequired, setIsPasswordRequired] = useState(false);
     const [password, setPassword] = useState('');
-    const { width: windowWidth, isScreenSm } = useResize();
+    const { isScreenSm } = useResize();
     const {
         user,
         isUploadAvatarSuccess,
@@ -48,6 +49,7 @@ export const ProfileWrapp = () => {
     const dispatch = useAppDispatch();
 
     useEffect(() => {
+        setIsUpdateSuccess(false);
         setAvatarUrl(user.imgSrc);
         setSubmitButtonDisabled(true);
         if (avatarUrl) {
@@ -60,6 +62,11 @@ export const ProfileWrapp = () => {
                 },
             ]);
         }
+
+        return () => {
+            setIsUpdateSuccess(false);
+            dispatch(changeUpdateUserSuccessState(false));
+        };
     }, []);
 
     useEffect(() => {
@@ -350,7 +357,7 @@ export const ProfileWrapp = () => {
             >
                 <img alt='example' style={{ width: '100%' }} src={previewImage} />
             </Modal>
-            {isUpdateSuccess && <UpdateUserSuccess />}
+            {isUpdateSuccess ? <UpdateUserSuccess /> : null}
         </div>
     );
 };
