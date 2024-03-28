@@ -1,20 +1,26 @@
 import { Result, Button } from 'antd';
 import './RegistrationResult.scss';
-import { useAppDispatch, useAppSelector } from '@hooks/typed-react-redux-hooks';
+import { useAppDispatch } from '@hooks/typed-react-redux-hooks';
 import { push } from 'redux-first-history';
 import CONSTANTS from '@utils/constants';
-import { useEffect } from 'react';
-import { changeRegisterErrorState } from '@redux/slices/UserSlice';
+import { useContext } from 'react';
+import { RegisterUserThunk } from '@redux/thunk/userThunks';
+import { AppContext } from '../../context/AppContext';
 
 export const RegistrationFailWindow = () => {
-    const dispatch = useAppDispatch();
-    const { isRegisterError } = useAppSelector((state) => state.user);
+    const { registrationData } = useContext(AppContext);
 
-    useEffect(() => {
-        if (!isRegisterError) {
-            dispatch(push(`${CONSTANTS.ROUTER__PATH.AUTH__PATH}/registration`));
-        }
-    }, [isRegisterError]);
+    const dispatch = useAppDispatch();
+
+    const retryRequest = () => {
+        dispatch(
+            RegisterUserThunk({
+                email: registrationData.email,
+                password: registrationData.password,
+            }),
+        );
+        dispatch(push(`${CONSTANTS.ROUTER__PATH.AUTH__PATH}/registration`));
+    };
 
     return (
         <Result
@@ -25,7 +31,7 @@ export const RegistrationFailWindow = () => {
             extra={[
                 <Button
                     type='primary'
-                    onClick={() => dispatch(changeRegisterErrorState(false))}
+                    onClick={retryRequest}
                     className='registration__res_btn'
                     data-test-id='registration-retry-button'
                 >

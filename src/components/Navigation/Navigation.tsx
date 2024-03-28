@@ -51,7 +51,7 @@ export const Navigation: React.FC = () => {
 
     useEffect(() => {
         setCollapsed(isScreenSm);
-    }, []);
+    }, [windowWidth]);
 
     const dispatch = useAppDispatch();
 
@@ -63,6 +63,7 @@ export const Navigation: React.FC = () => {
         switch (item.key) {
             case CONSTANTS.SIDEBAR_KEYS.CALENDAR:
                 dispatch(GetTrainingInfoThunk(accessToken));
+                dispatch(push(`${CONSTANTS.ROUTER__PATH.CALENDAR__PATH}`));
                 break;
             case CONSTANTS.SIDEBAR_KEYS.PROFILE:
                 dispatch(push(`${CONSTANTS.ROUTER__PATH.PROFILE__PATH}`));

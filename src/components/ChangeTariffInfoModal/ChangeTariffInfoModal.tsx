@@ -5,7 +5,7 @@ import { AppContext } from '../../context/AppContext';
 import { useContext } from 'react';
 import CONSTANTS from '@utils/constants';
 import { useAppDispatch, useAppSelector } from '@hooks/typed-react-redux-hooks';
-import { setToken, changeAuthState } from '@redux/slices/UserSlice';
+import { setToken, changeAuthState, changeIsPostTariffSuccessState } from '@redux/slices/UserSlice';
 import { push } from 'redux-first-history';
 
 export const ChangeTariffInfoModal = ({ isModalOpen }: { isModalOpen: boolean }) => {
@@ -15,10 +15,11 @@ export const ChangeTariffInfoModal = ({ isModalOpen }: { isModalOpen: boolean })
     const dispatch = useAppDispatch();
 
     const logOut = () => {
-        dispatch(push(CONSTANTS.ROUTER__PATH.AUTH__PATH));
         dispatch(setToken(''));
         dispatch(changeAuthState(false));
         localStorage.removeItem('jwtToken');
+        dispatch(changeIsPostTariffSuccessState(false));
+        dispatch(push(CONSTANTS.ROUTER__PATH.AUTH__PATH));
         closeModal(CONSTANTS.CHANGE_TARIFF_INFO_MODAL);
     };
 

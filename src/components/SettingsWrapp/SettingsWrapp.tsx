@@ -84,6 +84,7 @@ export const SettingsWrapp = () => {
                                 type='primary'
                                 className='card__footer-button'
                                 data-test-id='activate-tariff-btn'
+                                onClick={() => setTariffDrawerStatus(true)}
                             >
                                 Активировать
                             </Button>

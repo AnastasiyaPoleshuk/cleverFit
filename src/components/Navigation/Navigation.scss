@@ -27,6 +27,12 @@
         padding-top: 42px;
     }
 
+    .logo-icon {
+        @media (max-width: 360px) {
+            width: 72px;
+        }
+    }
+
     .logo-short-icon {
         margin: 10px 0 73px 0;
         @media (max-width: 360px) {

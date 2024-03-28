@@ -93,6 +93,9 @@ const userSlice = createSlice({
         changeAuthState: (state, action: PayloadAction<boolean>) => {
             state.isAuth = action.payload;
         },
+        changeIsPostTariffSuccessState: (state, action: PayloadAction<boolean>) => {
+            state.isPostTariffSuccess = action.payload;
+        },
         setToken: (state, action: PayloadAction<string>) => {
             state.accessToken = action.payload;
         },
@@ -120,6 +123,8 @@ const userSlice = createSlice({
         builder
             .addCase(RegisterUserThunk.pending, (state) => {
                 state.isLoading = true;
+                state.isRegisterError = false;
+                state.isRegisterSuccess = false;
             })
             .addCase(RegisterUserThunk.fulfilled, (state) => {
                 state.isLoading = false;
@@ -134,29 +139,20 @@ const userSlice = createSlice({
                 state.error = JSON.parse(action.error.message as string);
             });
         builder
-            .addCase(GetUserThunk.pending, (state) => {
-                state.isLoading = true;
-            })
             .addCase(GetUserThunk.fulfilled, (state, action) => {
-                state.isLoading = false;
                 state.isGetUserError = false;
                 state.isGetUserSuccess = true;
 
                 state.user = action.payload.data;
             })
             .addCase(GetUserThunk.rejected, (state, action) => {
-                state.isLoading = false;
                 state.isGetUserError = true;
                 state.isGetUserSuccess = false;
 
                 state.error = JSON.parse(action.error.message as string);
             });
         builder
-            .addCase(UpdateUserThunk.pending, (state) => {
-                state.isLoading = true;
-            })
             .addCase(UpdateUserThunk.fulfilled, (state, action) => {
-                state.isLoading = false;
                 state.isUpdateUserError = false;
                 state.isUpdateUserSuccess = true;
 
@@ -229,7 +225,12 @@ const userSlice = createSlice({
     },
 });
 
-export const { changeErrorState, changeRegisterErrorState, changeAuthState, setToken } =
-    userSlice.actions;
+export const {
+    changeErrorState,
+    changeRegisterErrorState,
+    changeAuthState,
+    setToken,
+    changeIsPostTariffSuccessState,
+} = userSlice.actions;
 
 export default userSlice.reducer;
