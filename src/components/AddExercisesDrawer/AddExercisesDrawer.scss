@@ -13,9 +13,8 @@
 
 .ant-drawer-content-wrapper {
     @media (max-width: 360px) {
-        height: 550px !important;
-        border-top-right-radius: 24px !important;
-        border-top-left-radius: 24px !important;
+        // border-top-right-radius: 24px !important;
+        // border-top-left-radius: 24px !important;
     }
 }
 
@@ -56,7 +55,7 @@
 
     .ant-input {
         height: 24px;
-        border-radius: 2px;
+        border-radius: $border-radius-2;
     }
 }
 
@@ -118,17 +117,17 @@
     justify-content: space-between;
     background-color: rgb(0, 0, 0, 0.06);
     border-radius: 0 0 6px 6px;
-    height: 40px;
+    height: $button-height;
 }
 
 .add-form-item__btn {
     text-align: left;
-    height: 40px;
+    height: $button-height;
 }
 
 .remove-form-item__btn {
     text-align: right;
-    height: 40px;
+    height: $button-height;
 
     color: $gray-color;
 }

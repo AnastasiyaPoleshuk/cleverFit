@@ -5,9 +5,10 @@ import { push } from 'redux-first-history';
 import './CheckPasswordResult.scss';
 import { useEffect } from 'react';
 import { changePasswordErrorState } from '../../redux/slices/ChangePasswordSlice';
+import { routerSelector } from '@utils/StoreSelectors';
 
 export const ChangePasswordFail = () => {
-    const router = useAppSelector((state) => state.router);
+    const router = useAppSelector(routerSelector);
     const dispatch = useAppDispatch();
 
     useEffect(() => {

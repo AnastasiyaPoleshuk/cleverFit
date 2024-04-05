@@ -8,19 +8,6 @@
         width: 329px;
     }
 
-    .header__main-link_btn {
-        height: auto;
-        color: $gray-color;
-        border: none;
-        outline: none;
-        padding: 0;
-
-        &:hover {
-            border: none;
-            outline: none;
-        }
-    }
-
     .header__home-link {
         display: block;
         text-align: left;
@@ -113,6 +100,19 @@
     }
 }
 
+.header__main-link_btn {
+    height: auto;
+    color: $gray-color;
+    border: none;
+    outline: none;
+    padding: 0;
+
+    &:hover {
+        border: none;
+        outline: none;
+    }
+}
+
 .profile-header {
     display: flex;
     justify-content: space-between;
@@ -173,5 +173,36 @@
 
     &__title {
         @include h4;
+    }
+}
+
+.trainings__header {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: $primary-color-light-1;
+    gap: 6px;
+    padding: 16px 24px 20px 24px;
+
+    @media (max-width: 360px) {
+        width: 329px;
+    }
+
+    .header__info-settings-btn {
+        display: block;
+        width: 100%;
+        text-align: right;
+
+        & p {
+            margin-left: 8px;
+        }
+
+        @media (max-width: 360px) {
+            background: none;
+
+            border: none;
+            padding: 7px 8px;
+            box-shadow: none;
+        }
     }
 }

@@ -30,7 +30,7 @@
     }
 
     .tariff__card {
-        border-radius: 2px;
+        border-radius: $border-radius-2;
         width: 240px;
         box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.15);
 
@@ -89,8 +89,8 @@
         }
 
         .card__footer-button {
-            height: 40px;
-            border-radius: 2px;
+            height: $button-height;
+            border-radius: $border-radius-2;
         }
     }
 

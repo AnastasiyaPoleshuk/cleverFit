@@ -5,10 +5,11 @@ import { push } from 'redux-first-history';
 import { useAppDispatch, useAppSelector } from '@hooks/typed-react-redux-hooks';
 import { useEffect } from 'react';
 import { changeRegisterErrorState } from '@redux/slices/UserSlice';
+import { UserSelector } from '@utils/StoreSelectors';
 
 export const RegistrationFailEmailWindow = () => {
     const dispatch = useAppDispatch();
-    const { isRegisterError } = useAppSelector((state) => state.user);
+    const { isRegisterError } = useAppSelector(UserSelector);
 
     useEffect(() => {
         if (!isRegisterError) {

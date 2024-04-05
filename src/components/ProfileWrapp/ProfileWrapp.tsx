@@ -12,28 +12,34 @@ import {
     UploadProps,
 } from 'antd';
 import { useEffect, useState } from 'react';
-import { PlusOutlined, UploadOutlined } from '@ant-design/icons';
+import { UploadOutlined } from '@ant-design/icons';
 import CONSTANTS, { calendarLocale } from '@utils/constants';
 import { UpdateUserThunk, UploadAvatarThunk } from '@redux/thunk/userThunks';
 import { IUpdateUser } from '../../types/apiTypes';
 import { ProfileErrorModal } from '@components/ProfileModals/ProfileErrorModal';
 import { UpdateUserFail } from '@components/ProfileModals/UpdateUserFail';
 import { UpdateUserSuccess } from '@components/ProfileModals/UpdateUserSuccess';
-import moment from 'moment';
 import { useResize } from '@hooks/useResize';
 import { changeUpdateUserSuccessState } from '@redux/slices/UserSlice';
+import { UserSelector } from '@utils/StoreSelectors';
+import {
+    getInitialValues,
+    passwordInputRules,
+    repeatPasswordInputRules,
+    uploadButton,
+} from './componentUtils';
 
 export const ProfileWrapp = () => {
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
     const [previewTitle, setPreviewTitle] = useState('');
+    const [isPasswordRequired, setIsPasswordRequired] = useState(false);
     const [isUpdateSuccess, setIsUpdateSuccess] = useState(false);
     const [avatar, setAvatar] = useState<UploadFile[]>([]);
     const [isValidEmail, setIsValidEmail] = useState(true);
     const [isValidPassword, setIsValidPassword] = useState(true);
     const [isPasswordsMatch, setIsVPasswordsMatch] = useState(true);
     const [submitButtonDisabled, setSubmitButtonDisabled] = useState(false);
-    const [isPasswordRequired, setIsPasswordRequired] = useState(false);
     const [password, setPassword] = useState('');
     const { isScreenSm } = useResize();
     const {
@@ -43,8 +49,9 @@ export const ProfileWrapp = () => {
         isUploadAvatarError,
         isUpdateUserError,
         isUpdateUserSuccess,
-    } = useAppSelector((state) => state.user);
+    } = useAppSelector(UserSelector);
     const [avatarUrl, setAvatarUrl] = useState<string>(user.imgSrc);
+    const [form] = Form.useForm();
 
     const dispatch = useAppDispatch();
 
@@ -52,6 +59,7 @@ export const ProfileWrapp = () => {
         setIsUpdateSuccess(false);
         setAvatarUrl(user.imgSrc);
         setSubmitButtonDisabled(true);
+
         if (avatarUrl) {
             setAvatar([
                 {
@@ -87,7 +95,7 @@ export const ProfileWrapp = () => {
     useEffect(() => {
         if (isUploadAvatarError) {
             setSubmitButtonDisabled(true);
-            setAvatar([]);
+            setAvatar([{ uid: '0', name: 'image.png', status: 'error' }]);
             ProfileErrorModal();
         }
     }, [isUploadAvatarError]);
@@ -96,6 +104,7 @@ export const ProfileWrapp = () => {
         if (isUpdateUserSuccess) {
             setIsUpdateSuccess(true);
             setSubmitButtonDisabled(true);
+            form.resetFields(['password', 'passwordRepeat']);
         }
     }, [isUpdateUserSuccess]);
 
@@ -124,12 +133,6 @@ export const ProfileWrapp = () => {
         setPreviewOpen(true);
         setPreviewTitle(file.name || file.url!.substring(file.url!.lastIndexOf('/') + 1));
     };
-    const uploadButton = (
-        <div style={{ padding: 16 }}>
-            <PlusOutlined />
-            <div style={{ marginTop: 6, width: 'min-content' }}>Загрузить фото профиля</div>
-        </div>
-    );
 
     const handleChange: UploadProps['onChange'] = async ({ file }) => {
         const status = file.status;
@@ -151,7 +154,7 @@ export const ProfileWrapp = () => {
     };
 
     const CheckEmail = (data: string) => {
-        if (/([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}/.test(data)) {
+        if (CONSTANTS.EMAIL_RGX.test(data)) {
             setIsValidEmail(true);
             setSubmitButtonDisabled(false);
         } else {
@@ -161,7 +164,7 @@ export const ProfileWrapp = () => {
     };
 
     const CheckPassword = (data: string) => {
-        if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(data)) {
+        if (CONSTANTS.PASSWORD_RGX.test(data)) {
             setIsValidPassword(true);
             setSubmitButtonDisabled(false);
         } else {
@@ -182,47 +185,34 @@ export const ProfileWrapp = () => {
         }
     };
 
-    const getInitialValues = () => {
-        const initialValues: IUpdateUser = {
-            email: '',
-        };
-        if (user.firstName) {
-            initialValues.firstName = user.firstName;
-        }
-        if (user.lastName) {
-            initialValues.lastName = user.lastName;
-        }
-        if (user.birthday) {
-            initialValues.birthday = moment(user.birthday);
-        }
-        if (user.email) {
-            initialValues.email = user.email;
-        }
-        if (user.email) {
-            initialValues.email = user.email;
-        }
-        return initialValues;
-    };
-
     const setRequired = () => {
         setSubmitButtonDisabled(true);
         setIsPasswordRequired(true);
     };
 
+    const formValuesChange = () => {
+        setSubmitButtonDisabled(false);
+    };
+
+    const closeModal = () => {
+        setPreviewOpen(false);
+    };
+
     return (
         <div className='profile-wrapp'>
             <Form
+                form={form}
                 name='update user'
-                initialValues={getInitialValues()}
+                initialValues={getInitialValues(user)}
                 onFinish={saveChanges}
-                onValuesChange={() => setSubmitButtonDisabled(false)}
+                onValuesChange={formValuesChange}
                 className='update-user__form'
                 autoComplete='off'
             >
                 <div className='personal-info__form-blok'>
                     <h2 className='personal-info__form-title'>Личная информация</h2>
 
-                    <div className='personal-info__form-blok-item' style={{}}>
+                    <div className='personal-info__form-blok-item'>
                         <Form.Item data-test-id='profile-avatar'>
                             {isScreenSm ? (
                                 <div className='mobile__upload-box'>
@@ -268,7 +258,7 @@ export const ProfileWrapp = () => {
                                     placeholder='Дата рождения'
                                     size='large'
                                     locale={calendarLocale}
-                                    format={['DD.MM.YYYY']}
+                                    format={[CONSTANTS.DEFAULT_DATE_FORMAT]}
                                     data-test-id='profile-birthday'
                                     style={{
                                         width: '100%',
@@ -297,13 +287,7 @@ export const ProfileWrapp = () => {
 
                     <Form.Item
                         name='password'
-                        rules={[
-                            {
-                                required: isPasswordRequired,
-                                message: 'пожалуйста, введите параль',
-                                pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
-                            },
-                        ]}
+                        rules={passwordInputRules(isPasswordRequired)}
                         validateStatus={isValidPassword ? 'success' : 'error'}
                         help='Пароль не менее 8 символов, с заглавной буквой и цифрой'
                         className='update-user__form-item'
@@ -312,19 +296,14 @@ export const ProfileWrapp = () => {
                             size='small'
                             placeholder='Пароль'
                             onChange={(e) => CheckPassword(e.target.value)}
-                            onFocus={() => setRequired()}
+                            onFocus={setRequired}
                             data-test-id='profile-password'
                         />
                     </Form.Item>
 
                     <Form.Item
                         name='passwordRepeat'
-                        rules={[
-                            {
-                                required: isPasswordRequired,
-                                pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
-                            },
-                        ]}
+                        rules={repeatPasswordInputRules(isPasswordRequired)}
                         validateStatus={isPasswordsMatch ? 'success' : 'error'}
                         help={isPasswordsMatch ? '' : 'Пароли не совпадают'}
                         className='update-user__form-item'
@@ -349,12 +328,7 @@ export const ProfileWrapp = () => {
                     </Button>
                 </Form.Item>
             </Form>
-            <Modal
-                open={previewOpen}
-                title={previewTitle}
-                footer={null}
-                onCancel={() => setPreviewOpen(false)}
-            >
+            <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={closeModal}>
                 <img alt='example' style={{ width: '100%' }} src={previewImage} />
             </Modal>
             {isUpdateSuccess ? <UpdateUserSuccess /> : null}

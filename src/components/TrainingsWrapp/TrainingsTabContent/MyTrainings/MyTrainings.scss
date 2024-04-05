@@ -1,0 +1,118 @@
+@import '../../../../App.variables.scss';
+
+.my-training__content {
+    position: relative;
+    height: 50vh;
+}
+
+.trainings__table {
+    width: 555px;
+
+    @media (max-width: 360px) {
+        width: 312px;
+    }
+}
+
+.trainings__table-header-cell-title {
+    width: 217px;
+    background-color: rgba($color: #000000, $alpha: 0.06);
+    padding: 7.5px 12px;
+
+    @media (max-width: 360px) {
+        width: 120px;
+        padding: 4px 2.5px;
+    }
+}
+
+.trainings__table-header-select {
+    width: 240px;
+    height: 37px;
+    background-color: rgba($color: #000000, $alpha: 0.06);
+
+    @media (max-width: 360px) {
+        width: 120px;
+    }
+}
+
+.training-name__table-cell {
+    @include body-regular;
+}
+
+.edit_button {
+    border: none;
+    outline: none;
+    &:hover {
+        border: none;
+        outline: none;
+        background: transparent;
+    }
+}
+
+.trainings__table-rows {
+    margin: 0 12px;
+
+    .ant-table-cell:not(:first-child) {
+        padding: 7px 0 !important;
+
+        @media (max-width: 360px) {
+            padding: 4px 0 !important;
+        }
+    }
+}
+
+.training-name__cell {
+    width: 241px;
+    border-bottom: 1px solid rgba($color: #000000, $alpha: 0.06);
+    display: flex;
+    justify-content: space-between;
+
+    @media (max-width: 360px) {
+        width: 120px;
+    }
+}
+
+.training-period__cell {
+    display: inline-block;
+    text-align: start;
+    width: 241px;
+    border-bottom: 1px solid rgba($color: #000000, $alpha: 0.06);
+
+    @media (max-width: 360px) {
+        width: 120px;
+    }
+}
+
+.create-new-training__btn {
+    width: 174px;
+    height: 40px;
+    border-radius: 2px;
+    margin-top: 76px;
+
+    @media (max-width: 360px) {
+        width: 100%;
+        margin-top: 24px;
+    }
+}
+
+.no-trainings__block {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .no-trainings__title {
+        @include h3;
+    }
+}
+
+.no-trainings__button {
+    width: 174px;
+    height: 40px;
+    border-radius: 2px;
+    margin-top: 76px;
+}

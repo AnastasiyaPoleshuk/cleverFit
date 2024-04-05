@@ -6,14 +6,14 @@ import { ConfirmEmailThunk } from '@redux/thunk/changePasswordThunks';
 import { useEffect, useState } from 'react';
 import CONSTANTS from '@utils/constants';
 import { push } from 'redux-first-history';
+import { changePasswordSelector, routerSelector } from '@utils/StoreSelectors';
 
 export const ConfirmEmailForm = () => {
     const [formError, setFormError] = useState(false);
     const [confirmCode, setConfirmCode] = useState('');
-    const { email, isConfirmEmailError, isConfirmEmailSuccess } = useAppSelector(
-        (state) => state.changePassword,
-    );
-    const router = useAppSelector((state) => state.router);
+    const { email, isConfirmEmailError, isConfirmEmailSuccess } =
+        useAppSelector(changePasswordSelector);
+    const router = useAppSelector(routerSelector);
     const dispatch = useAppDispatch();
 
     useEffect(() => {

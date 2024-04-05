@@ -36,8 +36,8 @@
 
 .button {
     width: 180px;
-    height: 40px;
-    border-radius: 2px;
+    height: $button-height;
+    border-radius: $border-radius-2;
 
     &:first-child {
         margin-right: 8px;

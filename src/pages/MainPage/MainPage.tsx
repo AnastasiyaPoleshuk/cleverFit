@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import './MainPage.scss';
 import { Header } from '@components/header/Header';
@@ -15,15 +15,22 @@ import {
 } from '@redux/slices/CalendarSlice';
 import { cleanError } from '@redux/slices/CalendarSlice';
 import { GetUserThunk } from '@redux/thunk/userThunks';
+import { UserSelector, calendarSelector } from '@utils/StoreSelectors';
 
 export const MainPage: React.FC = () => {
-    const { isAuth, accessToken } = useAppSelector((state) => state.user);
-    const { isGetTrainingInfoSuccess } = useAppSelector((state) => state.calendar);
+    const [isCalendar, setISsCalendar] = useState(false);
+
+    const { isAuth, accessToken } = useAppSelector(UserSelector);
+    const { isGetTrainingInfoSuccess } = useAppSelector(calendarSelector);
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        if (isGetTrainingInfoSuccess) {
+        if (isGetTrainingInfoSuccess && isCalendar) {
             dispatch(push(`${CONSTANTS.ROUTER__PATH.CALENDAR__PATH}`));
+            dispatch(GetTrainingListThunk());
+        }
+        if (isGetTrainingInfoSuccess && !isCalendar) {
+            dispatch(push(`${CONSTANTS.ROUTER__PATH.TRAININGS__PATH}`));
             dispatch(GetTrainingListThunk());
         }
     }, [isGetTrainingInfoSuccess]);
@@ -51,6 +58,16 @@ export const MainPage: React.FC = () => {
             }, 1000);
         }
     }, [isAuth]);
+
+    const goToCalendar = () => {
+        setISsCalendar(true);
+        dispatch(GetTrainingInfoThunk(accessToken));
+    };
+
+    const goToTrainings = () => {
+        setISsCalendar(false);
+        dispatch(GetTrainingInfoThunk(accessToken));
+    };
 
     return (
         <div className='main-page main'>
@@ -85,7 +102,12 @@ export const MainPage: React.FC = () => {
                     <div className='main__cards-block'>
                         <div className='card'>
                             <h5 className='card__title'>Расписать тренировки</h5>
-                            <Button type='link' className='card__link'>
+                            <Button
+                                type='link'
+                                className='card__link'
+                                onClick={goToTrainings}
+                                data-test-id='menu-button-training'
+                            >
                                 Тренировки
                             </Button>
                         </div>
@@ -94,7 +116,7 @@ export const MainPage: React.FC = () => {
                             <Button
                                 type='link'
                                 className='card__link'
-                                onClick={() => dispatch(GetTrainingInfoThunk(accessToken))}
+                                onClick={goToCalendar}
                                 data-test-id='menu-button-calendar'
                             >
                                 Календарь

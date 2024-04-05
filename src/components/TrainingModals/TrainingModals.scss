@@ -1,0 +1,11 @@
+@import '../../App.variables.scss';
+
+.exercises-list__item {
+    color: $gray-color;
+}
+
+.create-training__alert {
+    @media (max-width: 360px) {
+        width: 312px;
+    }
+}

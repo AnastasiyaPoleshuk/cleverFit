@@ -10,9 +10,9 @@
 
 .verification-input {
     border: 1px solid $gray-color;
-    border-radius: 2px;
+    border-radius: $border-radius-2;
     width: 40px;
-    height: 40px;
+    height: $button-height;
     padding: 10px 0;
 
     @include body-regular;

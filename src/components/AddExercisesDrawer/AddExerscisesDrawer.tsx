@@ -92,7 +92,7 @@ export const AddExercisesDrawer = ({
                 setIsRemoveButtonDisabled(false);
             }
 
-            const exercises = filteredExercises.map((item, index) => {
+            const exercises = filteredExercises.map((item) => {
                 return {
                     name: item.name,
                     replays: item.replays || 1,
@@ -181,6 +181,7 @@ export const AddExercisesDrawer = ({
             }}
             className='drawer__body'
             width={408}
+            height={550}
             placement={window.innerWidth > 360 ? 'right' : 'bottom'}
             onClose={closeDrawer}
             open={isOpen}

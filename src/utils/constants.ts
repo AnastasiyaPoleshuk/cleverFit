@@ -11,6 +11,7 @@ const CONSTANTS = {
         CALENDAR__PATH: '/calendar',
         PROFILE__PATH: '/profile',
         SETTINGS__PATH: '/settings',
+        TRAININGS__PATH: '/trainings',
         RESULT: {
             RESULT: '/result',
             SUCCESS: {
@@ -36,10 +37,16 @@ const CONSTANTS = {
     ADD_TRAINING_MODAL: 'create or update training',
     CHANGE_TARIFF_INFO_MODAL: 'Чек для оплаты у вас на почте',
     DRAWER: 'open drawer',
+    CREATE_TRAINING_DRAWER: 'create training drawer',
     DEFAULT__FEEDBACKS_COUNT: 4,
     DATE_FORMAT: 'DD.MM.YYYY',
     RESULT_STATUS_TYPE_500: '500',
     RATE_DEFAULT_VALUE: 3,
+    UPDATE_TRAINING_SUCCESS: 'Тренировка успешно обновлена',
+    CREATE_TRAINING_SUCCESS: 'Новая тренировка успешно добавлена',
+    DEFAULT_DATE_FORMAT: 'DD.MM.YYYY',
+    EMAIL_RGX: /([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}/,
+    PASSWORD_RGX: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
     SIDEBAR_KEYS: {
         CALENDAR: 'calendar',
         TRAININGS: 'trainings',
@@ -47,11 +54,11 @@ const CONSTANTS = {
         PROFILE: 'profile',
     },
     TRAINING_TYPE: {
-        LEGS: 'legs',
-        HANDS: 'hands',
-        STRENGTH: 'strength',
-        BACK: 'back',
-        CHEST: 'chest',
+        LEGS: 'Ноги',
+        HANDS: 'Руки',
+        STRENGTH: 'Силовая',
+        BACK: 'Спина',
+        CHEST: 'Грудь',
     },
     TRAINING_COLOR: {
         LEGS: 'red',

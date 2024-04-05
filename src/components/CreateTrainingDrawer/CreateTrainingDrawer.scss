@@ -1,0 +1,59 @@
+@import '../../App.variables.scss';
+
+.add-training__btn {
+    width: 344px;
+    height: $button-height;
+    border-radius: $border-radius-2;
+
+    margin-top: 12px;
+
+    @media (max-width: 360px) {
+        width: 312px;
+        margin-top: 24px;
+    }
+}
+
+.training-info__period {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 24px 0;
+}
+
+.training-info__select-type {
+    border-radius: $border-radius-2;
+}
+
+.training-info__select-period {
+    border-radius: $border-radius-2 !important;
+    width: 140px;
+}
+
+.training-info__select-date__form-item {
+    margin: 0;
+}
+
+.training-info__select-date {
+    border-radius: $border-radius-2;
+    margin: 0;
+}
+
+.training-info__period-checkbox {
+    @include body-small;
+}
+
+.submit__btn {
+    position: absolute;
+    bottom: -12px;
+    left: 0;
+    z-index: 4;
+    width: 100%;
+    border-top: 1px solid $selected-bg-color-light;
+    display: flex;
+    justify-content: center;
+
+    @media (max-width: 360px) {
+        position: static;
+        // width: 312px;
+    }
+}

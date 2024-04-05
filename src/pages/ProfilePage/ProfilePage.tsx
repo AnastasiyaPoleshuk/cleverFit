@@ -5,9 +5,10 @@ import { push } from 'redux-first-history';
 import './ProfilePage.scss';
 import { ProfileWrapp } from '@components/ProfileWrapp/ProfileWrapp';
 import { ProfileHeader } from '@components/header/ProfileHeader';
+import { UserSelector } from '@utils/StoreSelectors';
 
 export const ProfilePage = () => {
-    const { isAuth } = useAppSelector((state) => state.user);
+    const { isAuth } = useAppSelector(UserSelector);
     const dispatch = useAppDispatch();
 
     useEffect(() => {

@@ -2,9 +2,8 @@
 
 .tariff-drawer {
     @media (max-width: 360px) {
-        height: 550px !important;
-        border-top-right-radius: 24px !important;
-        border-top-left-radius: 24px !important;
+        border-top-right-radius: 24px;
+        border-top-left-radius: 24px;
         width: 312px;
     }
 }
@@ -28,7 +27,7 @@
     border-radius: 2px !important;
     padding: 4px 15px;
     width: 344px;
-    height: 40px;
+    height: $button-height;
     text-align: center;
 
     @media (max-width: 360px) {

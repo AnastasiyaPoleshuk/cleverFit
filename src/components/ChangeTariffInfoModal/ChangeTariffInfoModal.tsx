@@ -7,10 +7,11 @@ import CONSTANTS from '@utils/constants';
 import { useAppDispatch, useAppSelector } from '@hooks/typed-react-redux-hooks';
 import { setToken, changeAuthState, changeIsPostTariffSuccessState } from '@redux/slices/UserSlice';
 import { push } from 'redux-first-history';
+import { UserSelector } from '@utils/StoreSelectors';
 
 export const ChangeTariffInfoModal = ({ isModalOpen }: { isModalOpen: boolean }) => {
     const { closeModal } = useContext(AppContext);
-    const { user } = useAppSelector((state) => state.user);
+    const { user } = useAppSelector(UserSelector);
 
     const dispatch = useAppDispatch();
 
@@ -29,12 +30,19 @@ export const ChangeTariffInfoModal = ({ isModalOpen }: { isModalOpen: boolean })
             onCancel={logOut}
             data-test-id='tariff-modal-success'
             footer={null}
+            centered={true}
         >
             <Result
                 status='success'
                 icon={<CheckCircleFilled style={{ color: '#2f54eb' }} />}
                 title='Чек для оплаты у вас на почте'
-                subTitle={`Мы отправили инструкцию для оплаты вам на e-mail ${user.email}. После подтверждения оплаты войдите в приложение заново.`}
+                subTitle={
+                    <p>
+                        Мы отправили инструкцию для оплаты вам на e-mail
+                        <span className='tariff-modal-success__email'>{` ${user.email}`}</span>.
+                        После подтверждения оплаты войдите в приложение заново.
+                    </p>
+                }
                 extra='Не пришло письмо? Проверьте папку Спам.'
             />
         </Modal>

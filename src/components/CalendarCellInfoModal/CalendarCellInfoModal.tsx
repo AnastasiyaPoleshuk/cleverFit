@@ -8,6 +8,8 @@ import { IGetTrainingListResponse, IGetTrainingsResponse } from '../../types/api
 import { CloseOutlined, EditOutlined } from '@ant-design/icons';
 import moment, { Moment } from 'moment';
 import { updateTrainingsState } from '@redux/slices/CalendarSlice';
+import { calendarSelector } from '@utils/StoreSelectors';
+import { getTrainingColor } from '@utils/getTrainingColor';
 
 interface IProps {
     date: string;
@@ -17,23 +19,6 @@ interface IProps {
     isAddTrainingDisabled: boolean;
     setOpen: (isModalOpen: boolean) => void;
 }
-
-const getStatus = (key: string) => {
-    switch (key) {
-        case CONSTANTS.TRAINING_TYPE.BACK:
-            return CONSTANTS.TRAINING_COLOR.BACK;
-        case CONSTANTS.TRAINING_TYPE.CHEST:
-            return CONSTANTS.TRAINING_COLOR.CHEST;
-        case CONSTANTS.TRAINING_TYPE.HANDS:
-            return CONSTANTS.TRAINING_COLOR.HANDS;
-        case CONSTANTS.TRAINING_TYPE.LEGS:
-            return CONSTANTS.TRAINING_COLOR.LEGS;
-        case CONSTANTS.TRAINING_TYPE.STRENGTH:
-            return CONSTANTS.TRAINING_COLOR.STRENGTH;
-        default:
-            break;
-    }
-};
 
 const getTrainingsData = (
     trainingsData: IGetTrainingsResponse[],
@@ -87,7 +72,7 @@ export const CalendarCellInfoModal = ({
     isAddTrainingDisabled,
     setOpen,
 }: IProps) => {
-    const { trainingList, isUpdateTrainingSuccess } = useAppSelector((state) => state.calendar);
+    const { trainingList, isUpdateTrainingSuccess } = useAppSelector(calendarSelector);
     const { saveExercisesData, saveCurrentExerciseName, openModal, exercisesDataToUpdate } =
         useContext(AppContext);
     const dispatch = useAppDispatch();
@@ -159,7 +144,9 @@ export const CalendarCellInfoModal = ({
                             }`}
                         >
                             <Badge
-                                color={getStatus(item ? item.key : '') as BadgeProps['color']}
+                                color={
+                                    getTrainingColor(item ? item.name : '') as BadgeProps['color']
+                                }
                                 text={item?.name}
                             />
 

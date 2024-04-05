@@ -43,7 +43,7 @@
     }
 
     .main__list {
-        border-radius: 2px;
+        border-radius: $border-radius-2;
         width: 705px;
         background-color: $white-color;
         padding: 25px;
@@ -72,7 +72,7 @@
     .main__article-last {
         @include h4;
         background-color: $white-color;
-        border-radius: 2px;
+        border-radius: $border-radius-2;
         width: 705px;
         margin: 24px 0 18px 0;
         padding: 24px;
@@ -108,7 +108,7 @@
     }
 
     .card {
-        border-radius: 2px;
+        border-radius: $border-radius-2;
         width: 240px;
         background-color: $white-color;
         display: flex;

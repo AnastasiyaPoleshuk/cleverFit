@@ -8,9 +8,10 @@ import {
     changePasswordErrorState,
     checkEmailSuccessState,
 } from '../../redux/slices/ChangePasswordSlice';
+import { routerSelector } from '@utils/StoreSelectors';
 
 export const ChangePasswordSuccess = () => {
-    const router = useAppSelector((state) => state.router);
+    const router = useAppSelector(routerSelector);
     const dispatch = useAppDispatch();
 
     useEffect(() => {

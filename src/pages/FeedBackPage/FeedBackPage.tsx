@@ -4,11 +4,9 @@ import { NoFeedbacksBlok } from '@components/NoFeedbacksBlok/NoFeedbacksBlok';
 import { FeedbacksWrapp } from '@components/FeedbacksWrapp/FeedbacksWrapp';
 import { useContext, useEffect, useState } from 'react';
 import { AppContext } from '../../context/AppContext';
-import { CreateFeedbackModal } from '@components/CreateFeedbackModal/CreateFeedbackModal';
 import CONSTANTS from '@utils/constants';
 import { push } from 'redux-first-history';
 import { GetFeedbacksThunk } from '@redux/thunk/feedbacksThunk';
-import { CreateFeedbackSuccessModal } from '@components/FeedbacksResult/CreateFeedbackSuccessModal';
 import {
     changeGetFeedbacksErrorState,
     changeGetFeedbacksSuccessState,
@@ -16,8 +14,8 @@ import {
 } from '@redux/slices/FeedbacksSlice';
 import { setToken, changeAuthState } from '@redux/slices/UserSlice';
 import { StatusCodes } from 'http-status-codes';
-import { CreateFeedbackFailModal } from '@components/FeedbacksResult/CreateFeedbackFailModal';
 import { Header } from '@components/header/Header';
+import { UserSelector, feedbacksSelector } from '@utils/StoreSelectors';
 
 export const FeedBackPage = () => {
     const {
@@ -27,8 +25,8 @@ export const FeedBackPage = () => {
         isGetFeedbacksError,
         error,
         isLoading,
-    } = useAppSelector((state) => state.feedbacks);
-    const { isAuth, accessToken } = useAppSelector((state) => state.user);
+    } = useAppSelector(feedbacksSelector);
+    const { isAuth, accessToken } = useAppSelector(UserSelector);
     const { openModal } = useContext(AppContext);
     const [isFeedbacks, setIsFeedbacks] = useState(true);
     const dispatch = useAppDispatch();

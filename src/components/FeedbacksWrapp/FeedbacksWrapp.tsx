@@ -7,9 +7,10 @@ import CONSTANTS from '@utils/constants';
 import { AppContext } from '../../context/AppContext';
 import { useContext, useEffect, useState } from 'react';
 import { useAppSelector } from '@hooks/typed-react-redux-hooks';
+import { feedbacksSelector } from '@utils/StoreSelectors';
 
 export const FeedbacksWrapp = () => {
-    const { feedbacks, isGetFeedbacksSuccess } = useAppSelector((state) => state.feedbacks);
+    const { feedbacks, isGetFeedbacksSuccess } = useAppSelector(feedbacksSelector);
     const [isCollapsed, setIsCollapsed] = useState(true);
     const [feedbacksArr, setFeedbacksArr] = useState(feedbacks);
     const [sortedFeedbacks, setSortedFeedbacks] = useState(sortFeedbacks(feedbacks));

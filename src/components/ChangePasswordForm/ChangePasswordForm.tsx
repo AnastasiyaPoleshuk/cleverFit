@@ -6,16 +6,16 @@ import { IChangePasswordRequest } from '../../types/apiTypes';
 import { ChangePasswordThunk } from '@redux/thunk/changePasswordThunks';
 import CONSTANTS from '@utils/constants';
 import { push } from 'redux-first-history';
+import { changePasswordSelector, routerSelector } from '@utils/StoreSelectors';
 
 export const ChangePasswordForm = () => {
     const [isValidPassword, setIsValidPassword] = useState(true);
     const [isPasswordsMatch, setIsVPasswordsMatch] = useState(true);
     const [changePassword, setChangePassword] = useState({ password: '', confirmPassword: '' });
     const [password, setPassword] = useState('');
-    const { isChangePasswordSuccess, isChangePasswordError } = useAppSelector(
-        (state) => state.changePassword,
-    );
-    const router = useAppSelector((state) => state.router);
+    const { isChangePasswordSuccess, isChangePasswordError } =
+        useAppSelector(changePasswordSelector);
+    const router = useAppSelector(routerSelector);
     const dispatch = useAppDispatch();
 
     useEffect(() => {
@@ -57,7 +57,7 @@ export const ChangePasswordForm = () => {
     };
 
     const CheckPassword = (password: string) => {
-        if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(password)) {
+        if (CONSTANTS.PASSWORD_RGX.test(password)) {
             setIsValidPassword(true);
         } else {
             setIsValidPassword(false);

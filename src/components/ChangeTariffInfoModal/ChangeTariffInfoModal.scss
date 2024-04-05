@@ -1,1 +1,5 @@
 @import '../../App.variables.scss';
+
+.tariff-modal-success__email {
+    @include body-strong;
+}

@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from '@hooks/typed-react-redux-hooks';
 import CONSTANTS from '@utils/constants';
 import { push } from 'redux-first-history';
 import { AppContext } from '../../context/AppContext';
+import { UserSelector } from '@utils/StoreSelectors';
 
 interface IRegistrationData {
     email: string;
@@ -21,7 +22,7 @@ export const RegistrationForm = () => {
     const [submitButtonDisabled, setSubmitButtonDisabled] = useState(true);
     const [password, setPassword] = useState('');
     const { saveRegistrationData } = useContext(AppContext);
-    const { isRegisterSuccess } = useAppSelector((state) => state.user);
+    const { isRegisterSuccess } = useAppSelector(UserSelector);
     const dispatch = useAppDispatch();
 
     useEffect(() => {
@@ -51,7 +52,7 @@ export const RegistrationForm = () => {
     };
 
     const CheckEmail = (data: string) => {
-        if (/([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}/.test(data)) {
+        if (CONSTANTS.EMAIL_RGX.test(data)) {
             setIsValidEmail(true);
             setSubmitButtonDisabled(false);
         } else {
@@ -61,7 +62,7 @@ export const RegistrationForm = () => {
     };
 
     const CheckPassword = (data: string) => {
-        if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(data)) {
+        if (CONSTANTS.PASSWORD_RGX.test(data)) {
             setIsValidPassword(true);
             setSubmitButtonDisabled(false);
         } else {

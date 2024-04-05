@@ -5,10 +5,11 @@ import { useAppDispatch, useAppSelector } from '@hooks/typed-react-redux-hooks';
 import { push } from 'redux-first-history';
 import { useEffect } from 'react';
 import { changeErrorState } from '@redux/slices/UserSlice';
+import { UserSelector } from '@utils/StoreSelectors';
 
 export const LoginFailWindow = () => {
     const dispatch = useAppDispatch();
-    const { isError } = useAppSelector((state) => state.user);
+    const { isError } = useAppSelector(UserSelector);
 
     useEffect(() => {
         if (!isError) {

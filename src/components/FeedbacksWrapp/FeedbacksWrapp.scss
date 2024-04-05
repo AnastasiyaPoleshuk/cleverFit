@@ -61,10 +61,10 @@
     }
 
     &__btn {
-        border-radius: 2px;
+        border-radius: $border-radius-2;
         padding: 4px 15px;
         width: 142px;
-        height: 40px;
+        height: $button-height;
 
         &:first-child {
             border: 1px solid $brand-color-light;

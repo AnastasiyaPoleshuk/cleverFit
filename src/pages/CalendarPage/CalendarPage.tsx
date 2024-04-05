@@ -12,10 +12,11 @@ import { GetTrainingsListFail } from '@components/ErrorModals/GetTrainingsListFa
 import { AppContext } from '../../context/AppContext';
 import { changeGetTrainingListErrorState } from '@redux/slices/CalendarSlice';
 import { IGetTrainingsResponse } from '../../types/apiTypes';
+import { UserSelector } from '@utils/StoreSelectors';
 
 export const CalendarPage = () => {
     const [trainings, setTrainings] = useState<IGetTrainingsResponse[]>([]);
-    const { isAuth, accessToken } = useAppSelector((state) => state.user);
+    const { isAuth, accessToken } = useAppSelector(UserSelector);
     const { isRepeatRequestNeeded, setStateOfRepeatRequest } = useContext(AppContext);
     const { isGetTrainingInfoSuccess, isGetTrainingListError, trainingInfo } = useAppSelector(
         (state) => state.calendar,

@@ -21,6 +21,6 @@ export const useResize = () => {
     };
 };
 
-const SCREEN_SM = 360;
+const SCREEN_SM = 400;
 const SCREEN_MD = 834;
 const SCREEN_LG = 1440;

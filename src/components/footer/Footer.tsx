@@ -7,10 +7,11 @@ import CONSTANTS from '@utils/constants';
 import { push } from 'redux-first-history';
 import { useEffect } from 'react';
 import { changeCreateFeedbackSuccessState } from '@redux/slices/FeedbacksSlice';
+import { UserSelector, feedbacksSelector } from '@utils/StoreSelectors';
 
 export const Footer = () => {
-    const { accessToken } = useAppSelector((state) => state.user);
-    const { isLoading } = useAppSelector((state) => state.feedbacks);
+    const { accessToken } = useAppSelector(UserSelector);
+    const { isLoading } = useAppSelector(feedbacksSelector);
 
     const dispatch = useAppDispatch();
 

@@ -12,6 +12,7 @@ import { useAppDispatch, useAppSelector } from '@hooks/typed-react-redux-hooks';
 import { PostTariffThunk } from '@redux/thunk/userThunks';
 import moment from 'moment';
 import { useResize } from '@hooks/useResize';
+import { UserSelector } from '@utils/StoreSelectors';
 
 const AdvantagesTableColumns = [
     {
@@ -49,19 +50,39 @@ const priseTableColumns = [
     },
 ];
 
-interface AdvantagesTableData {
+const drawerMobileStyles = {
+    borderTopRightRadius: 24,
+    borderTopLeftRadius: 24,
+};
+
+const drawerStyles = {
+    borderTopRightRadius: 0,
+    borderTopLeftRadius: 0,
+};
+
+const drawerMobileStylesHeader = {
+    borderTopRightRadius: 24,
+    borderTopLeftRadius: 24,
+    borderBottom: 'none',
+};
+
+const drawerStylesHeader = {
+    borderBottom: 'none',
+};
+
+type AdvantagesTableData = {
     key: string;
     name: string;
     free: JSX.Element;
     pro: JSX.Element;
-}
+};
 
-interface PriseTableData {
+type PriseTableData = {
     key: string;
     period: JSX.Element;
     prise: JSX.Element;
     isChecked: JSX.Element;
-}
+};
 
 export const TariffDrawer = () => {
     const [days, setDays] = useState(0);
@@ -73,7 +94,7 @@ export const TariffDrawer = () => {
         AdvantagesTableData[]
     >([]);
     const { setTariffDrawerStatus, isTariffDrawerOpen } = useContext(AppContext);
-    const { tariff, user } = useAppSelector((state) => state.user);
+    const { tariff, user } = useAppSelector(UserSelector);
     const dispatch = useAppDispatch();
 
     useEffect(() => {
@@ -82,9 +103,9 @@ export const TariffDrawer = () => {
 
     useLayoutEffect(() => {
         if (tariff.length) {
-            const priseTableData = tariff[0].periods.map((item, index) => {
+            const priseTableData = tariff[0].periods.map((item) => {
                 return {
-                    key: `${index++}`,
+                    key: `${item.days}`,
                     period: <span>{item.text}</span>,
                     prise: (
                         <h5 className='prise__prise'>{`${item.cost
@@ -97,7 +118,7 @@ export const TariffDrawer = () => {
 
             setPriseTableDataSource([
                 {
-                    key: '0',
+                    key: 'Стоимость тарифа',
                     period: <p className='prise__title'>Стоимость тарифа</p>,
                     prise: <></>,
                     isChecked: <></>,
@@ -107,7 +128,7 @@ export const TariffDrawer = () => {
 
             setAdvantagesTableDataSource([
                 {
-                    key: '0',
+                    key: 'FREE/PRO',
                     name: '',
                     free: (
                         <Tag
@@ -132,43 +153,43 @@ export const TariffDrawer = () => {
                     ),
                 },
                 {
-                    key: '1',
+                    key: 'Статистика за месяц',
                     name: 'Статистика за месяц',
                     free: <CheckCircleFilled />,
                     pro: <CheckCircleFilled />,
                 },
                 {
-                    key: '2',
+                    key: 'Статистика за все время',
                     name: 'Статистика за все время',
                     free: <CloseCircleOutlined style={{ color: '#8c8c8c' }} />,
                     pro: <CheckCircleFilled />,
                 },
                 {
-                    key: '3',
+                    key: 'Совместные тренировки',
                     name: 'Совместные тренировки',
                     free: <CheckCircleFilled />,
                     pro: <CheckCircleFilled />,
                 },
                 {
-                    key: '4',
+                    key: 'Участие в марафонах',
                     name: 'Участие в марафонах',
                     free: <CloseCircleOutlined style={{ color: '#8c8c8c' }} />,
                     pro: <CheckCircleFilled />,
                 },
                 {
-                    key: '5',
+                    key: 'Приложение IOS',
                     name: 'Приложение IOS',
                     free: <CloseCircleOutlined style={{ color: '#8c8c8c' }} />,
                     pro: <CheckCircleFilled />,
                 },
                 {
-                    key: '6',
+                    key: 'Приложение Android',
                     name: 'Приложение Android',
                     free: <CloseCircleOutlined style={{ color: '#8c8c8c' }} />,
                     pro: <CheckCircleFilled />,
                 },
                 {
-                    key: '7',
+                    key: 'Индивидуальный Chat GPT',
                     name: 'Индивидуальный Chat GPT',
                     free: <CloseCircleOutlined style={{ color: '#8c8c8c' }} />,
                     pro: <CheckCircleFilled />,
@@ -195,11 +216,13 @@ export const TariffDrawer = () => {
         <Drawer
             title={<h4 className='tariff-drawer__title'>Сравнить тарифы</h4>}
             styles={{
-                header: { borderBottom: 'none' },
+                header: isMobile ? drawerMobileStylesHeader : drawerStylesHeader,
                 body: { padding: '0 24px 0 24px' },
+                content: isMobile ? drawerMobileStyles : drawerStyles,
             }}
             data-test-id='tariff-sider'
             width={408}
+            height={550}
             placement={isMobile ? 'bottom' : 'right'}
             open={isTariffDrawerOpen}
             closable={false}

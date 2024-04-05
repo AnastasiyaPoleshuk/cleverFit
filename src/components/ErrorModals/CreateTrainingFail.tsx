@@ -1,6 +1,4 @@
 import { CloseCircleOutlined } from '@ant-design/icons';
-import { AppDispatch } from '@redux/configure-store';
-import CONSTANTS from '@utils/constants';
 import { Modal } from 'antd';
 
 export const CreateTrainingFail = (redirect: () => void) => {

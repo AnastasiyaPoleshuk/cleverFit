@@ -5,7 +5,7 @@ import 'moment/locale/ru';
 import './CalengarWrapp.scss';
 import { useAppSelector } from '@hooks/typed-react-redux-hooks';
 import { useContext, useEffect, useState } from 'react';
-import CONSTANTS, { calendarLocale } from '@utils/constants';
+import { calendarLocale } from '@utils/constants';
 import { IGetTrainingListResponse, IGetTrainingsResponse } from '../../types/apiTypes';
 import moment from 'moment';
 import { CalendarCellInfoModal } from '@components/CalendarCellInfoModal/CalendarCellInfoModal';
@@ -14,6 +14,9 @@ import { AddExercisesDrawer } from '@components/AddExercisesDrawer/AddExerscises
 import { CreateTrainingFail } from '@components/ErrorModals/CreateTrainingFail';
 import { useResize } from '@hooks/useResize';
 import { CalendarCreateTrainingModal } from '@components/CalendarCellInfoModal/CalendarCreateTrainingModal';
+import { calendarSelector } from '@utils/StoreSelectors';
+import { getTrainingColor } from '@utils/getTrainingColor';
+import { getModalPosition } from '@utils/getModalPosition';
 
 const getListData = (
     value: Moment,
@@ -47,23 +50,6 @@ const getCurrentDayTrainings = (day: Moment, allTrainingsArr: IGetTrainingsRespo
     return allTrainingsArr.filter((item) => moment(item.date).format('DD') === day.format('DD'));
 };
 
-const getStatus = (key: string) => {
-    switch (key) {
-        case CONSTANTS.TRAINING_TYPE.BACK:
-            return CONSTANTS.TRAINING_COLOR.BACK;
-        case CONSTANTS.TRAINING_TYPE.CHEST:
-            return CONSTANTS.TRAINING_COLOR.CHEST;
-        case CONSTANTS.TRAINING_TYPE.HANDS:
-            return CONSTANTS.TRAINING_COLOR.HANDS;
-        case CONSTANTS.TRAINING_TYPE.LEGS:
-            return CONSTANTS.TRAINING_COLOR.LEGS;
-        case CONSTANTS.TRAINING_TYPE.STRENGTH:
-            return CONSTANTS.TRAINING_COLOR.STRENGTH;
-        default:
-            break;
-    }
-};
-
 export const CalengarWrapp = ({ trainings }: { trainings: IGetTrainingsResponse[] }) => {
     const {
         isCreateTrainingSuccess,
@@ -72,7 +58,7 @@ export const CalengarWrapp = ({ trainings }: { trainings: IGetTrainingsResponse[
         isUpdateTrainingError,
         trainingList,
         trainingInfo,
-    } = useAppSelector((state) => state.calendar);
+    } = useAppSelector(calendarSelector);
     const [cellData, setCellData] = useState(<></>);
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [isModalRender, setIsModalRender] = useState(false);
@@ -102,30 +88,6 @@ export const CalengarWrapp = ({ trainings }: { trainings: IGetTrainingsResponse[
         }
     }, [isCreateTrainingError, isUpdateTrainingError]);
 
-    const getModalPosition = (dateElement: Element | null) => {
-        if (!dateElement) return { top: '0', left: '0' };
-
-        const cellRect = dateElement.getBoundingClientRect();
-        const rightThreshold = Math.round(windowWidth - Math.round(cellRect.left));
-        const modalWidth = 520;
-
-        if (!isScreenSm) {
-            return {
-                top: `${cellRect.top - 4}px`,
-                left: `${
-                    rightThreshold < modalWidth
-                        ? cellRect.right - CONSTANTS.CREATE_TRAINING_MODAL_WIDTH + 14
-                        : cellRect.left
-                }px`,
-            };
-        } else {
-            return {
-                top: '32%',
-                left: 24,
-            };
-        }
-    };
-
     const onSelect = (value: Moment) => {
         getCurrentDayTrainings(value, trainingInfo);
         if (value.month() !== selectedDate.month()) {
@@ -137,15 +99,15 @@ export const CalengarWrapp = ({ trainings }: { trainings: IGetTrainingsResponse[
             value.daysInMonth(),
             document.querySelectorAll(`.ant-picker-calendar-date-value`),
         );
-        let dateElement = null;
+        let element = null;
 
         for (let i = 0; i < dateElementArr.length; i++) {
             if (dateElementArr[i].innerHTML === value.format('DD')) {
-                dateElement = dateElementArr[i];
+                element = dateElementArr[i];
             }
         }
 
-        const newPosition = getModalPosition(dateElement);
+        const newPosition = getModalPosition({ element, windowWidth, isScreenSm });
         const modalBodyData = dateCellRender(value);
 
         setModalPosition(newPosition);
@@ -184,7 +146,7 @@ export const CalengarWrapp = ({ trainings }: { trainings: IGetTrainingsResponse[
                         ? listData.map((item, index) => (
                               <li key={item.key} className='trainings__list-item'>
                                   <Badge
-                                      color={getStatus(item.key) as BadgeProps['color']}
+                                      color={getTrainingColor(item.name) as BadgeProps['color']}
                                       text={item.name}
                                   />
                               </li>
@@ -241,7 +203,7 @@ export const CalengarWrapp = ({ trainings }: { trainings: IGetTrainingsResponse[
                 date={addExercisesData.date}
                 trainingName={addExercisesData.name}
                 trainingType={
-                    getStatus(
+                    getTrainingColor(
                         trainingList.find((training) => training.name === addExercisesData.name)
                             ?.key || '',
                     ) || ''

@@ -1,7 +1,6 @@
-import axios from 'axios';
-import { IUser, IRequestError } from '../types/apiTypes';
+import { IUser } from '../types/apiTypes';
 
-import { api, apiSetHeader } from './api';
+import { api, apiSetHeader, handleError } from './api';
 
 export const getUser = async (token: string) => {
     try {
@@ -11,18 +10,6 @@ export const getUser = async (token: string) => {
 
         return { data, status };
     } catch (error) {
-        if (axios.isAxiosError(error)) {
-            const errorString = JSON.stringify({
-                statusCode: error.response?.status,
-                error: error.response?.data.error || error.name,
-                message: error.response?.data.message || error.message,
-            });
-            throw Error(errorString);
-        }
-
-        const requestError = error as IRequestError;
-        const errorString = JSON.stringify(requestError);
-
-        throw Error(errorString);
+        handleError(error);
     }
 };

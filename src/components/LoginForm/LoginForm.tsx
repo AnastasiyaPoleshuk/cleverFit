@@ -10,6 +10,7 @@ import { useAppDispatch, useAppSelector } from '@hooks/typed-react-redux-hooks';
 import { CheckEmailThunk } from '@redux/thunk/changePasswordThunks';
 import { push } from 'redux-first-history';
 import { StatusCodes } from 'http-status-codes';
+import { UserSelector } from '@utils/StoreSelectors';
 
 export const LoginForm = () => {
     const [isValidEmail, setIsValidEmail] = useState(true);
@@ -19,7 +20,7 @@ export const LoginForm = () => {
     const { isCheckEmailSuccess, isCheckEmailError, error } = useAppSelector(
         (state) => state.changePassword,
     );
-    const { isAuth, isError: isErrorLogin, accessToken } = useAppSelector((state) => state.user);
+    const { isAuth, isError: isErrorLogin, accessToken } = useAppSelector(UserSelector);
 
     const dispatch = useAppDispatch();
 
@@ -87,7 +88,7 @@ export const LoginForm = () => {
     };
 
     const CheckEmail = (email: string) => {
-        if (/([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}/.test(email)) {
+        if (CONSTANTS.EMAIL_RGX.test(email)) {
             setIsValidEmail(true);
             setEmail(email);
         } else {
@@ -96,7 +97,7 @@ export const LoginForm = () => {
     };
 
     const CheckPassword = (data: string) => {
-        if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(data)) {
+        if (CONSTANTS.PASSWORD_RGX.test(data)) {
             setIsValidPassword(true);
         } else {
             setIsValidPassword(false);

@@ -13,6 +13,9 @@ $gray-color: #8c8c8c;
 $gray-color-light: #bfbfbf;
 $text-color: rgba(0, 0, 0, 0.85);
 
+$button-height: 40px;
+$border-radius-2: 2px;
+
 @mixin h1 {
     font-weight: 700;
     font-size: 38px;

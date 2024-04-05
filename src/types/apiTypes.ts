@@ -91,6 +91,7 @@ export interface IUser {
 export interface IUpdateUser {
     email: string;
     password?: string;
+    passwordRepeat?: string;
     firstName?: string;
     lastName?: string;
     birthday?: Moment;

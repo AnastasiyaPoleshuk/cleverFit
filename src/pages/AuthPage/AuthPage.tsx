@@ -8,11 +8,12 @@ import { useAppDispatch, useAppSelector } from '@hooks/typed-react-redux-hooks';
 import { push } from 'redux-first-history';
 import { StatusCodes } from 'http-status-codes';
 import { changeAuthState, setToken } from '@redux/slices/UserSlice';
+import { UserSelector, routerSelector } from '@utils/StoreSelectors';
 
 export const AuthPage = () => {
     const [isLoginForm, setIsLoginForm] = useState(true);
-    const { isAuth, isRegisterError, error, isLoading } = useAppSelector((state) => state.user);
-    const router = useAppSelector((state) => state.router);
+    const { isAuth, isRegisterError, error, isLoading } = useAppSelector(UserSelector);
+    const router = useAppSelector(routerSelector);
     const dispatch = useAppDispatch();
 
     useEffect(() => {

@@ -1,7 +1,7 @@
 @import '../../App.variables.scss';
 
 .create-feedback {
-    border-radius: 2px;
+    border-radius: $border-radius-2;
     width: 539px;
     height: 247px;
     top: 25%;
@@ -12,7 +12,7 @@
 
     .create-feedback__btn {
         border: 1px;
-        border-radius: 2px;
+        border-radius: $border-radius-2;
         padding: 4px 15px;
     }
 

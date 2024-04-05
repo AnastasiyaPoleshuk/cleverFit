@@ -12,10 +12,11 @@ import { AppContext } from '../../context/AppContext';
 import { UpdateUserThunk } from '@redux/thunk/userThunks';
 import { GetFeedbacksThunk } from '@redux/thunk/feedbacksThunk';
 import moment from 'moment';
+import { UserSelector } from '@utils/StoreSelectors';
 
 export const SettingsWrapp = () => {
     const [isPROActive, setIsPROActive] = useState(false);
-    const { user, accessToken, isPostTariffSuccess } = useAppSelector((state) => state.user);
+    const { user, accessToken, isPostTariffSuccess } = useAppSelector(UserSelector);
 
     const { openModal, setTariffDrawerStatus } = useContext(AppContext);
     const dispatch = useAppDispatch();
@@ -37,6 +38,26 @@ export const SettingsWrapp = () => {
         dispatch(push(CONSTANTS.ROUTER__PATH.FEEDBACKS__PATH));
     };
 
+    const openDrawer = () => setTariffDrawerStatus(true);
+
+    const openFeedbackModal = () => openModal(CONSTANTS.CREATE_FEEDBACK_MODAL);
+
+    const changeReadyForJointTrainingStatus = (checked: boolean) =>
+        dispatch(
+            UpdateUserThunk({
+                email: user.email,
+                readyForJointTraining: checked,
+            }),
+        );
+
+    const changeSendNotificationStatus = (checked: boolean) =>
+        dispatch(
+            UpdateUserThunk({
+                email: user.email,
+                sendNotification: checked,
+            }),
+        );
+
     return (
         <div className='settings-wrapp'>
             <h4 className='settings-wrapp__title'>Мой тариф</h4>
@@ -45,11 +66,7 @@ export const SettingsWrapp = () => {
                 <div className='tariff__card card'>
                     <header className='card__header'>
                         <h5 className='card__header-title'>FREE tarif</h5>
-                        <Button
-                            type='link'
-                            className='card__header-button'
-                            onClick={() => setTariffDrawerStatus(true)}
-                        >
+                        <Button type='link' className='card__header-button' onClick={openDrawer}>
                             Подробнее
                         </Button>
                     </header>
@@ -61,11 +78,7 @@ export const SettingsWrapp = () => {
                 <div className='tariff__card card' data-test-id='pro-tariff-card'>
                     <header className='card__header'>
                         <h5 className='card__header-title'>PRO tarif</h5>
-                        <Button
-                            type='link'
-                            className='card__header-button'
-                            onClick={() => setTariffDrawerStatus(true)}
-                        >
+                        <Button type='link' className='card__header-button' onClick={openDrawer}>
                             Подробнее
                         </Button>
                     </header>
@@ -77,14 +90,17 @@ export const SettingsWrapp = () => {
                     <footer className='card__footer'>
                         {isPROActive ? (
                             <span className='card__footer-text'>
-                                Активен до {moment(user.tariff.expired).format('DD.MM')}
+                                Активен до{' '}
+                                {user.tariff?.expired
+                                    ? moment(user.tariff?.expired).format('DD.MM')
+                                    : moment().format('DD.MM')}
                             </span>
                         ) : (
                             <Button
                                 type='primary'
                                 className='card__footer-button'
                                 data-test-id='activate-tariff-btn'
-                                onClick={() => setTariffDrawerStatus(true)}
+                                onClick={openDrawer}
                             >
                                 Активировать
                             </Button>
@@ -111,14 +127,7 @@ export const SettingsWrapp = () => {
                     <Switch
                         data-test-id='tariff-trainings'
                         checked={user.readyForJointTraining}
-                        onChange={(checked) =>
-                            dispatch(
-                                UpdateUserThunk({
-                                    email: user.email,
-                                    readyForJointTraining: checked,
-                                }),
-                            )
-                        }
+                        onChange={changeReadyForJointTrainingStatus}
                     />
                 </div>
                 <div className='advantage-item'>
@@ -134,14 +143,7 @@ export const SettingsWrapp = () => {
                     <Switch
                         data-test-id='tariff-notifications'
                         checked={user.sendNotification}
-                        onChange={(checked) =>
-                            dispatch(
-                                UpdateUserThunk({
-                                    email: user.email,
-                                    sendNotification: checked,
-                                }),
-                            )
-                        }
+                        onChange={changeSendNotificationStatus}
                     />
                 </div>
                 <div className='advantage-item'>
@@ -160,13 +162,13 @@ export const SettingsWrapp = () => {
                             <ExclamationCircleOutlined data-test-id='tariff-theme-icon' />
                         </Tooltip>
                     </div>
-                    <Switch disabled={isPROActive ? false : true} data-test-id='tariff-theme' />
+                    <Switch disabled={!isPROActive} data-test-id='tariff-theme' />
                 </div>
 
                 <div className='feedbacks-btns__wrapp'>
                     <Button
                         type='primary'
-                        onClick={() => openModal(CONSTANTS.CREATE_FEEDBACK_MODAL)}
+                        onClick={openFeedbackModal}
                         className='feedbacks-wrapp__btn'
                         data-test-id='write-review'
                     >

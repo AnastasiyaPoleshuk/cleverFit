@@ -18,6 +18,7 @@ import { push } from 'redux-first-history';
 import { MenuInfo } from 'rc-menu/lib/interface';
 import { GetTrainingInfoThunk } from '@redux/thunk/TrainingThunk';
 import { useResize } from '@hooks/useResize';
+import { UserSelector } from '@utils/StoreSelectors';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -39,7 +40,11 @@ function getItem(
 
 const items: MenuItem[] = [
     getItem('Календарь', CONSTANTS.SIDEBAR_KEYS.CALENDAR, <CalendarIcon />),
-    getItem('Тренировки', CONSTANTS.SIDEBAR_KEYS.TRAININGS, <WorkoutIcon />),
+    getItem(
+        'Тренировки',
+        CONSTANTS.SIDEBAR_KEYS.TRAININGS,
+        <WorkoutIcon data-test-id='notification-about-joint-training' />,
+    ),
     getItem('Достижения', CONSTANTS.SIDEBAR_KEYS.ACHIEVEMENTS, <AchievementsIcon />),
     getItem('Профиль', CONSTANTS.SIDEBAR_KEYS.PROFILE, <ProfileIcon />),
 ];
@@ -47,7 +52,7 @@ const items: MenuItem[] = [
 export const Navigation: React.FC = () => {
     const { width: windowWidth, isScreenSm } = useResize();
     const [collapsed, setCollapsed] = useState(isScreenSm);
-    const { accessToken } = useAppSelector((state) => state.user);
+    const { accessToken } = useAppSelector(UserSelector);
 
     useEffect(() => {
         setCollapsed(isScreenSm);
@@ -68,10 +73,17 @@ export const Navigation: React.FC = () => {
             case CONSTANTS.SIDEBAR_KEYS.PROFILE:
                 dispatch(push(`${CONSTANTS.ROUTER__PATH.PROFILE__PATH}`));
                 break;
-
+            case CONSTANTS.SIDEBAR_KEYS.TRAININGS:
+                dispatch(GetTrainingInfoThunk(accessToken));
+                dispatch(push(`${CONSTANTS.ROUTER__PATH.TRAININGS__PATH}`));
+                break;
             default:
                 break;
         }
+    };
+
+    const goToMain = () => {
+        dispatch(push(CONSTANTS.ROUTER__PATH.AUTH__PATH));
     };
 
     const logOut = () => {
@@ -84,25 +96,9 @@ export const Navigation: React.FC = () => {
     return (
         <div className={`nav__menu ${collapsed ? 'collapsed__menu' : 'not-collapsed__menu'}`}>
             <div className='nav__menu-section'>
-                {collapsed ? (
-                    <Button
-                        className='nav__menu-section_btn'
-                        onClick={() => {
-                            dispatch(push(CONSTANTS.ROUTER__PATH.AUTH__PATH));
-                        }}
-                    >
-                        <LogoShortIcon />
-                    </Button>
-                ) : (
-                    <Button
-                        className='nav__menu-section_btn'
-                        onClick={() => {
-                            dispatch(push(CONSTANTS.ROUTER__PATH.MAIN__PATH));
-                        }}
-                    >
-                        <LogoIcon />
-                    </Button>
-                )}
+                <Button className='nav__menu-section_btn' onClick={goToMain}>
+                    {collapsed ? <LogoShortIcon /> : <LogoIcon />}
+                </Button>
                 <Button
                     type='text'
                     onClick={toggleCollapsed}

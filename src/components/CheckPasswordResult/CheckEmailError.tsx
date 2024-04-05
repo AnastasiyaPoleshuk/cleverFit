@@ -1,14 +1,15 @@
 import { useAppDispatch, useAppSelector } from '@hooks/typed-react-redux-hooks';
 import { checkEmailErrorState } from '@redux/slices/ChangePasswordSlice';
 import { CheckEmailThunk } from '@redux/thunk/changePasswordThunks';
+import { changePasswordSelector, routerSelector } from '@utils/StoreSelectors';
 import CONSTANTS from '@utils/constants';
 import { Button, Result } from 'antd';
 import { useEffect } from 'react';
 import { push } from 'redux-first-history';
 
 export const CheckEmailError = () => {
-    const { email } = useAppSelector((state) => state.changePassword);
-    const router = useAppSelector((state) => state.router);
+    const { email } = useAppSelector(changePasswordSelector);
+    const router = useAppSelector(routerSelector);
     const dispatch = useAppDispatch();
 
     useEffect(() => {

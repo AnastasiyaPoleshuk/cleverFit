@@ -6,12 +6,13 @@ import { push } from 'redux-first-history';
 import { useAppDispatch, useAppSelector } from '@hooks/typed-react-redux-hooks';
 import { useState, useEffect } from 'react';
 import { GetTariffListThunk } from '@redux/thunk/userThunks';
+import { routerSelector } from '@utils/StoreSelectors';
 
 export const Header = () => {
     const [pageName, setPageName] = useState('');
     const [isMain, setIsMain] = useState(false);
     const dispatch = useAppDispatch();
-    const router = useAppSelector((state) => state.router);
+    const router = useAppSelector(routerSelector);
 
     useEffect(() => {
         switch (router.location?.pathname) {
