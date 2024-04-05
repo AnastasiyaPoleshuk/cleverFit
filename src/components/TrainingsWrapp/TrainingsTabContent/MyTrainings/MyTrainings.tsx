@@ -42,6 +42,7 @@ export const MyTrainings = () => {
 
     useEffect(() => {
         const sortedData = sortDataByPeriod(trainingInfo);
+
         setTrainingsTableData(getTrainingsTableData(sortedData));
     }, [trainingInfo]);
 
@@ -210,7 +211,7 @@ export const MyTrainings = () => {
 
     return (
         <div className='my-training__content'>
-            {trainingsTableData.length ? (
+            {trainingInfo.length ? (
                 <>
                     <Table
                         dataSource={trainingsTableData}
