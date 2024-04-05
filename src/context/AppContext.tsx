@@ -18,6 +18,7 @@ export interface IAppContext {
     isChangeTariffInfoModalOpen: boolean;
     exercisesData: ITrainingExercises[];
     currentTraining: IGetTrainingsResponse;
+    isCalendar: boolean;
     addExercisesData: {
         name: string;
         date: string;
@@ -38,6 +39,7 @@ export interface IAppContext {
     saveExercisesDataToUpdate: (data: { data: ITrainingExercises[]; id: string }) => void;
     saveRegistrationData: (data: { email: string; password: string }) => void;
     setCurrentTrainingData: (training: IGetTrainingsResponse) => void;
+    setIsCalendar: (data: boolean) => void;
 }
 
 export const AppContext = createContext<IAppContext>({
@@ -51,6 +53,7 @@ export const AppContext = createContext<IAppContext>({
     isChangeTariffInfoModalOpen: false,
     isTariffDrawerOpen: false,
     isCreateTrainingDrawerOpen: false,
+    isCalendar: false,
     exercisesData: [],
     currentTraining: {
         _id: '',
@@ -86,6 +89,7 @@ export const AppContext = createContext<IAppContext>({
     setTariffDrawerStatus: () => {},
     saveRegistrationData: () => {},
     setCurrentTrainingData: () => {},
+    setIsCalendar: () => {},
 });
 
 export const AppState = ({ children }: { children: React.ReactNode }) => {
@@ -99,6 +103,7 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
     const [isTariffDrawerOpen, setIsTariffDrawerOpen] = useState(false);
     const [isCreateTrainingDrawerOpen, setIsCreateTrainingDrawerOpen] = useState(false);
     const [isChangeTariffInfoModalOpen, setIsChangeTariffInfoModalOpen] = useState(false);
+    const [isCalendar, setIsCalendarData] = useState(false);
     const [currentTraining, setCurrentTraining] = useState({});
     const [registrationData, setRegistrationData] = useState({ email: '', password: '' });
     const [addExercisesData, setAddExercisesData] = useState({
@@ -176,6 +181,10 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
         setRegistrationData(data);
     };
 
+    const setIsCalendar = (data: boolean) => {
+        setIsCalendarData(data);
+    };
+
     const setCurrentTrainingData = (training: IGetTrainingsResponse) => {
         setCurrentTraining(training);
     };
@@ -222,6 +231,7 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
             isCreateTrainingDrawerOpen,
             registrationData,
             currentTraining,
+            isCalendar,
             openModal,
             closeModal,
             setStateOfRepeatRequest,
@@ -232,6 +242,7 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
             setTariffDrawerStatus,
             saveRegistrationData,
             setCurrentTrainingData,
+            setIsCalendar,
         }),
         [
             isFeedbacksFailModalOpen,
@@ -250,6 +261,7 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
             registrationData,
             isCreateTrainingDrawerOpen,
             currentTraining,
+            isCalendar,
         ],
     );
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import './MainPage.scss';
 import { Header } from '@components/header/Header';
@@ -15,25 +15,14 @@ import {
 } from '@redux/slices/CalendarSlice';
 import { cleanError } from '@redux/slices/CalendarSlice';
 import { GetUserThunk } from '@redux/thunk/userThunks';
-import { UserSelector, calendarSelector } from '@utils/StoreSelectors';
+import { UserSelector } from '@utils/StoreSelectors';
+import { AppContext } from '../../context/AppContext';
 
 export const MainPage: React.FC = () => {
-    const [isCalendar, setISsCalendar] = useState(false);
+    const { setIsCalendar } = useContext(AppContext);
 
     const { isAuth, accessToken } = useAppSelector(UserSelector);
-    const { isGetTrainingInfoSuccess } = useAppSelector(calendarSelector);
     const dispatch = useAppDispatch();
-
-    useEffect(() => {
-        if (isGetTrainingInfoSuccess && isCalendar) {
-            dispatch(push(`${CONSTANTS.ROUTER__PATH.CALENDAR__PATH}`));
-            dispatch(GetTrainingListThunk());
-        }
-        if (isGetTrainingInfoSuccess && !isCalendar) {
-            dispatch(push(`${CONSTANTS.ROUTER__PATH.TRAININGS__PATH}`));
-            dispatch(GetTrainingListThunk());
-        }
-    }, [isGetTrainingInfoSuccess]);
 
     useEffect(() => {
         const token = localStorage.getItem('jwtToken');
@@ -60,12 +49,12 @@ export const MainPage: React.FC = () => {
     }, [isAuth]);
 
     const goToCalendar = () => {
-        setISsCalendar(true);
+        setIsCalendar(true);
         dispatch(GetTrainingInfoThunk(accessToken));
     };
 
     const goToTrainings = () => {
-        setISsCalendar(false);
+        setIsCalendar(false);
         dispatch(GetTrainingInfoThunk(accessToken));
     };
 

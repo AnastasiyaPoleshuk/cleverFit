@@ -108,6 +108,8 @@ const calendarSlice = createSlice({
         builder
             .addCase(GetTrainingInfoThunk.pending, (state) => {
                 state.isLoading = true;
+                state.isGetTrainingInfoError = false;
+                state.isGetTrainingInfoSuccess = false;
             })
             .addCase(GetTrainingInfoThunk.fulfilled, (state, action) => {
                 state.isLoading = false;
@@ -126,6 +128,8 @@ const calendarSlice = createSlice({
         builder
             .addCase(GetTrainingListThunk.pending, (state) => {
                 state.isLoading = true;
+                state.isGetTrainingListError = false;
+                state.isGetTrainingListSuccess = false;
             })
             .addCase(GetTrainingListThunk.fulfilled, (state, action) => {
                 state.isLoading = false;

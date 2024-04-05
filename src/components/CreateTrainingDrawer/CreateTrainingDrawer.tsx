@@ -127,6 +127,7 @@ export const CreateTrainingDrawer = ({ isDrawerOpen }: { isDrawerOpen: boolean }
     }, [currentTraining]);
 
     const closeDrawer = () => {
+        setWithPeriod(false);
         closeModal(CONSTANTS.CREATE_TRAINING_DRAWER);
     };
 
@@ -197,14 +198,19 @@ export const CreateTrainingDrawer = ({ isDrawerOpen }: { isDrawerOpen: boolean }
     const onSubmit = (values: ITrainingForm) => {
         const id = currentTraining._id;
         const trainingDate = values.trainingDate ? values.trainingDate : moment();
+        let period: number = 0;
+
+        if (withPeriod && !values.trainingPeriod) {
+            period = 1;
+        }
 
         const request = {
             _id: id,
-            name: values.trainingType,
+            name: values.trainingType || currentTraining.name,
             date: trainingDate.format('YYYY-MM-DDThh:mm:ss.ms'),
             parameters: {
                 repeat: values.trainingRepeat,
-                period: values.trainingPeriod,
+                period: values.trainingPeriod || period,
             },
             exercises: createExercisesArr(values.exercises),
         };
@@ -339,6 +345,7 @@ export const CreateTrainingDrawer = ({ isDrawerOpen }: { isDrawerOpen: boolean }
                                 format={CONSTANTS.DATE_FORMAT}
                                 data-test-id='modal-drawer-right-date-picker'
                                 disabledDate={disablePastDays}
+                                defaultValue={moment(currentTraining.date)}
                             />
                         </Form.Item>
                         <Form.Item

@@ -2,7 +2,7 @@ import './Navigation.scss';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Button, Menu } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import { CalendarIcon } from './Iconscomponents/CalendarIcon';
 import { ProfileIcon } from './Iconscomponents/ProfileIcon';
@@ -16,9 +16,10 @@ import { useAppDispatch, useAppSelector } from '@hooks/typed-react-redux-hooks';
 import { changeAuthState, setToken } from '@redux/slices/UserSlice';
 import { push } from 'redux-first-history';
 import { MenuInfo } from 'rc-menu/lib/interface';
-import { GetTrainingInfoThunk } from '@redux/thunk/TrainingThunk';
+import { GetTrainingInfoThunk, GetTrainingListThunk } from '@redux/thunk/TrainingThunk';
 import { useResize } from '@hooks/useResize';
 import { UserSelector } from '@utils/StoreSelectors';
+import { AppContext } from '../../context/AppContext';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -52,13 +53,13 @@ const items: MenuItem[] = [
 export const Navigation: React.FC = () => {
     const { width: windowWidth, isScreenSm } = useResize();
     const [collapsed, setCollapsed] = useState(isScreenSm);
+    const { setIsCalendar } = useContext(AppContext);
     const { accessToken } = useAppSelector(UserSelector);
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
         setCollapsed(isScreenSm);
     }, [windowWidth]);
-
-    const dispatch = useAppDispatch();
 
     const toggleCollapsed = () => {
         setCollapsed(!collapsed);
@@ -68,14 +69,15 @@ export const Navigation: React.FC = () => {
         switch (item.key) {
             case CONSTANTS.SIDEBAR_KEYS.CALENDAR:
                 dispatch(GetTrainingInfoThunk(accessToken));
-                dispatch(push(`${CONSTANTS.ROUTER__PATH.CALENDAR__PATH}`));
+                setIsCalendar(true);
                 break;
             case CONSTANTS.SIDEBAR_KEYS.PROFILE:
                 dispatch(push(`${CONSTANTS.ROUTER__PATH.PROFILE__PATH}`));
                 break;
             case CONSTANTS.SIDEBAR_KEYS.TRAININGS:
                 dispatch(GetTrainingInfoThunk(accessToken));
-                dispatch(push(`${CONSTANTS.ROUTER__PATH.TRAININGS__PATH}`));
+                setIsCalendar(false);
+
                 break;
             default:
                 break;

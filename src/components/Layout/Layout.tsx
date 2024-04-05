@@ -14,20 +14,24 @@ import { CreateFeedbackModal } from '@components/CreateFeedbackModal/CreateFeedb
 import { CreateFeedbackFailModal } from '@components/FeedbacksResult/CreateFeedbackFailModal';
 import { CreateFeedbackSuccessModal } from '@components/FeedbacksResult/CreateFeedbackSuccessModal';
 import { UserSelector, changePasswordSelector, feedbacksSelector } from '@utils/StoreSelectors';
+import { GetTrainingListThunk } from '@redux/thunk/TrainingThunk';
 
 export const Layout = () => {
     const [queryParams, setQueryParams] = useSearchParams();
     const { isLoading: isLoadingUser } = useAppSelector(UserSelector);
     const { isLoading: isLoadingChangePassword } = useAppSelector(changePasswordSelector);
     const { isLoading: isLoadingFeedback } = useAppSelector(feedbacksSelector);
-    const { isLoading: isLoadingTrainingInfo, isGetTrainingInfoError } = useAppSelector(
-        (state) => state.calendar,
-    );
+    const {
+        isLoading: isLoadingTrainingInfo,
+        isGetTrainingInfoError,
+        isGetTrainingInfoSuccess,
+    } = useAppSelector((state) => state.calendar);
     const {
         isFeedbacksFailModalOpen,
         isCreateFeedbackModalOpen,
         isCreateFeedbackSuccessModalOpen,
         isCreateFeedbackErrorModalOpen,
+        isCalendar,
     } = useContext(AppContext);
     const dispatch = useAppDispatch();
 
@@ -39,6 +43,17 @@ export const Layout = () => {
             dispatch(push(CONSTANTS.ROUTER__PATH.MAIN__PATH));
         }
     }, []);
+
+    useEffect(() => {
+        if (isGetTrainingInfoSuccess && isCalendar) {
+            dispatch(push(`${CONSTANTS.ROUTER__PATH.CALENDAR__PATH}`));
+            dispatch(GetTrainingListThunk());
+        }
+        if (isGetTrainingInfoSuccess && !isCalendar) {
+            dispatch(push(`${CONSTANTS.ROUTER__PATH.TRAININGS__PATH}`));
+            dispatch(GetTrainingListThunk());
+        }
+    }, [isGetTrainingInfoSuccess, isCalendar]);
 
     return (
         <div className='app'>
