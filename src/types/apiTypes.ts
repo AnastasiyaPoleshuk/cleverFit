@@ -119,3 +119,55 @@ export interface IPostTariffRequest {
     tariffId: string;
     days: number;
 }
+
+export interface IGetTrainingPalsResponse {
+    id: string;
+    name: string;
+    trainingType: string;
+    imageSrc?: string;
+    avgWeightInWeek: number;
+    inviteId: string;
+    status: string;
+}
+
+export interface IGetInviteResponse {
+    _id: string;
+    from: {
+        _id: string;
+        firstName?: string;
+        lastName?: string;
+        imageSrc?: string;
+    };
+    training: IGetTrainingsResponse;
+    status: string;
+    createdAt: string;
+}
+
+export interface ICreateInviteRequest {
+    to: string;
+    trainingId: string;
+}
+
+export interface ICreateInviteResponse {
+    _id: string;
+    from: {
+        _id: string;
+        firstName?: string;
+        lastName?: string;
+        imageSrc?: string;
+    };
+    training: IGetTrainingsResponse;
+    status: string;
+    createdAt: string;
+    to: {
+        _id: string;
+        firstName?: string;
+        lastName?: string;
+        imageSrc?: string;
+    };
+}
+
+export interface IUpdateInviteStatusRequest {
+    id: string;
+    status: string;
+}

@@ -5,3 +5,4 @@ export const calendarSelector = (state: RootState) => state.calendar;
 export const changePasswordSelector = (state: RootState) => state.changePassword;
 export const feedbacksSelector = (state: RootState) => state.feedbacks;
 export const routerSelector = (state: RootState) => state.router;
+export const trainingSelector = (state: RootState) => state.training;

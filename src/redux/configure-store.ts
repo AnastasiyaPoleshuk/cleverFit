@@ -5,6 +5,8 @@ import userReducer from './slices/UserSlice';
 import changePasswordReducer from './slices/ChangePasswordSlice';
 import feedbacksReducer from './slices/FeedbacksSlice';
 import calendarReducer from './slices/CalendarSlice';
+import trainingReducer from './slices/TrainingSlice';
+import inviteReducer from './slices/InviteSlice';
 
 const { createReduxHistory, routerMiddleware, routerReducer } = createReduxHistoryContext({
     history: createBrowserHistory(),
@@ -18,6 +20,8 @@ export const store = configureStore({
         changePassword: changePasswordReducer,
         feedbacks: feedbacksReducer,
         calendar: calendarReducer,
+        training: trainingReducer,
+        invites: inviteReducer,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(routerMiddleware),
 });

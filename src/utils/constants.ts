@@ -37,6 +37,7 @@ const CONSTANTS = {
     ADD_TRAINING_MODAL: 'create or update training',
     CHANGE_TARIFF_INFO_MODAL: 'Чек для оплаты у вас на почте',
     DRAWER: 'open drawer',
+    MY_TRAINING_PARTNER_INFO_MODAL: 'view ptraining partner',
     CREATE_TRAINING_DRAWER: 'create training drawer',
     DEFAULT__FEEDBACKS_COUNT: 4,
     DATE_FORMAT: 'DD.MM.YYYY',

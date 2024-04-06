@@ -4,6 +4,8 @@ import { getTrainingList } from '../../api/getTrainingList';
 import { createTraining } from '../../api/createTraining';
 import { ICreateTrainingRequest } from '../../types/apiTypes';
 import { updateTraining } from '../../api/updateTraining';
+import { getTrainingPals } from '../../api/getTrainingPals';
+import { getUsersForJoinTraining } from '../../api/getUsersForJoinTraining';
 
 export const GetTrainingInfoThunk = createAsyncThunk(
     'calendar/getTrainingInfo',
@@ -30,6 +32,19 @@ export const UpdateTrainingThunk = createAsyncThunk(
     'calendar/updateTraining',
     async (request: ICreateTrainingRequest) => {
         const response = await updateTraining(request);
+        return response;
+    },
+);
+
+export const GetTrainingPalsThunk = createAsyncThunk('training/getTrainingPals', async () => {
+    const response = await getTrainingPals();
+    return response;
+});
+
+export const GetUsersForJoinTrainingThunk = createAsyncThunk(
+    'training/getUsersForJoinTraining',
+    async () => {
+        const response = await getUsersForJoinTraining();
         return response;
     },
 );
