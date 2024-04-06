@@ -1,0 +1,16 @@
+@import '../../App.variables.scss';
+
+.drawer__body__header {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    gap: 8px;
+    align-items: center;
+}
+
+.join-training-info__period {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 0 24px 0;
+}

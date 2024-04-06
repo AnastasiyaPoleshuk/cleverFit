@@ -1,0 +1,143 @@
+@import '../../../App.variables.scss';
+
+.preview__block {
+    width: 96%;
+    background-color: rgba($color: #000000, $alpha: 0.06);
+    padding: 32px 24px 16px 24px;
+    margin-top: 24px;
+
+    .preview__block-title {
+        width: 100%;
+        color: $primary-color-light-9;
+        @include h3;
+        margin-bottom: 32px;
+        text-align: center;
+    }
+
+    .preview__block-subtitle {
+        width: 100%;
+        text-align: center;
+        color: $gray-color;
+        margin-bottom: 24px;
+        @include body-regular;
+    }
+
+    .preview__block-button__wrapp {
+        border-top: 1px solid $gray-color-light;
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        padding-top: 12px;
+    }
+
+    .preview__block-button {
+        border: none;
+        background-color: transparent;
+        box-shadow: none;
+
+        &:hover {
+            border: none;
+            background-color: transparent !important;
+        }
+
+        &:first-child {
+            color: $brand-color-light;
+        }
+
+        &:last-child {
+            color: $text-color;
+        }
+    }
+}
+
+.users-for-join__section {
+    margin-top: 24px;
+
+    .section__header {
+        margin-bottom: 24px;
+    }
+
+    .section__header-goBack-btn {
+        margin-right: 160px;
+        border: none;
+        outline: none;
+        background: none;
+
+        &:hover {
+            border: none;
+            outline: none;
+            background: none !important;
+        }
+
+        & span {
+            @include h4;
+        }
+    }
+
+    .section__header-search {
+        border-radius: 2px;
+        width: 484px;
+        height: 32px !important;
+    }
+
+    .section__main {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+
+    .section__main-user-card {
+        background-color: $selected-bg-color-light;
+        padding: 16px;
+        width: 234px;
+    }
+
+    .user-card__header {
+        width: 100%;
+        display: flex;
+        justify-content: flex-start;
+        gap: 8px;
+        align-items: center;
+    }
+
+    .user-card__name {
+        width: min-content;
+        @include body-regular;
+    }
+
+    .user-card__info {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        &:first-child {
+            margin-top: 12px;
+        }
+
+        &:last-child {
+            margin-bottom: 24px;
+        }
+    }
+
+    .user-card__type-title {
+        @include body-small;
+        color: $gray-color;
+    }
+
+    .user-card__type-value {
+        @include body-medium;
+        color: $brand-color-light;
+    }
+
+    .user-card__add-btn {
+        width: 100%;
+        border-radius: $border-radius-2;
+        margin-top: 24px;
+    }
+}
+
+.hightlight {
+    color: $warning-color;
+}
