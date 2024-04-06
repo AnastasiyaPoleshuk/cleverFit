@@ -44,9 +44,8 @@ export const MyTrainings = () => {
 
     useEffect(() => {
         console.log(trainingInfo, trainingInfo.length);
-
         if (isSorting) {
-            const sortedData = sortDataByPeriod(trainingInfo);
+            const sortedData = sortDataByPeriodAsc(trainingInfo);
 
             setTrainingsTableData(getTrainingsTableData(sortedData));
         } else {
@@ -58,15 +57,30 @@ export const MyTrainings = () => {
         let sortedData: IGetTrainingsResponse[] = [];
 
         if (isSorting) {
-            sortedData = sortDataByPeriod(trainingInfo);
+            sortedData = sortDataByPeriodAsc(trainingInfo);
             setTrainingsTableData(getTrainingsTableData(sortedData));
         } else {
-            setTrainingsTableData(getTrainingsTableData(trainingInfo));
+            sortedData = sortDataByPeriodDesc(trainingInfo);
+            setTrainingsTableData(getTrainingsTableData(sortedData));
+
+//             setTrainingsTableData(getTrainingsTableData(trainingInfo));
         }
     }, [isSorting]);
 
-    const sortDataByPeriod = (data: IGetTrainingsResponse[]) => {
-        return [...data].slice().sort((a, b) => a.parameters.period - b.parameters.period);
+    const sortDataByPeriodAsc = (data: IGetTrainingsResponse[]) => {
+        return [...data].slice().sort((a, b) => {
+            const aValue = (a.parameters.repeat === true && a.parameters.period) ? a.parameters.period : 0;
+            const bValue = (b.parameters.repeat === true && b.parameters.period) ? b.parameters.period : 0;
+            return aValue - bValue;
+        });
+    };
+
+    const sortDataByPeriodDesc = (data: IGetTrainingsResponse[]) => {
+        return [...data].slice().sort((a, b) => {
+            const aValue = a.parameters.repeat === true && a.parameters.period ? a.parameters.period : 0;
+            const bValue = b.parameters.repeat === true && b.parameters.period ? b.parameters.period : 0;
+            return bValue - aValue;
+            });
     };
 
     function toggleSorting() {
