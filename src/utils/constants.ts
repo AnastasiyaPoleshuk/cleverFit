@@ -38,6 +38,7 @@ const CONSTANTS = {
     CHANGE_TARIFF_INFO_MODAL: 'Чек для оплаты у вас на почте',
     DRAWER: 'open drawer',
     MY_TRAINING_PARTNER_INFO_MODAL: 'view ptraining partner',
+    TRAINING_DETAILS_MODAL: 'invite training details modal',
     CREATE_TRAINING_DRAWER: 'create training drawer',
     DEFAULT__FEEDBACKS_COUNT: 4,
     DATE_FORMAT: 'DD.MM.YYYY',

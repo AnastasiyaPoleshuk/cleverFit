@@ -29,9 +29,7 @@ export const JoinTrainingPreview = ({
                 <Button className='preview__block-button' onClick={goToFindPeople}>
                     Случайный выбор
                 </Button>
-                <Button className='preview__block-button'>
-                    Выбор друга по моим видам тренировок
-                </Button>
+                <Button className='preview__block-button'>Выбор друга по моим тренировкам</Button>
             </div>
         </section>
     );

@@ -9,3 +9,30 @@
         width: 312px;
     }
 }
+
+.training-details__modal {
+    width: 312px;
+}
+
+.training-details__info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.training-details__period {
+    @include h5;
+}
+
+.training-details__date {
+    @include body-medium;
+}
+
+.training-details__exercise-name {
+    color: $gray-color;
+}
+
+.training-details__exercise-params {
+    color: $brand-color-light;
+}

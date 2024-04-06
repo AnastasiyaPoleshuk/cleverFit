@@ -1,7 +1,7 @@
 import './Navigation.scss';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import { Button, Menu } from 'antd';
+import { Badge, Button, Menu } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
 
 import { CalendarIcon } from './Iconscomponents/CalendarIcon';
@@ -18,7 +18,7 @@ import { push } from 'redux-first-history';
 import { MenuInfo } from 'rc-menu/lib/interface';
 import { GetTrainingInfoThunk, GetTrainingListThunk } from '@redux/thunk/TrainingThunk';
 import { useResize } from '@hooks/useResize';
-import { UserSelector } from '@utils/StoreSelectors';
+import { UserSelector, invitesSelector } from '@utils/StoreSelectors';
 import { AppContext } from '../../context/AppContext';
 
 type MenuItem = Required<MenuProps>['items'][number];
@@ -39,23 +39,31 @@ function getItem(
     } as MenuItem;
 }
 
-const items: MenuItem[] = [
-    getItem('Календарь', CONSTANTS.SIDEBAR_KEYS.CALENDAR, <CalendarIcon />),
-    getItem(
-        'Тренировки',
-        CONSTANTS.SIDEBAR_KEYS.TRAININGS,
-        <WorkoutIcon data-test-id='notification-about-joint-training' />,
-    ),
-    getItem('Достижения', CONSTANTS.SIDEBAR_KEYS.ACHIEVEMENTS, <AchievementsIcon />),
-    getItem('Профиль', CONSTANTS.SIDEBAR_KEYS.PROFILE, <ProfileIcon />),
-];
-
 export const Navigation: React.FC = () => {
     const { width: windowWidth, isScreenSm } = useResize();
     const [collapsed, setCollapsed] = useState(isScreenSm);
     const { setIsCalendar } = useContext(AppContext);
     const { accessToken } = useAppSelector(UserSelector);
+    const { myInvites } = useAppSelector(invitesSelector);
+
     const dispatch = useAppDispatch();
+
+    const items: MenuItem[] = [
+        getItem('Календарь', CONSTANTS.SIDEBAR_KEYS.CALENDAR, <CalendarIcon />),
+        getItem(
+            'Тренировки',
+            CONSTANTS.SIDEBAR_KEYS.TRAININGS,
+            <>
+                <WorkoutIcon data-test-id='notification-about-joint-training' />
+                <Badge
+                    count={myInvites.length ? myInvites.length : 0}
+                    data-test-id='notification-about-joint-training'
+                />
+            </>,
+        ),
+        getItem('Достижения', CONSTANTS.SIDEBAR_KEYS.ACHIEVEMENTS, <AchievementsIcon />),
+        getItem('Профиль', CONSTANTS.SIDEBAR_KEYS.PROFILE, <ProfileIcon />),
+    ];
 
     useEffect(() => {
         setCollapsed(isScreenSm);

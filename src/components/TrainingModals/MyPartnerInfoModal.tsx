@@ -4,21 +4,28 @@ import { AppContext } from '../../context/AppContext';
 import { useContext } from 'react';
 import CONSTANTS from '@utils/constants';
 import { CheckCircleFilled, UserOutlined } from '@ant-design/icons';
+import { useAppDispatch } from '@hooks/typed-react-redux-hooks';
+import { RemoveInviteThunk } from '@redux/thunk/InviteThunk';
 
 export const MyPartnerInfoModal = () => {
     const { closeModal, currentTrainingPartner, isMyTrainingPartnerInfoModalOpen } =
         useContext(AppContext);
+    const dispatch = useAppDispatch();
 
     const close = () => {
         closeModal(CONSTANTS.MY_TRAINING_PARTNER_INFO_MODAL);
     };
+
+    const cancelTraining = () => {
+        dispatch(RemoveInviteThunk(currentTrainingPartner.inviteId));
+    };
+
     return (
         <Modal
             open={isMyTrainingPartnerInfoModalOpen}
             destroyOnClose={true}
             closable={true}
             onCancel={close}
-            // style={{ position: 'absolute', ...modalPosition }}
             styles={{
                 body: {
                     // height: 91,
@@ -28,6 +35,7 @@ export const MyPartnerInfoModal = () => {
                     // alignItems: 'flex-start',
                 },
             }}
+            data-test-id='partner-modal'
             className='training-partner-info__modal'
         >
             <div className='training-partner-info__block'>
@@ -60,11 +68,7 @@ export const MyPartnerInfoModal = () => {
                     <div className='user-card__type-value'>{`${currentTrainingPartner.avgWeightInWeek}кг/нед`}</div>
                 </div>
 
-                <Button
-                    type='default'
-                    className='user-card__add-btn'
-                    // onClick={() => openJoinTrainingDrawer(currentTrainingPartner)}
-                >
+                <Button type='default' className='user-card__add-btn' onClick={cancelTraining}>
                     Отменить тренировку
                 </Button>
             </div>

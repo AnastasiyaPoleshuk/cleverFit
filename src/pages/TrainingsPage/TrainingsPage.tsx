@@ -22,9 +22,11 @@ import { UpdateTrainingFail } from '@components/ErrorModals/UpdateTrainingFail';
 import { UserSelector, calendarSelector } from '@utils/StoreSelectors';
 import { JoinTrainingDrawer } from '@components/JoinTrainingDrawer/JoinTrainingDrawer';
 import { MyPartnerInfoModal } from '@components/TrainingModals/MyPartnerInfoModal';
+import { GetInvitesThunk } from '@redux/thunk/InviteThunk';
+import { TrainingDetails } from '@components/TrainingModals/TrainingDetails';
 
 export const TrainingsPage = () => {
-    const { isAuth } = useAppSelector(UserSelector);
+    const { isAuth, accessToken } = useAppSelector(UserSelector);
     const {
         isGetTrainingListError,
         isCreateTrainingSuccess,
@@ -39,9 +41,14 @@ export const TrainingsPage = () => {
         isCalendar,
         isJoinTrainingDrawerOpen,
         isMyTrainingPartnerInfoModalOpen,
+        isTrainingDetailsModalOpen,
     } = useContext(AppContext);
 
     const dispatch = useAppDispatch();
+
+    useLayoutEffect(() => {
+        dispatch(GetInvitesThunk(accessToken));
+    }, []);
 
     useEffect(() => {
         if (!isAuth) {
@@ -93,10 +100,8 @@ export const TrainingsPage = () => {
         <div className='trainings-page'>
             <TrainingsHeader />
             <TrainingsWrapp />
-
             <CreateTrainingDrawer isDrawerOpen={isCreateTrainingDrawerOpen} />
             <JoinTrainingDrawer isDrawerOpen={isJoinTrainingDrawerOpen} />
-
             {isCreateTrainingSuccess && (
                 <CreateTrainingSuccess title={CONSTANTS.CREATE_TRAINING_SUCCESS} />
             )}
@@ -104,6 +109,9 @@ export const TrainingsPage = () => {
                 <CreateTrainingSuccess title={CONSTANTS.UPDATE_TRAINING_SUCCESS} />
             )}
             {isMyTrainingPartnerInfoModalOpen && <MyPartnerInfoModal />}
+            {isTrainingDetailsModalOpen && (
+                <TrainingDetails isTrainingDetailsModalOpen={isTrainingDetailsModalOpen} />
+            )}
         </div>
     );
 };

@@ -54,6 +54,7 @@ export const UsersForJoinTrainingSection = ({
                 <Search
                     placeholder='Поиск по имени'
                     className='section__header-search'
+                    data-test-id='search-input'
                     onSearch={search}
                     styles={{
                         input: {

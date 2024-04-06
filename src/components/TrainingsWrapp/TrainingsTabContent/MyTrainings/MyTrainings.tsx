@@ -11,25 +11,7 @@ import { CurrentTrainingInfoModal } from '@components/TrainingModals/CurrentTrai
 import { getModalPosition } from '@utils/getModalPosition';
 import { useResize } from '@hooks/useResize';
 import { calendarSelector } from '@utils/StoreSelectors';
-
-const getPeriodValue = (data: number) => {
-    switch (data) {
-        case 1:
-            return 'Через 1 день';
-
-        case 2:
-            return 'Через 2 дня';
-
-        case 3:
-            return 'Через 3 дня';
-
-        case 7:
-            return '1 раз в неделю';
-
-        default:
-            return '';
-    }
-};
+import { getPeriodValue } from '@utils/getPeriod';
 
 export const MyTrainings = () => {
     const [modalPosition, setModalPosition] = useState({ top: '0', left: '0' });
@@ -43,7 +25,6 @@ export const MyTrainings = () => {
     const { width: windowWidth, isScreenSm } = useResize();
 
     useEffect(() => {
-        console.log(trainingInfo, trainingInfo.length);
         if (isSorting) {
             const sortedData = sortDataByPeriodAsc(trainingInfo);
 
@@ -62,25 +43,27 @@ export const MyTrainings = () => {
         } else {
             sortedData = sortDataByPeriodDesc(trainingInfo);
             setTrainingsTableData(getTrainingsTableData(sortedData));
-
-//             setTrainingsTableData(getTrainingsTableData(trainingInfo));
         }
     }, [isSorting]);
 
     const sortDataByPeriodAsc = (data: IGetTrainingsResponse[]) => {
         return [...data].slice().sort((a, b) => {
-            const aValue = (a.parameters.repeat === true && a.parameters.period) ? a.parameters.period : 0;
-            const bValue = (b.parameters.repeat === true && b.parameters.period) ? b.parameters.period : 0;
+            const aValue =
+                a.parameters.repeat === true && a.parameters.period ? a.parameters.period : 0;
+            const bValue =
+                b.parameters.repeat === true && b.parameters.period ? b.parameters.period : 0;
             return aValue - bValue;
         });
     };
 
     const sortDataByPeriodDesc = (data: IGetTrainingsResponse[]) => {
         return [...data].slice().sort((a, b) => {
-            const aValue = a.parameters.repeat === true && a.parameters.period ? a.parameters.period : 0;
-            const bValue = b.parameters.repeat === true && b.parameters.period ? b.parameters.period : 0;
+            const aValue =
+                a.parameters.repeat === true && a.parameters.period ? a.parameters.period : 0;
+            const bValue =
+                b.parameters.repeat === true && b.parameters.period ? b.parameters.period : 0;
             return bValue - aValue;
-            });
+        });
     };
 
     function toggleSorting() {

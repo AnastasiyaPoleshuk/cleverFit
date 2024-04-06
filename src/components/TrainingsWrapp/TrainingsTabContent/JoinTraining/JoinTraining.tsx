@@ -3,19 +3,22 @@ import './JoinTraining.scss';
 import { useContext, useEffect, useLayoutEffect, useState } from 'react';
 import { GetTrainingPalsThunk } from '@redux/thunk/TrainingThunk';
 import { IGetTrainingPalsResponse } from '../../../../types/apiTypes';
-import { trainingSelector } from '@utils/StoreSelectors';
+import { invitesSelector, trainingSelector } from '@utils/StoreSelectors';
 import { JoinTrainingPreview } from '@components/TrainingsWrapp/components/JoinTrainingPreview';
 import { UsersForJoinTrainingSection } from '@components/TrainingsWrapp/components/UsersForJoinTrainingSection';
 import { Avatar, Card } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import { AppContext } from '../../../../context/AppContext';
 import CONSTANTS from '@utils/constants';
+import { JoinTrainingMessages } from '@components/TrainingsWrapp/components/JoinTrainingMessages';
 
 export const JoinTraining = () => {
     const [isPreview, setIsPreview] = useState(true);
     const [trainingPals, setTrainingPals] = useState<IGetTrainingPalsResponse[]>([]);
     const { isGeTrainingPalsSuccess, trainingPals: trainingPalsStore } =
         useAppSelector(trainingSelector);
+    const { myInvites } = useAppSelector(invitesSelector);
+
     const { openModal, saveCurrentTrainingPartner } = useContext(AppContext);
 
     const dispatch = useAppDispatch();
@@ -37,6 +40,7 @@ export const JoinTraining = () => {
 
     return (
         <div className='join-training__content'>
+            {myInvites.length && <JoinTrainingMessages />}
             {isPreview ? (
                 <JoinTrainingPreview changePreviewState={setIsPreview} />
             ) : (
@@ -47,7 +51,7 @@ export const JoinTraining = () => {
                     <h4 className='my-partners__block-title'>Мои партнеры по тренировками</h4>
                     <div className='my-partners__cards-wrapp'>
                         {trainingPals.length ? (
-                            trainingPals.map((item) => (
+                            trainingPals.map((item, index) => (
                                 <Card
                                     key={item.id}
                                     title={
@@ -68,6 +72,7 @@ export const JoinTraining = () => {
                                     hoverable
                                     onClick={() => openUserInfoModal(item)}
                                     bordered={false}
+                                    data-test-id={`joint-training-cards${index}`}
                                     className='section__main-user-card user-card'
                                     styles={{
                                         header: {

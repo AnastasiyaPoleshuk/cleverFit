@@ -105,10 +105,6 @@ export const CreateTrainingDrawer = ({ isDrawerOpen }: { isDrawerOpen: boolean }
     useEffect(() => {
         setAddExerciseButtonText('Добавление упражнений');
 
-        if (currentTraining.name) {
-            setIsSubmitButtonDisabled(false);
-        }
-
         if (currentTraining.exercises?.length) {
             setAddExerciseButtonText('Добавить ещё');
             const checkboxData = currentTraining.exercises.map((exercise, index) => {
@@ -126,6 +122,13 @@ export const CreateTrainingDrawer = ({ isDrawerOpen }: { isDrawerOpen: boolean }
             }
         }
     }, [currentTraining]);
+
+    useEffect(() => {
+        if (isDrawerOpen && currentTraining.name) {
+            setIsSubmitButtonDisabled(false);
+            setWithPeriod(currentTraining.parameters.repeat);
+        }
+    }, [isDrawerOpen]);
 
     const closeDrawer = () => {
         setWithPeriod(false);
@@ -213,7 +216,7 @@ export const CreateTrainingDrawer = ({ isDrawerOpen }: { isDrawerOpen: boolean }
             name: values.trainingType || currentTraining.name,
             date: trainingDate.format('YYYY-MM-DDThh:mm:ss.ms'),
             parameters: {
-                repeat: values.trainingRepeat || false,
+                repeat: withPeriod,
                 period: values.trainingPeriod || trainingPeriod,
             },
             exercises: createExercisesArr(values.exercises),
@@ -351,7 +354,7 @@ export const CreateTrainingDrawer = ({ isDrawerOpen }: { isDrawerOpen: boolean }
                                 disabledDate={disablePastDays}
                                 defaultValue={
                                     currentTraining.date
-                                        ? moment(currentTraining.date, CONSTANTS.DATE_FORMAT)
+                                        ? moment(currentTraining.date, 'YYYY-MM-DD')
                                         : ''
                                 }
                             />
@@ -361,7 +364,9 @@ export const CreateTrainingDrawer = ({ isDrawerOpen }: { isDrawerOpen: boolean }
                             className='training-info__select-date__form-item'
                         >
                             <Checkbox
+                                name='trainingRepeat'
                                 onChange={(e) => toggleTrainingPeriod(e.target.checked)}
+                                value={withPeriod}
                                 className='training-info__period-checkbox'
                                 data-test-id='modal-drawer-right-checkbox-period'
                             >

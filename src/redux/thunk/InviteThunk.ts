@@ -1,12 +1,12 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { getInvites } from '../../api/getinvites';
+import { getInvites } from '../../api/getInvites';
 import { createInvite } from '../../api/createInvite';
 import { ICreateInviteRequest, IUpdateInviteStatusRequest } from '../../types/apiTypes';
 import { updateInviteStatus } from '../../api/updateInviteStatus';
-import { removeInvite } from 'src/api/removeInvite';
+import { removeInvite } from '../../api/removeInvite';
 
-export const GetInvitesThunk = createAsyncThunk('training/getInvites', async () => {
-    const response = await getInvites();
+export const GetInvitesThunk = createAsyncThunk('training/getInvites', async (token: string) => {
+    const response = await getInvites(token);
     return response;
 });
 

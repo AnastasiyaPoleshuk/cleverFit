@@ -1,10 +1,14 @@
-import { Tabs } from 'antd';
+import { Badge, Tabs } from 'antd';
 import './TrainingsWrapp.scss';
 import { JoinTraining } from './TrainingsTabContent/JoinTraining/JoinTraining';
 import { Maraphon } from './TrainingsTabContent/Maraphon/Maraphon';
 import { MyTrainings } from './TrainingsTabContent/MyTrainings/MyTrainings';
+import { useAppSelector } from '@hooks/typed-react-redux-hooks';
+import { invitesSelector } from '@utils/StoreSelectors';
 
 export const TrainingsWrapp = () => {
+    const { myInvites } = useAppSelector(invitesSelector);
+
     return (
         <div className='trainings-wrapp'>
             <Tabs
@@ -16,7 +20,12 @@ export const TrainingsWrapp = () => {
                     <MyTrainings />
                 </Tabs.TabPane>
                 <Tabs.TabPane
-                    tab={<h3 className='tab__bar-title'>Совместные тренировки</h3>}
+                    tab={
+                        <h3 className='tab__bar-title'>
+                            Совместные тренировки
+                            <Badge count={myInvites.length ? myInvites.length : 0} />
+                        </h3>
+                    }
                     key='2'
                 >
                     <JoinTraining />
