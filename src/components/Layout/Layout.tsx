@@ -13,7 +13,12 @@ import { changeGetTrainingInfoErrorState } from '@redux/slices/CalendarSlice';
 import { CreateFeedbackModal } from '@components/CreateFeedbackModal/CreateFeedbackModal';
 import { CreateFeedbackFailModal } from '@components/FeedbacksResult/CreateFeedbackFailModal';
 import { CreateFeedbackSuccessModal } from '@components/FeedbacksResult/CreateFeedbackSuccessModal';
-import { UserSelector, changePasswordSelector, feedbacksSelector } from '@utils/StoreSelectors';
+import {
+    UserSelector,
+    calendarSelector,
+    changePasswordSelector,
+    feedbacksSelector,
+} from '@utils/StoreSelectors';
 import { GetTrainingListThunk } from '@redux/thunk/TrainingThunk';
 
 export const Layout = () => {
@@ -25,7 +30,7 @@ export const Layout = () => {
         isLoading: isLoadingTrainingInfo,
         isGetTrainingInfoError,
         isGetTrainingInfoSuccess,
-    } = useAppSelector((state) => state.calendar);
+    } = useAppSelector(calendarSelector);
     const {
         isFeedbacksFailModalOpen,
         isCreateFeedbackModalOpen,

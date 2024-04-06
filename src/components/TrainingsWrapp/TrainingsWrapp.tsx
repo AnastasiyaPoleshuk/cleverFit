@@ -1,6 +1,6 @@
 import { Tabs } from 'antd';
 import './TrainingsWrapp.scss';
-import { JoingTraining } from './TrainingsTabContent/JoingTraining/JoingTraining';
+import { JoinTraining } from './TrainingsTabContent/JoinTraining/JoinTraining';
 import { Maraphon } from './TrainingsTabContent/Maraphon/Maraphon';
 import { MyTrainings } from './TrainingsTabContent/MyTrainings/MyTrainings';
 
@@ -19,7 +19,7 @@ export const TrainingsWrapp = () => {
                     tab={<h3 className='tab__bar-title'>Совместные тренировки</h3>}
                     key='2'
                 >
-                    <JoingTraining />
+                    <JoinTraining />
                 </Tabs.TabPane>
                 <Tabs.TabPane tab={<h3 className='tab__bar-title'>Марафоны</h3>} key='3'>
                     <Maraphon />

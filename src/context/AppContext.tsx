@@ -3,7 +3,7 @@ import React, { createContext, useMemo, useState } from 'react';
 
 import CONSTANTS from '../utils/constants';
 import { ITrainingExercises } from '../types/storeTypes';
-import { IGetTrainingsResponse } from '@types/apiTypes';
+import { IGetTrainingPalsResponse, IGetTrainingsResponse } from '../types/apiTypes';
 
 export interface IAppContext {
     isFeedbacksFailModalOpen: boolean;
@@ -13,11 +13,15 @@ export interface IAppContext {
     isRepeatRequestNeeded: boolean;
     isAddTrainingModalOpen: boolean;
     isDrawerOpen: boolean;
+    isJoinTrainingDrawerOpen: boolean;
     isTariffDrawerOpen: boolean;
     isCreateTrainingDrawerOpen: boolean;
     isChangeTariffInfoModalOpen: boolean;
+    isMyTrainingPartnerInfoModalOpen: boolean;
     exercisesData: ITrainingExercises[];
     currentTraining: IGetTrainingsResponse;
+    currentUserForJoinTraining: IGetTrainingPalsResponse;
+    currentTrainingPartner: IGetTrainingPalsResponse;
     isCalendar: boolean;
     addExercisesData: {
         name: string;
@@ -33,6 +37,7 @@ export interface IAppContext {
     closeModal: (type: string) => void;
     setStateOfRepeatRequest: (state: boolean) => void;
     setTariffDrawerStatus: (state: boolean) => void;
+    setJoinTrainingDrawerStatus: (state: boolean) => void;
     updateAddExercisesData: (data: { name: string; date: string }) => void;
     saveExercisesData: (exercisesData: ITrainingExercises[]) => void;
     saveCurrentExerciseName: (exerciseNam: string) => void;
@@ -40,6 +45,8 @@ export interface IAppContext {
     saveRegistrationData: (data: { email: string; password: string }) => void;
     setCurrentTrainingData: (training: IGetTrainingsResponse) => void;
     setIsCalendar: (data: boolean) => void;
+    saveCurrentUserForJoinTraining: (data: IGetTrainingPalsResponse) => void;
+    saveCurrentTrainingPartner: (data: IGetTrainingPalsResponse) => void;
 }
 
 export const AppContext = createContext<IAppContext>({
@@ -52,7 +59,9 @@ export const AppContext = createContext<IAppContext>({
     isDrawerOpen: false,
     isChangeTariffInfoModalOpen: false,
     isTariffDrawerOpen: false,
+    isJoinTrainingDrawerOpen: false,
     isCreateTrainingDrawerOpen: false,
+    isMyTrainingPartnerInfoModalOpen: false,
     isCalendar: false,
     exercisesData: [],
     currentTraining: {
@@ -78,6 +87,24 @@ export const AppContext = createContext<IAppContext>({
         data: [],
         id: '',
     },
+    currentUserForJoinTraining: {
+        id: '',
+        name: '',
+        trainingType: '',
+        imageSrc: '',
+        avgWeightInWeek: 0,
+        inviteId: '',
+        status: '',
+    },
+    currentTrainingPartner: {
+        id: '',
+        name: '',
+        trainingType: '',
+        imageSrc: '',
+        avgWeightInWeek: 0,
+        inviteId: '',
+        status: '',
+    },
     currentExerciseName: '',
     openModal: () => {},
     closeModal: () => {},
@@ -90,6 +117,9 @@ export const AppContext = createContext<IAppContext>({
     saveRegistrationData: () => {},
     setCurrentTrainingData: () => {},
     setIsCalendar: () => {},
+    setJoinTrainingDrawerStatus: () => {},
+    saveCurrentUserForJoinTraining: () => {},
+    saveCurrentTrainingPartner: () => {},
 });
 
 export const AppState = ({ children }: { children: React.ReactNode }) => {
@@ -104,7 +134,11 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
     const [isCreateTrainingDrawerOpen, setIsCreateTrainingDrawerOpen] = useState(false);
     const [isChangeTariffInfoModalOpen, setIsChangeTariffInfoModalOpen] = useState(false);
     const [isCalendar, setIsCalendarData] = useState(false);
+    const [isMyTrainingPartnerInfoModalOpen, setIsMyTrainingPartnerInfoModalOpen] = useState(false);
+    const [isJoinTrainingDrawerOpen, setIsJoinTrainingDrawerOpen] = useState(false);
     const [currentTraining, setCurrentTraining] = useState({});
+    const [currentUserForJoinTraining, setCurrentUserForJoinTraining] = useState({});
+    const [currentTrainingPartner, setCurrentTrainingPartner] = useState({});
     const [registrationData, setRegistrationData] = useState({ email: '', password: '' });
     const [addExercisesData, setAddExercisesData] = useState({
         name: '',
@@ -145,6 +179,9 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
             case CONSTANTS.CREATE_TRAINING_DRAWER:
                 setIsCreateTrainingDrawerOpen(true);
                 break;
+            case CONSTANTS.MY_TRAINING_PARTNER_INFO_MODAL:
+                setIsMyTrainingPartnerInfoModalOpen(true);
+                break;
         }
     };
 
@@ -174,6 +211,9 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
             case CONSTANTS.CREATE_TRAINING_DRAWER:
                 setIsCreateTrainingDrawerOpen(false);
                 break;
+            case CONSTANTS.MY_TRAINING_PARTNER_INFO_MODAL:
+                setIsMyTrainingPartnerInfoModalOpen(false);
+                break;
         }
     };
 
@@ -181,8 +221,20 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
         setRegistrationData(data);
     };
 
+    const setJoinTrainingDrawerStatus = (data: boolean) => {
+        setIsJoinTrainingDrawerOpen(data);
+    };
+
     const setIsCalendar = (data: boolean) => {
         setIsCalendarData(data);
+    };
+
+    const saveCurrentUserForJoinTraining = (data: IGetTrainingPalsResponse) => {
+        setCurrentUserForJoinTraining(data);
+    };
+
+    const saveCurrentTrainingPartner = (data: IGetTrainingPalsResponse) => {
+        setCurrentTrainingPartner(data);
     };
 
     const setCurrentTrainingData = (training: IGetTrainingsResponse) => {
@@ -232,6 +284,10 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
             registrationData,
             currentTraining,
             isCalendar,
+            isJoinTrainingDrawerOpen,
+            currentUserForJoinTraining,
+            isMyTrainingPartnerInfoModalOpen,
+            currentTrainingPartner,
             openModal,
             closeModal,
             setStateOfRepeatRequest,
@@ -243,6 +299,9 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
             saveRegistrationData,
             setCurrentTrainingData,
             setIsCalendar,
+            setJoinTrainingDrawerStatus,
+            saveCurrentUserForJoinTraining,
+            saveCurrentTrainingPartner,
         }),
         [
             isFeedbacksFailModalOpen,
@@ -262,6 +321,10 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
             isCreateTrainingDrawerOpen,
             currentTraining,
             isCalendar,
+            isJoinTrainingDrawerOpen,
+            currentUserForJoinTraining,
+            isMyTrainingPartnerInfoModalOpen,
+            currentTrainingPartner,
         ],
     );
 

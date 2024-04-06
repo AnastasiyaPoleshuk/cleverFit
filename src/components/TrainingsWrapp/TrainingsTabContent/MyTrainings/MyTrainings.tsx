@@ -10,6 +10,7 @@ import { getTrainingColor } from '@utils/getTrainingColor';
 import { CurrentTrainingInfoModal } from '@components/TrainingModals/CurrentTrainingInfoModal';
 import { getModalPosition } from '@utils/getModalPosition';
 import { useResize } from '@hooks/useResize';
+import { calendarSelector } from '@utils/StoreSelectors';
 
 const getPeriodValue = (data: number) => {
     switch (data) {
@@ -33,7 +34,8 @@ const getPeriodValue = (data: number) => {
 export const MyTrainings = () => {
     const [modalPosition, setModalPosition] = useState({ top: '0', left: '0' });
     const [isTrainingInfoModalOpen, setIsTrainingInfoModalOpen] = useState(false);
-    const { trainingInfo, isGetTrainingListSuccess } = useAppSelector((state) => state.calendar);
+    const [isSorting, setIsSorting] = useState(false);
+    const { trainingInfo, isGetTrainingListSuccess } = useAppSelector(calendarSelector);
     const { openModal, setCurrentTrainingData } = useContext(AppContext);
     const [trainingsTableData, setTrainingsTableData] = useState(
         getTrainingsTableData(trainingInfo),
@@ -41,22 +43,35 @@ export const MyTrainings = () => {
     const { width: windowWidth, isScreenSm } = useResize();
 
     useEffect(() => {
-        const sortedData = sortDataByPeriod(trainingInfo);
+        console.log(trainingInfo, trainingInfo.length);
 
-        setTrainingsTableData(getTrainingsTableData(sortedData));
+        if (isSorting) {
+            const sortedData = sortDataByPeriod(trainingInfo);
+
+            setTrainingsTableData(getTrainingsTableData(sortedData));
+        } else {
+            setTrainingsTableData(getTrainingsTableData(trainingInfo));
+        }
     }, [trainingInfo]);
 
+    useEffect(() => {
+        let sortedData: IGetTrainingsResponse[] = [];
+
+        if (isSorting) {
+            sortedData = sortDataByPeriod(trainingInfo);
+            setTrainingsTableData(getTrainingsTableData(sortedData));
+        } else {
+            setTrainingsTableData(getTrainingsTableData(trainingInfo));
+        }
+    }, [isSorting]);
+
     const sortDataByPeriod = (data: IGetTrainingsResponse[]) => {
-        return data.slice().sort((a, b) => a.parameters.period - b.parameters.period);
+        return [...data].slice().sort((a, b) => a.parameters.period - b.parameters.period);
     };
 
-    const changeSortingType = (value: string) => {
-        let sortedData: IGetTrainingsResponse[] = [];
-        if (value === 'period') {
-            sortedData = sortDataByPeriod(trainingInfo);
-        }
-        setTrainingsTableData(getTrainingsTableData(sortedData));
-    };
+    function toggleSorting() {
+        setIsSorting(!isSorting);
+    }
 
     const trainingsTableColumns = [
         {
@@ -66,11 +81,9 @@ export const MyTrainings = () => {
         },
         {
             title: (
-                <Select
-                    defaultValue='Сортировка по периоду'
-                    onChange={changeSortingType}
-                    options={[]}
-                />
+                <Button onClick={toggleSorting} className='trainings__table-header-select'>
+                    Периодичность
+                </Button>
             ),
             dataIndex: 'sorting',
             key: 'sorting',
@@ -111,7 +124,7 @@ export const MyTrainings = () => {
     function getTrainingsTableData(trainings: IGetTrainingsResponse[]) {
         const trainingsTableData = trainings.map((training, index) => {
             return {
-                key: `${training.name}${index++}`,
+                key: `${training.name}${index + 2}`,
                 type: (
                     <div className='training-name__cell'>
                         <Badge
@@ -156,29 +169,9 @@ export const MyTrainings = () => {
                 key: 'Тип тренировки',
                 type: <p className='trainings__table-header-cell-title'>Тип тренировки</p>,
                 sorting: (
-                    <Select
-                        defaultValue='Периодичность'
-                        className='trainings__table-header-select'
-                        variant={'borderless'}
-                        options={[
-                            {
-                                value: 'period',
-                                label: 'Периодичность',
-                            },
-                            {
-                                value: 'date',
-                                label: 'Сортировка по дате',
-                            },
-                            {
-                                value: 'day',
-                                label: 'Сортировка по дням',
-                            },
-                            {
-                                value: 'all',
-                                label: 'Сортировка по всему',
-                            },
-                        ]}
-                    />
+                    <Button className='trainings__table-header-select' onClick={toggleSorting}>
+                        Периодичность
+                    </Button>
                 ),
                 button: <></>,
             },
@@ -217,7 +210,9 @@ export const MyTrainings = () => {
                         dataSource={trainingsTableData}
                         columns={trainingsTableColumns}
                         pagination={
-                            trainingsTableData.length > 14 ? { position: ['bottomRight'] } : false
+                            trainingsTableData.length > 12
+                                ? { position: ['bottomLeft'], pageSize: 12 }
+                                : false
                         }
                         showHeader={false}
                         className='trainings__table'

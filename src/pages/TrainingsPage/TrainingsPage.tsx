@@ -8,23 +8,38 @@ import { useContext, useEffect, useLayoutEffect } from 'react';
 import { push } from 'redux-first-history';
 import { AppContext } from '../../context/AppContext';
 import { GetTrainingsListFail } from '@components/ErrorModals/GetTrainingsListFail';
-import { changeGetTrainingListErrorState } from '@redux/slices/CalendarSlice';
+import {
+    changeCreateTrainingErrorState,
+    changeGetTrainingInfoErrorState,
+    changeGetTrainingInfoSuccessState,
+    changeGetTrainingListErrorState,
+    cleanError,
+} from '@redux/slices/CalendarSlice';
 import { CreateTrainingDrawer } from '@components/CreateTrainingDrawer/CreateTrainingDrawer';
 import { CreateTrainingSuccess } from '@components/TrainingModals/CreateTrainingSuccess';
 import { CreateTrainingFail } from '@components/ErrorModals/CreateTrainingFail';
 import { UpdateTrainingFail } from '@components/ErrorModals/UpdateTrainingFail';
+import { UserSelector, calendarSelector } from '@utils/StoreSelectors';
+import { JoinTrainingDrawer } from '@components/JoinTrainingDrawer/JoinTrainingDrawer';
+import { MyPartnerInfoModal } from '@components/TrainingModals/MyPartnerInfoModal';
 
 export const TrainingsPage = () => {
-    const { isAuth } = useAppSelector((state) => state.user);
+    const { isAuth } = useAppSelector(UserSelector);
     const {
         isGetTrainingListError,
         isCreateTrainingSuccess,
         isCreateTrainingError,
         isUpdateTrainingSuccess,
         isUpdateTrainingError,
-    } = useAppSelector((state) => state.calendar);
-    const { isRepeatRequestNeeded, setStateOfRepeatRequest, isCreateTrainingDrawerOpen } =
-        useContext(AppContext);
+    } = useAppSelector(calendarSelector);
+    const {
+        isRepeatRequestNeeded,
+        setStateOfRepeatRequest,
+        isCreateTrainingDrawerOpen,
+        isCalendar,
+        isJoinTrainingDrawerOpen,
+        isMyTrainingPartnerInfoModalOpen,
+    } = useContext(AppContext);
 
     const dispatch = useAppDispatch();
 
@@ -42,9 +57,25 @@ export const TrainingsPage = () => {
         }
     }, [isRepeatRequestNeeded]);
 
+    const clearErr = () => {
+        dispatch(changeCreateTrainingErrorState(false));
+        dispatch(push(`${CONSTANTS.ROUTER__PATH.MAIN__PATH}`));
+    };
+
+    const clearErrOfGetTrainingsList = () => {
+        dispatch(changeGetTrainingListErrorState(false));
+
+        dispatch(changeGetTrainingInfoErrorState(false));
+        dispatch(changeGetTrainingInfoSuccessState(false));
+        dispatch(cleanError());
+    };
+
     useLayoutEffect(() => {
-        if (isCreateTrainingError) {
-            CreateTrainingFail(() => dispatch(push(`${CONSTANTS.ROUTER__PATH.MAIN__PATH}`)));
+        if (isCreateTrainingError && isCalendar) {
+            CreateTrainingFail(clearErr);
+        }
+        if (isCreateTrainingError && !isCalendar) {
+            UpdateTrainingFail();
         }
 
         if (isUpdateTrainingError) {
@@ -54,7 +85,7 @@ export const TrainingsPage = () => {
 
     useLayoutEffect(() => {
         if (isGetTrainingListError) {
-            GetTrainingsListFail(setStateOfRepeatRequest);
+            GetTrainingsListFail(setStateOfRepeatRequest, clearErrOfGetTrainingsList);
         }
     }, [isGetTrainingListError]);
 
@@ -64,12 +95,15 @@ export const TrainingsPage = () => {
             <TrainingsWrapp />
 
             <CreateTrainingDrawer isDrawerOpen={isCreateTrainingDrawerOpen} />
+            <JoinTrainingDrawer isDrawerOpen={isJoinTrainingDrawerOpen} />
+
             {isCreateTrainingSuccess && (
                 <CreateTrainingSuccess title={CONSTANTS.CREATE_TRAINING_SUCCESS} />
             )}
             {isUpdateTrainingSuccess && (
                 <CreateTrainingSuccess title={CONSTANTS.UPDATE_TRAINING_SUCCESS} />
             )}
+            {isMyTrainingPartnerInfoModalOpen && <MyPartnerInfoModal />}
         </div>
     );
 };

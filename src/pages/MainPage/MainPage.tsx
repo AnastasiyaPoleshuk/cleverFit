@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 
 import './MainPage.scss';
 import { Header } from '@components/header/Header';
@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from '@hooks/typed-react-redux-hooks';
 import CONSTANTS from '@utils/constants';
 import { changeAuthState, setToken } from '@redux/slices/UserSlice';
 import { Button } from 'antd';
-import { GetTrainingInfoThunk, GetTrainingListThunk } from '@redux/thunk/TrainingThunk';
+import { GetTrainingInfoThunk } from '@redux/thunk/TrainingThunk';
 import {
     changeGetTrainingInfoErrorState,
     changeGetTrainingInfoSuccessState,

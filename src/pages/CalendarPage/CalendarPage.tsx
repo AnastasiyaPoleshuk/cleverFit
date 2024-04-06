@@ -10,7 +10,12 @@ import { push } from 'redux-first-history';
 import { GetTrainingInfoThunk, GetTrainingListThunk } from '@redux/thunk/TrainingThunk';
 import { GetTrainingsListFail } from '@components/ErrorModals/GetTrainingsListFail';
 import { AppContext } from '../../context/AppContext';
-import { changeGetTrainingListErrorState } from '@redux/slices/CalendarSlice';
+import {
+    changeGetTrainingInfoErrorState,
+    changeGetTrainingInfoSuccessState,
+    changeGetTrainingListErrorState,
+    cleanError,
+} from '@redux/slices/CalendarSlice';
 import { IGetTrainingsResponse } from '../../types/apiTypes';
 import { UserSelector } from '@utils/StoreSelectors';
 
@@ -53,9 +58,17 @@ export const CalendarPage = () => {
         }
     }, [isAuth]);
 
+    const clearErrOfGetTrainingsList = () => {
+        dispatch(changeGetTrainingListErrorState(false));
+
+        dispatch(changeGetTrainingInfoErrorState(false));
+        dispatch(changeGetTrainingInfoSuccessState(false));
+        dispatch(cleanError());
+    };
+
     useLayoutEffect(() => {
         if (isGetTrainingListError) {
-            GetTrainingsListFail(setStateOfRepeatRequest);
+            GetTrainingsListFail(setStateOfRepeatRequest, clearErrOfGetTrainingsList);
         }
     }, [isGetTrainingListError]);
 

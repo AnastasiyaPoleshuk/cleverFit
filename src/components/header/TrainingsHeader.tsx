@@ -6,11 +6,12 @@ import CONSTANTS from '@utils/constants';
 import { useState, useEffect } from 'react';
 import { push } from 'redux-first-history';
 import { SettingOutlined } from '@ant-design/icons';
+import { routerSelector } from '@utils/StoreSelectors';
 
 export const TrainingsHeader = () => {
     const [pageName, setPageName] = useState('');
     const dispatch = useAppDispatch();
-    const router = useAppSelector((state) => state.router);
+    const router = useAppSelector(routerSelector);
 
     useEffect(() => {
         switch (router.location?.pathname) {

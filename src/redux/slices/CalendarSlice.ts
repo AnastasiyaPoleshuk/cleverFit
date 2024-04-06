@@ -192,6 +192,7 @@ export const {
     cleanError,
     changeGetTrainingListErrorState,
     changeGetTrainingListSuccessState,
+    changeCreateTrainingErrorState,
     updateTrainingsState,
 } = calendarSlice.actions;
 

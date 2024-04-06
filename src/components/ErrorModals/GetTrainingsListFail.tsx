@@ -1,7 +1,10 @@
 import { CloseCircleOutlined, CloseOutlined } from '@ant-design/icons';
 import { Modal } from 'antd';
 
-export const GetTrainingsListFail = (setStateOfRepeatRequest: (state: boolean) => void) => {
+export const GetTrainingsListFail = (
+    setStateOfRepeatRequest: (state: boolean) => void,
+    clearError: () => void,
+) => {
     Modal.error({
         title: (
             <span
@@ -17,6 +20,9 @@ export const GetTrainingsListFail = (setStateOfRepeatRequest: (state: boolean) =
         closeIcon: <CloseOutlined data-test-id='modal-error-user-training-button-close' />,
         icon: <CloseCircleOutlined color='#2f54eb' style={{ color: '#2f54eb' }} />,
         okText: <span data-test-id='modal-error-user-training-button'>Обновить</span>,
+        onCancel: () => {
+            clearError();
+        },
         onOk: () => {
             setStateOfRepeatRequest(true);
         },

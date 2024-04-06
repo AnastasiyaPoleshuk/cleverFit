@@ -22,6 +22,7 @@ import { IExercises, IFormValues } from '@components/AddExercisesDrawer/AddExers
 import moment, { Moment } from 'moment';
 import { UpdateTrainingThunk, CreateTrainingThunk } from '@redux/thunk/TrainingThunk';
 import { ITrainingExercises } from '../../types/storeTypes';
+import { calendarSelector } from '@utils/StoreSelectors';
 
 const defaultFormListValue = [
     { approaches: undefined, name: '', replays: undefined, weight: undefined },
@@ -96,7 +97,7 @@ export const CreateTrainingDrawer = ({ isDrawerOpen }: { isDrawerOpen: boolean }
     const [addExerciseButtonText, setAddExerciseButtonText] = useState('');
     const [isSubmitButtonDisabled, setIsSubmitButtonDisabled] = useState(true);
     const [isRemoveButtonDisabled, setIsRemoveButtonDisabled] = useState(true);
-    const { trainingList } = useAppSelector((state) => state.calendar);
+    const { trainingList } = useAppSelector(calendarSelector);
     const { isScreenSm } = useResize();
 
     const dispatch = useAppDispatch();
@@ -128,6 +129,7 @@ export const CreateTrainingDrawer = ({ isDrawerOpen }: { isDrawerOpen: boolean }
 
     const closeDrawer = () => {
         setWithPeriod(false);
+        setIsSubmitButtonDisabled(true);
         closeModal(CONSTANTS.CREATE_TRAINING_DRAWER);
     };
 
@@ -198,10 +200,12 @@ export const CreateTrainingDrawer = ({ isDrawerOpen }: { isDrawerOpen: boolean }
     const onSubmit = (values: ITrainingForm) => {
         const id = currentTraining._id;
         const trainingDate = values.trainingDate ? values.trainingDate : moment();
-        let period: number = 0;
+        let trainingPeriod: number | null;
 
         if (withPeriod && !values.trainingPeriod) {
-            period = 1;
+            trainingPeriod = 1;
+        } else {
+            trainingPeriod = null;
         }
 
         const request = {
@@ -209,8 +213,8 @@ export const CreateTrainingDrawer = ({ isDrawerOpen }: { isDrawerOpen: boolean }
             name: values.trainingType || currentTraining.name,
             date: trainingDate.format('YYYY-MM-DDThh:mm:ss.ms'),
             parameters: {
-                repeat: values.trainingRepeat,
-                period: values.trainingPeriod || period,
+                repeat: values.trainingRepeat || false,
+                period: values.trainingPeriod || trainingPeriod,
             },
             exercises: createExercisesArr(values.exercises),
         };
@@ -345,7 +349,11 @@ export const CreateTrainingDrawer = ({ isDrawerOpen }: { isDrawerOpen: boolean }
                                 format={CONSTANTS.DATE_FORMAT}
                                 data-test-id='modal-drawer-right-date-picker'
                                 disabledDate={disablePastDays}
-                                defaultValue={moment(currentTraining.date)}
+                                defaultValue={
+                                    currentTraining.date
+                                        ? moment(currentTraining.date, CONSTANTS.DATE_FORMAT)
+                                        : ''
+                                }
                             />
                         </Form.Item>
                         <Form.Item
