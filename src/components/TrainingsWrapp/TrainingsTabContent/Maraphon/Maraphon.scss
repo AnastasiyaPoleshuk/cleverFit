@@ -1,1 +1,31 @@
 @import '../../../../App.variables.scss';
+
+.maraphon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 68vh;
+
+    .maraphon-mock__block {
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .maraphon-mock__title {
+        width: 100%;
+        @include h3;
+        color: $primary-color-light-9;
+        text-align: center;
+        margin-bottom: 48px;
+    }
+
+    .maraphon-mock__subitle {
+        width: fit-content;
+        text-align: center;
+
+        color: $gray-color;
+    }
+}

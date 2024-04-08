@@ -28,6 +28,11 @@ const CONSTANTS = {
             },
         },
     },
+    USER_INVITE_STATUS: {
+        ACCEPTED: 'accepted',
+        PENDING: 'pending',
+        REJECTED: 'rejected',
+    },
     CHECK_EMAIL_ERROR_MESSAGE: 'Email не найден',
     LOGIN_ERROR_MESSAGE: 'Неверные логин или пароль.',
     GET_FEEDBACKS_FAIL_MODAL: 'toggle feedbacks fail modal window',

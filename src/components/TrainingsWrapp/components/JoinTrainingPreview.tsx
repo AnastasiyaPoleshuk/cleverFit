@@ -1,18 +1,30 @@
 import { Button } from 'antd';
 import './Components.scss';
-import { useAppDispatch } from '@hooks/typed-react-redux-hooks';
+import { useAppDispatch, useAppSelector } from '@hooks/typed-react-redux-hooks';
 import { GetUsersForJoinTrainingThunk } from '@redux/thunk/TrainingThunk';
+import { useEffect } from 'react';
+import { UserSelector, trainingSelector } from '@utils/StoreSelectors';
 
 export const JoinTrainingPreview = ({
     changePreviewState,
 }: {
     changePreviewState: (data: boolean) => void;
 }) => {
+    const { isGetUsersForJoinTrainingSuccess } = useAppSelector(trainingSelector);
+    const { accessToken } = useAppSelector(UserSelector);
+
     const dispatch = useAppDispatch();
 
-    const goToFindPeople = () => {
-        dispatch(GetUsersForJoinTrainingThunk());
-        changePreviewState(false);
+    useEffect(() => {
+        if (isGetUsersForJoinTrainingSuccess) {
+            changePreviewState(false);
+        }
+    }, [isGetUsersForJoinTrainingSuccess]);
+
+    const goToFindPeople = (withType: boolean) => {
+        withType
+            ? dispatch(GetUsersForJoinTrainingThunk({ trainingType: 'legs', accessToken }))
+            : dispatch(GetUsersForJoinTrainingThunk({ trainingType: '', accessToken }));
     };
     return (
         <section className='preview__block'>
@@ -26,10 +38,12 @@ export const JoinTrainingPreview = ({
             </p>
 
             <div className='preview__block-button__wrapp'>
-                <Button className='preview__block-button' onClick={goToFindPeople}>
+                <Button className='preview__block-button' onClick={() => goToFindPeople(false)}>
                     Случайный выбор
                 </Button>
-                <Button className='preview__block-button'>Выбор друга по моим тренировкам</Button>
+                <Button className='preview__block-button' onClick={() => goToFindPeople(true)}>
+                    Выбор друга по моим тренировкам
+                </Button>
             </div>
         </section>
     );

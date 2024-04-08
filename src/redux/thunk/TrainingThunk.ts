@@ -43,8 +43,8 @@ export const GetTrainingPalsThunk = createAsyncThunk('training/getTrainingPals',
 
 export const GetUsersForJoinTrainingThunk = createAsyncThunk(
     'training/getUsersForJoinTraining',
-    async () => {
-        const response = await getUsersForJoinTraining();
+    async (request: { trainingType: string; accessToken: string }) => {
+        const response = await getUsersForJoinTraining(request);
         return response;
     },
 );

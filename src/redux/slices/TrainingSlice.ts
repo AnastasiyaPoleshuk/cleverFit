@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { IGetTrainingPalsResponse, IRequestError } from '../../types/apiTypes';
 import { GetTrainingPalsThunk, GetUsersForJoinTrainingThunk } from '@redux/thunk/TrainingThunk';
 
@@ -32,6 +32,9 @@ const trainingSlice = createSlice({
     name: 'training',
     initialState,
     reducers: {
+        changeGetUsersForJointTrainingErrorState: (state, action: PayloadAction<boolean>) => {
+            state.isGetUsersForJoinTrainingError = action.payload;
+        },
         cleanError: (state) => {
             state.error = {
                 statusCode: 0,
@@ -82,6 +85,6 @@ const trainingSlice = createSlice({
     },
 });
 
-export const { cleanError } = trainingSlice.actions;
+export const { cleanError, changeGetUsersForJointTrainingErrorState } = trainingSlice.actions;
 
 export default trainingSlice.reducer;

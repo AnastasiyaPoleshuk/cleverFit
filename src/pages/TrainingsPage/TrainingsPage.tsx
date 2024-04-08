@@ -2,7 +2,7 @@ import { TrainingsHeader } from '@components/header/TrainingsHeader';
 import './TrainingsPage.scss';
 import { TrainingsWrapp } from '@components/TrainingsWrapp/TrainingsWrapp';
 import { useAppSelector, useAppDispatch } from '@hooks/typed-react-redux-hooks';
-import { GetTrainingListThunk } from '@redux/thunk/TrainingThunk';
+import { GetTrainingListThunk, GetUsersForJoinTrainingThunk } from '@redux/thunk/TrainingThunk';
 import CONSTANTS from '@utils/constants';
 import { useContext, useEffect, useLayoutEffect } from 'react';
 import { push } from 'redux-first-history';
@@ -15,15 +15,19 @@ import {
     changeGetTrainingListErrorState,
     cleanError,
 } from '@redux/slices/CalendarSlice';
+import {
+    changeGetUsersForJointTrainingErrorState,
+    cleanError as cleanTrainingError,
+} from '@redux/slices/TrainingSlice';
 import { CreateTrainingDrawer } from '@components/CreateTrainingDrawer/CreateTrainingDrawer';
 import { CreateTrainingSuccess } from '@components/TrainingModals/CreateTrainingSuccess';
 import { CreateTrainingFail } from '@components/ErrorModals/CreateTrainingFail';
 import { UpdateTrainingFail } from '@components/ErrorModals/UpdateTrainingFail';
-import { UserSelector, calendarSelector } from '@utils/StoreSelectors';
+import { UserSelector, calendarSelector, trainingSelector } from '@utils/StoreSelectors';
 import { JoinTrainingDrawer } from '@components/JoinTrainingDrawer/JoinTrainingDrawer';
 import { MyPartnerInfoModal } from '@components/TrainingModals/MyPartnerInfoModal';
 import { GetInvitesThunk } from '@redux/thunk/InviteThunk';
-import { TrainingDetails } from '@components/TrainingModals/TrainingDetails';
+import { GetUsersFail } from '@components/TrainingModals/GetUsersFail';
 
 export const TrainingsPage = () => {
     const { isAuth, accessToken } = useAppSelector(UserSelector);
@@ -34,6 +38,7 @@ export const TrainingsPage = () => {
         isUpdateTrainingSuccess,
         isUpdateTrainingError,
     } = useAppSelector(calendarSelector);
+    const { isGetUsersForJoinTrainingError } = useAppSelector(trainingSelector);
     const {
         isRepeatRequestNeeded,
         setStateOfRepeatRequest,
@@ -68,12 +73,21 @@ export const TrainingsPage = () => {
         dispatch(push(`${CONSTANTS.ROUTER__PATH.MAIN__PATH}`));
     };
 
+    const repeatRequest = () => {
+        dispatch(GetUsersForJoinTrainingThunk('legs'));
+    };
+
     const clearErrOfGetTrainingsList = () => {
         dispatch(changeGetTrainingListErrorState(false));
 
         dispatch(changeGetTrainingInfoErrorState(false));
         dispatch(changeGetTrainingInfoSuccessState(false));
         dispatch(cleanError());
+    };
+
+    const clearErrorOfGetUsersForTraining = () => {
+        dispatch(changeGetUsersForJointTrainingErrorState(false));
+        dispatch(cleanTrainingError());
     };
 
     useLayoutEffect(() => {
@@ -87,7 +101,11 @@ export const TrainingsPage = () => {
         if (isUpdateTrainingError) {
             UpdateTrainingFail();
         }
-    }, [isCreateTrainingError, isUpdateTrainingError]);
+
+        if (isGetUsersForJoinTrainingError) {
+            GetUsersFail(repeatRequest, clearErrorOfGetUsersForTraining);
+        }
+    }, [isCreateTrainingError, isUpdateTrainingError, isGetUsersForJoinTrainingError]);
 
     useLayoutEffect(() => {
         if (isGetTrainingListError) {

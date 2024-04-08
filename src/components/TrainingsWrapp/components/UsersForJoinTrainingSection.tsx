@@ -1,28 +1,54 @@
 import { Avatar, Button, Card, Image, Pagination } from 'antd';
 import './Components.scss';
 import Search from 'antd/es/input/Search';
-import { ArrowLeftOutlined, UserOutlined } from '@ant-design/icons';
-import { useAppSelector } from '@hooks/typed-react-redux-hooks';
-import { trainingSelector } from '@utils/StoreSelectors';
+import {
+    ArrowLeftOutlined,
+    CheckCircleFilled,
+    ExclamationCircleOutlined,
+    UserOutlined,
+} from '@ant-design/icons';
+import { useAppDispatch, useAppSelector } from '@hooks/typed-react-redux-hooks';
+import { UserSelector, invitesSelector, trainingSelector } from '@utils/StoreSelectors';
 import { IGetTrainingPalsResponse } from '../../../types/apiTypes';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { Hightlight } from '@utils/hightlightSearch';
 import { AppContext } from '../../../context/AppContext';
+import CONSTANTS from '@utils/constants';
+import { UpdateInvitesThunk } from '@redux/thunk/InviteThunk';
+import { GetUsersForJoinTrainingThunk } from '@redux/thunk/TrainingThunk';
 
 export const UsersForJoinTrainingSection = ({
     changePreviewState,
 }: {
     changePreviewState: (data: boolean) => void;
 }) => {
+    const { isCreatedInviteSuccess } = useAppSelector(invitesSelector);
     const { usersForJoinTraining } = useAppSelector(trainingSelector);
+    const { accessToken } = useAppSelector(UserSelector);
     const [users, setUsers] = useState<IGetTrainingPalsResponse[]>([]);
     const [searchString, setSearchString] = useState('');
     const { setJoinTrainingDrawerStatus, saveCurrentUserForJoinTraining } = useContext(AppContext);
+    const dispatch = useAppDispatch();
 
     const light = useCallback((str: string) => Hightlight(searchString, str), [searchString]);
 
     useEffect(() => {
-        setUsers(usersForJoinTraining);
+        if (isCreatedInviteSuccess) {
+            setTimeout(() => {
+                dispatch(GetUsersForJoinTrainingThunk({ trainingType: '', accessToken }));
+            }, 1000);
+        }
+    }, [isCreatedInviteSuccess]);
+
+    useEffect(() => {
+        if (searchString) {
+            const searchResult = users.filter((user) =>
+                user.name.toLowerCase().includes(searchString.toLowerCase()),
+            );
+            searchResult ? setUsers(searchResult) : setUsers(usersForJoinTraining);
+        } else {
+            setUsers(usersForJoinTraining);
+        }
     }, [usersForJoinTraining]);
 
     const search = (searchStr: string) => {
@@ -35,6 +61,66 @@ export const UsersForJoinTrainingSection = ({
 
     const goBack = () => {
         changePreviewState(true);
+    };
+
+    const rejectTraining = (id: string) => {
+        dispatch(UpdateInvitesThunk({ id, status: 'rejected' }));
+    };
+
+    const getCardButton = (user: IGetTrainingPalsResponse) => {
+        switch (user.status) {
+            case CONSTANTS.USER_INVITE_STATUS.ACCEPTED:
+                return (
+                    <>
+                        <Button
+                            type='default'
+                            className='user-card__add-btn'
+                            onClick={() => rejectTraining(user.inviteId)}
+                        >
+                            Отменить тренировку
+                        </Button>
+                        <div className='invite-status__wrapp'>
+                            <span>
+                                тренировка одобрена <CheckCircleFilled style={{ color: 'green' }} />
+                            </span>
+                        </div>
+                    </>
+                );
+            case CONSTANTS.USER_INVITE_STATUS.PENDING:
+                return (
+                    <>
+                        <Button type='primary' className='user-card__add-btn' disabled={true}>
+                            Создать тренировку
+                        </Button>
+                        <div className='invite-status__wrapp'>
+                            <span>ожидает подтверждения</span>
+                        </div>
+                    </>
+                );
+            case CONSTANTS.USER_INVITE_STATUS.REJECTED:
+                return (
+                    <>
+                        <Button type='primary' className='user-card__add-btn' disabled={true}>
+                            Создать тренировку
+                        </Button>
+                        <div className='invite-status__wrapp'>
+                            <span>
+                                тренировка отклонена <ExclamationCircleOutlined />
+                            </span>
+                        </div>
+                    </>
+                );
+            default:
+                return (
+                    <Button
+                        type='primary'
+                        className='user-card__add-btn'
+                        onClick={() => openJoinTrainingDrawer(user)}
+                    >
+                        Создать тренировку
+                    </Button>
+                );
+        }
     };
 
     const openJoinTrainingDrawer = (currentUser: IGetTrainingPalsResponse) => {
@@ -62,9 +148,10 @@ export const UsersForJoinTrainingSection = ({
                 />
             </header>
             <main className='section__main'>
-                {users.map((user: IGetTrainingPalsResponse) => (
+                {users.map((user, index) => (
                     <Card
                         key={user.id}
+                        data-test-id={`joint-training-cards${index}`}
                         title={
                             <div className='user-card__header'>
                                 <Avatar
@@ -91,6 +178,11 @@ export const UsersForJoinTrainingSection = ({
                                 padding: 0,
                             },
                         }}
+                        style={
+                            user.status === CONSTANTS.USER_INVITE_STATUS.REJECTED
+                                ? { background: '#bfbfbf' }
+                                : { background: '#f0f5ff' }
+                        }
                     >
                         <div className='user-card__info'>
                             <div className='user-card__type-title'>Тип тренировки:</div>
@@ -101,13 +193,7 @@ export const UsersForJoinTrainingSection = ({
                             <div className='user-card__type-value'>{`${user.avgWeightInWeek}кг/нед`}</div>
                         </div>
 
-                        <Button
-                            type='primary'
-                            className='user-card__add-btn'
-                            onClick={() => openJoinTrainingDrawer(user)}
-                        >
-                            Создать тренировку
-                        </Button>
+                        {getCardButton(user)}
                     </Card>
                 ))}
             </main>

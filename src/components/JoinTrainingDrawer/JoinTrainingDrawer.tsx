@@ -491,7 +491,7 @@ export const JoinTrainingDrawer = ({ isDrawerOpen }: { isDrawerOpen: boolean }) 
                         className='add-training__btn'
                         disabled={isSubmitButtonDisabled}
                     >
-                        Добавить приглошение
+                        Отправить приглашение
                     </Button>
                 </Form.Item>
             </Form>
