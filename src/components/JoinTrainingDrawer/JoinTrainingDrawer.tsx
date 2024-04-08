@@ -17,15 +17,16 @@ import {
 import './JoinTrainingDrawer.scss';
 import { useResize } from '@hooks/useResize';
 import { AppContext } from '../../context/AppContext';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { getTrainingColor } from '@utils/getTrainingColor';
 import { IExercises, IFormValues } from '@components/AddExercisesDrawer/AddExerscisesDrawer';
 import { useAppSelector, useAppDispatch } from '@hooks/typed-react-redux-hooks';
-import { UpdateTrainingThunk, CreateTrainingThunk } from '@redux/thunk/TrainingThunk';
+import { CreateTrainingThunk } from '@redux/thunk/TrainingThunk';
 import { ITrainingExercises } from '../../types/storeTypes';
 import { calendarSelector } from '@utils/StoreSelectors';
 import CONSTANTS from '@utils/constants';
 import moment, { Moment } from 'moment';
+import { CreateInvitesThunk } from '@redux/thunk/InviteThunk';
 
 interface ITrainingForm {
     trainingDate: Moment;
@@ -89,8 +90,8 @@ const periodOptions = [
 ];
 
 export const JoinTrainingDrawer = ({ isDrawerOpen }: { isDrawerOpen: boolean }) => {
-    const { setJoinTrainingDrawerStatus, currentUserForJoinTraining, currentTraining } =
-        useContext(AppContext);
+    const { setJoinTrainingDrawerStatus, currentUserForJoinTraining } = useContext(AppContext);
+    const { training, isCreateTrainingSuccess } = useAppSelector(calendarSelector);
 
     const [implementationArr, setImplementationArr] = useState<{ value: boolean; id: number }[]>([
         { value: false, id: 0 },
@@ -103,24 +104,16 @@ export const JoinTrainingDrawer = ({ isDrawerOpen }: { isDrawerOpen: boolean }) 
 
     const dispatch = useAppDispatch();
 
-    // useEffect(() => {
-
-    //     if (currentTraining.exercises?.length) {
-    //         const checkboxData = currentTraining.exercises.map((exercise, index) => {
-    //             return { value: exercise.isImplementation, id: index };
-    //         });
-
-    //         setImplementationArr(checkboxData);
-
-    //         const activeCheckbox = currentTraining.exercises.find((item) => {
-    //             return item.isImplementation === true;
-    //         });
-
-    //         if (activeCheckbox) {
-    //             setIsRemoveButtonDisabled(false);
-    //         }
-    //     }
-    // }, [currentUserForJoinTraining]);
+    useEffect(() => {
+        if (isCreateTrainingSuccess) {
+            dispatch(
+                CreateInvitesThunk({
+                    to: currentUserForJoinTraining.id,
+                    trainingId: training._id,
+                }),
+            );
+        }
+    }, [training]);
 
     const closeDrawer = () => {
         setJoinTrainingDrawerStatus(false);
@@ -182,7 +175,6 @@ export const JoinTrainingDrawer = ({ isDrawerOpen }: { isDrawerOpen: boolean }) 
     };
 
     const onSubmit = (values: ITrainingForm) => {
-        const id = currentTraining._id;
         const trainingDate = values.trainingDate ? values.trainingDate : moment();
         let trainingPeriod: number | null;
 
@@ -193,23 +185,19 @@ export const JoinTrainingDrawer = ({ isDrawerOpen }: { isDrawerOpen: boolean }) 
         }
 
         const request = {
-            _id: id,
-            name: currentTraining.name,
+            _id: '',
+            name: currentUserForJoinTraining.trainingType,
             date: trainingDate.format('YYYY-MM-DDThh:mm:ss.ms'),
+            isImplementation: false,
             parameters: {
-                repeat: values.trainingRepeat || false,
+                repeat: withPeriod,
                 period: values.trainingPeriod || trainingPeriod,
             },
             exercises: createExercisesArr(values.exercises),
         };
 
-        if (request._id) {
-            dispatch(
-                UpdateTrainingThunk({ ...request, isImplementation: trainingDate < moment() }),
-            );
-        } else {
-            dispatch(CreateTrainingThunk({ ...request, isImplementation: false }));
-        }
+        dispatch(CreateTrainingThunk(request));
+
         closeDrawer();
     };
 
@@ -245,6 +233,10 @@ export const JoinTrainingDrawer = ({ isDrawerOpen }: { isDrawerOpen: boolean }) 
             return true;
         }
         return false;
+    };
+
+    const updateSubmitButtonState = (str: string) => {
+        setIsSubmitButtonDisabled(str.length ? false : true);
     };
 
     const updateRemoveItemButtonState = (index: number) => {
@@ -374,14 +366,7 @@ export const JoinTrainingDrawer = ({ isDrawerOpen }: { isDrawerOpen: boolean }) 
                         )}
                     </div>
                 </div>
-                <Form.List
-                    name='exercises'
-                    initialValue={
-                        currentTraining.exercises?.length
-                            ? currentTraining.exercises
-                            : defaultFormListValue
-                    }
-                >
+                <Form.List name='exercises' initialValue={defaultFormListValue}>
                     {(fields, { add, remove }) => (
                         <>
                             {fields.map(({ key, name, ...restField }, index) => (
@@ -401,6 +386,9 @@ export const JoinTrainingDrawer = ({ isDrawerOpen }: { isDrawerOpen: boolean }) 
                                             placeholder='Упражнение'
                                             className='form-input__exercise'
                                             data-test-id={`modal-drawer-right-input-exercise${index}`}
+                                            onChange={(e) =>
+                                                updateSubmitButtonState(e.target.value)
+                                            }
                                             addonAfter={
                                                 <Form.Item
                                                     {...restField}
@@ -503,7 +491,7 @@ export const JoinTrainingDrawer = ({ isDrawerOpen }: { isDrawerOpen: boolean }) 
                         className='add-training__btn'
                         disabled={isSubmitButtonDisabled}
                     >
-                        Сохранить
+                        Добавить приглошение
                     </Button>
                 </Form.Item>
             </Form>

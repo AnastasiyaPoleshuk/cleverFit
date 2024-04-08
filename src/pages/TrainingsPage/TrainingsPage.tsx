@@ -41,7 +41,6 @@ export const TrainingsPage = () => {
         isCalendar,
         isJoinTrainingDrawerOpen,
         isMyTrainingPartnerInfoModalOpen,
-        isTrainingDetailsModalOpen,
     } = useContext(AppContext);
 
     const dispatch = useAppDispatch();
@@ -109,9 +108,6 @@ export const TrainingsPage = () => {
                 <CreateTrainingSuccess title={CONSTANTS.UPDATE_TRAINING_SUCCESS} />
             )}
             {isMyTrainingPartnerInfoModalOpen && <MyPartnerInfoModal />}
-            {isTrainingDetailsModalOpen && (
-                <TrainingDetails isTrainingDetailsModalOpen={isTrainingDetailsModalOpen} />
-            )}
         </div>
     );
 };

@@ -27,11 +27,9 @@ export const UsersForJoinTrainingSection = ({
 
     const search = (searchStr: string) => {
         setSearchString(searchStr);
-        console.log(searchStr);
         const searchResult = users.filter((user) =>
             user.name.toLowerCase().includes(searchStr.toLowerCase()),
         );
-        console.log(searchResult);
         searchResult ? setUsers(searchResult) : setUsers(usersForJoinTraining);
     };
 

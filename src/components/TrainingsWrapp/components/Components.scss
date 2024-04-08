@@ -167,4 +167,15 @@
         justify-content: space-between;
         align-items: center;
     }
+
+    .card__btn {
+        border-radius: $border-radius-2;
+        height: $button-height;
+
+        &:first-child {
+            @media (max-width: 837px) {
+                margin-bottom: 12px;
+            }
+        }
+    }
 }

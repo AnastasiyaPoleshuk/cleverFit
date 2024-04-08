@@ -5,26 +5,32 @@ import { Avatar, Button, Card } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import CONSTANTS from '@utils/constants';
-import { RemoveInviteThunk } from '@redux/thunk/InviteThunk';
+import { UpdateInvitesThunk } from '@redux/thunk/InviteThunk';
 import { IGetInviteResponse } from '../../../types/apiTypes';
-import { AppContext } from '../../../context/AppContext';
-import { useContext } from 'react';
+import { useState } from 'react';
+import { TrainingDetails } from '@components/TrainingModals/TrainingDetails';
+import { useResize } from '@hooks/useResize';
 
 export const JoinTrainingMessages = () => {
+    const [modalPosition, setModalPosition] = useState({ top: '', left: '' });
     const { myInvites } = useAppSelector(invitesSelector);
-    const { openModal, saveCurrentTrainingInvite } = useContext(AppContext);
+
+    const { width: windowWidth, isScreenSm } = useResize();
 
     const dispatch = useAppDispatch();
 
-    const cancelInvite = (inviteId: string) => {
-        dispatch(RemoveInviteThunk(inviteId));
+    const rejectInvite = (inviteId: string) => {
+        dispatch(UpdateInvitesThunk({ id: inviteId, status: 'rejected' }));
+    };
+
+    const acceptInvite = (inviteId: string) => {
+        dispatch(UpdateInvitesThunk({ id: inviteId, status: 'accepted' }));
     };
 
     const openTrainingDetailsModal = (invite: IGetInviteResponse) => {
-        console.log('invite: ', invite);
-
-        openModal(CONSTANTS.TRAINING_DETAILS_MODAL);
-        saveCurrentTrainingInvite(invite);
+        TrainingDetails({
+            currentTrainingInvite: invite,
+        });
     };
 
     return (
@@ -65,8 +71,18 @@ export const JoinTrainingMessages = () => {
                             </Button>
                         </div>
                         <div className='card__info'>
-                            <Button type='primary'>Тренироваться вместе</Button>
-                            <Button type='default' onClick={() => cancelInvite(invite._id)}>
+                            <Button
+                                type='primary'
+                                className='card__btn'
+                                onClick={() => acceptInvite(invite._id)}
+                            >
+                                Тренироваться вместе
+                            </Button>
+                            <Button
+                                type='default'
+                                className='card__btn'
+                                onClick={() => rejectInvite(invite._id)}
+                            >
                                 Отклонить запрос
                             </Button>
                         </div>

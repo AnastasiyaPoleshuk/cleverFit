@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { ICreateInviteResponse, IGetInviteResponse, IRequestError } from '../../types/apiTypes';
 import {
     CreateInvitesThunk,
@@ -20,6 +20,7 @@ interface IInitialState {
     isUpdateInviteStatusSuccess: boolean;
     isRemoveInviteError: boolean;
     isRemoveInviteSuccess: boolean;
+    isTrainingRejected: boolean;
 }
 
 const initialState: IInitialState = {
@@ -56,12 +57,16 @@ const initialState: IInitialState = {
     isUpdateInviteStatusSuccess: false,
     isRemoveInviteError: false,
     isRemoveInviteSuccess: false,
+    isTrainingRejected: false,
 };
 
 const inviteSlice = createSlice({
     name: 'invite',
     initialState,
     reducers: {
+        changeStatusOfJointTraining: (state, action: PayloadAction<boolean>) => {
+            state.isTrainingRejected = action.payload;
+        },
         cleanError: (state) => {
             state.error = {
                 statusCode: 0,
@@ -148,6 +153,6 @@ const inviteSlice = createSlice({
     },
 });
 
-export const { cleanError } = inviteSlice.actions;
+export const { cleanError, changeStatusOfJointTraining } = inviteSlice.actions;
 
 export default inviteSlice.reducer;

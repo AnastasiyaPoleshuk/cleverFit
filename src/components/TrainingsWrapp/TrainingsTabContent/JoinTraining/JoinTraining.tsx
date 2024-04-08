@@ -17,9 +17,11 @@ export const JoinTraining = () => {
     const [trainingPals, setTrainingPals] = useState<IGetTrainingPalsResponse[]>([]);
     const { isGeTrainingPalsSuccess, trainingPals: trainingPalsStore } =
         useAppSelector(trainingSelector);
-    const { myInvites } = useAppSelector(invitesSelector);
+    const { myInvites, isUpdateInviteStatusSuccess, isTrainingRejected } =
+        useAppSelector(invitesSelector);
 
-    const { openModal, saveCurrentTrainingPartner } = useContext(AppContext);
+    const { openModal, saveCurrentTrainingPartner, currentTrainingPartner } =
+        useContext(AppContext);
 
     const dispatch = useAppDispatch();
 
@@ -28,10 +30,20 @@ export const JoinTraining = () => {
     }, []);
 
     useEffect(() => {
+        if (isUpdateInviteStatusSuccess && !isTrainingRejected) {
+            dispatch(GetTrainingPalsThunk());
+        }
+
+        if (isUpdateInviteStatusSuccess && isTrainingRejected) {
+            setTrainingPals(trainingPals.filter((item) => item.id !== currentTrainingPartner.id));
+        }
+    }, [isUpdateInviteStatusSuccess]);
+
+    useEffect(() => {
         if (isGeTrainingPalsSuccess) {
             setTrainingPals(trainingPalsStore);
         }
-    }, [isGeTrainingPalsSuccess]);
+    }, [trainingPalsStore]);
 
     const openUserInfoModal = (currentUser: IGetTrainingPalsResponse) => {
         openModal(CONSTANTS.MY_TRAINING_PARTNER_INFO_MODAL);
@@ -40,7 +52,7 @@ export const JoinTraining = () => {
 
     return (
         <div className='join-training__content'>
-            {myInvites.length && <JoinTrainingMessages />}
+            {myInvites.length ? <JoinTrainingMessages /> : null}
             {isPreview ? (
                 <JoinTrainingPreview changePreviewState={setIsPreview} />
             ) : (

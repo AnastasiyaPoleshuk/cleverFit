@@ -5,7 +5,8 @@ import { useContext } from 'react';
 import CONSTANTS from '@utils/constants';
 import { CheckCircleFilled, UserOutlined } from '@ant-design/icons';
 import { useAppDispatch } from '@hooks/typed-react-redux-hooks';
-import { RemoveInviteThunk } from '@redux/thunk/InviteThunk';
+import { UpdateInvitesThunk } from '@redux/thunk/InviteThunk';
+import { changeStatusOfJointTraining } from '@redux/slices/InviteSlice';
 
 export const MyPartnerInfoModal = () => {
     const { closeModal, currentTrainingPartner, isMyTrainingPartnerInfoModalOpen } =
@@ -16,8 +17,9 @@ export const MyPartnerInfoModal = () => {
         closeModal(CONSTANTS.MY_TRAINING_PARTNER_INFO_MODAL);
     };
 
-    const cancelTraining = () => {
-        dispatch(RemoveInviteThunk(currentTrainingPartner.inviteId));
+    const rejectInvite = () => {
+        dispatch(UpdateInvitesThunk({ id: currentTrainingPartner.inviteId, status: 'rejected' }));
+        dispatch(changeStatusOfJointTraining(true));
     };
 
     return (
@@ -26,15 +28,7 @@ export const MyPartnerInfoModal = () => {
             destroyOnClose={true}
             closable={true}
             onCancel={close}
-            styles={{
-                body: {
-                    // height: 91,
-                    // display: 'flex',
-                    // flexDirection: 'column',
-                    // justifyContent: 'center',
-                    // alignItems: 'flex-start',
-                },
-            }}
+            footer={null}
             data-test-id='partner-modal'
             className='training-partner-info__modal'
         >
@@ -68,7 +62,7 @@ export const MyPartnerInfoModal = () => {
                     <div className='user-card__type-value'>{`${currentTrainingPartner.avgWeightInWeek}кг/нед`}</div>
                 </div>
 
-                <Button type='default' className='user-card__add-btn' onClick={cancelTraining}>
+                <Button type='default' className='user-card__add-btn' onClick={rejectInvite}>
                     Отменить тренировку
                 </Button>
             </div>
