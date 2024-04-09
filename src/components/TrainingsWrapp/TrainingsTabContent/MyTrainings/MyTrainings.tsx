@@ -17,6 +17,7 @@ export const MyTrainings = () => {
     const [modalPosition, setModalPosition] = useState({ top: '0', left: '0' });
     const [isTrainingInfoModalOpen, setIsTrainingInfoModalOpen] = useState(false);
     const [isSorting, setIsSorting] = useState(false);
+    const [pageSize, setPageSize] = useState(12);
     const { trainingInfo, isGetTrainingListSuccess } = useAppSelector(calendarSelector);
     const { openModal, setCurrentTrainingData } = useContext(AppContext);
     const [trainingsTableData, setTrainingsTableData] = useState(
@@ -25,14 +26,17 @@ export const MyTrainings = () => {
     const { width: windowWidth, isScreenSm } = useResize();
 
     useEffect(() => {
-        if (isSorting) {
-            const sortedData = sortDataByPeriodAsc(trainingInfo);
-
-            setTrainingsTableData(getTrainingsTableData(sortedData));
-        } else {
             setTrainingsTableData(getTrainingsTableData(trainingInfo));
-        }
+            setIsSorting(false);
     }, [trainingInfo]);
+
+    useEffect(() => {
+        if (isScreenSm) {
+            setPageSize(9)
+        } else {
+            setPageSize(12)
+        }
+    }, [windowWidth]);
 
     useEffect(() => {
         let sortedData: IGetTrainingsResponse[] = [];
@@ -115,6 +119,20 @@ export const MyTrainings = () => {
     };
 
     const closeTrainingInfoModal = () => {
+        setCurrentTrainingData({ 
+            _id: '', 
+            name: '', 
+            date: '', 
+            isImplementation: false, 
+            userId: '', 
+            parameters: { 
+                repeat: false, 
+                period: 0, 
+                jointTraining: false, 
+                participants: [], 
+            }, 
+            exercises: [], 
+        },);
         setIsTrainingInfoModalOpen(false);
     };
 
@@ -139,7 +157,7 @@ export const MyTrainings = () => {
                 ),
                 sorting: (
                     <span className='training-period__cell'>
-                        {getPeriodValue(training.parameters.period)}
+                        {getPeriodValue(training.parameters.repeat === true ? training.parameters.period : 0)}
                     </span>
                 ),
                 button: (
@@ -207,8 +225,8 @@ export const MyTrainings = () => {
                         dataSource={trainingsTableData}
                         columns={trainingsTableColumns}
                         pagination={
-                            trainingsTableData.length > 12
-                                ? { position: ['bottomLeft'], pageSize: 12 }
+                            trainingsTableData.length > pageSize
+                                ? { position: ['bottomLeft'], pageSize: pageSize }
                                 : false
                         }
                         showHeader={false}

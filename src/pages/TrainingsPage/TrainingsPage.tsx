@@ -2,7 +2,7 @@ import { TrainingsHeader } from '@components/header/TrainingsHeader';
 import './TrainingsPage.scss';
 import { TrainingsWrapp } from '@components/TrainingsWrapp/TrainingsWrapp';
 import { useAppSelector, useAppDispatch } from '@hooks/typed-react-redux-hooks';
-import { GetTrainingListThunk, GetUsersForJoinTrainingThunk } from '@redux/thunk/TrainingThunk';
+import { GetTrainingInfoThunk, GetTrainingListThunk, GetUsersForJoinTrainingThunk } from '@redux/thunk/TrainingThunk';
 import CONSTANTS from '@utils/constants';
 import { useContext, useEffect, useLayoutEffect } from 'react';
 import { push } from 'redux-first-history';
@@ -112,6 +112,12 @@ export const TrainingsPage = () => {
             GetTrainingsListFail(setStateOfRepeatRequest, clearErrOfGetTrainingsList);
         }
     }, [isGetTrainingListError]);
+
+    useEffect(() => {
+        if (isCreateTrainingSuccess || isUpdateTrainingSuccess) {
+            dispatch(GetTrainingInfoThunk(accessToken));
+        }
+    }, [isCreateTrainingSuccess, isUpdateTrainingSuccess]);
 
     return (
         <div className='trainings-page'>
