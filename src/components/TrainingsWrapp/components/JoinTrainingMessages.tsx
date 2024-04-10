@@ -40,7 +40,7 @@ export const JoinTrainingMessages = () => {
             <div className='messages__wrapp'>
                 {myInvites.map((invite) => (
                     <Card key={invite._id} className='messages__card card'>
-                        <div className='card__info'>
+                        <div className='card__info card__info-name'>
                             <Avatar
                                 icon={
                                     invite.from.imageSrc ? (
@@ -50,8 +50,10 @@ export const JoinTrainingMessages = () => {
                                     )
                                 }
                             />
-                            <p className='user-card__name'>{invite.from.firstName}</p>
-                            <p className='user-card__name'>{invite.from.lastName}</p>
+                            <div>
+                                <p className='user-card__name'>{invite.from.firstName}</p>
+                                <p className='user-card__name'>{invite.from.lastName}</p>
+                            </div>
                         </div>
                         <div className='card__info'>
                             <div className='card__date'>
@@ -70,7 +72,7 @@ export const JoinTrainingMessages = () => {
                                 Посмотреть детали тренировки
                             </Button>
                         </div>
-                        <div className='card__info'>
+                        <div className='card__info card__info-btns'>
                             <Button
                                 type='primary'
                                 className='card__btn'

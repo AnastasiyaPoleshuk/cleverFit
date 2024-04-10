@@ -12,8 +12,8 @@ export const TrainingDetails = ({
     currentTrainingInvite: IGetInviteResponse;
 }) => {
     message.success({
-        duration: 0,
-        icon: null,
+        duration: 1000,
+        icon: <></>,
         content: (
             <div data-test-id='joint-training-review-card'>
                 <header

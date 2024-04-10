@@ -53,6 +53,7 @@ export interface ICreateFeedbackRequest {
 
 export interface IGetTrainingsResponse {
     _id: string;
+    id?: string;
     name: string;
     date: string;
     isImplementation: boolean;

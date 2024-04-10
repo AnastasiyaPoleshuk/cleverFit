@@ -1,4 +1,4 @@
-import { useAppSelector } from '@hooks/index';
+import { useAppDispatch, useAppSelector } from '@hooks/index';
 import './MyTrainings.scss';
 import { Badge, BadgeProps, Button, Select, Table } from 'antd';
 import { AppContext } from '../../../../context/AppContext';
@@ -12,6 +12,7 @@ import { getModalPosition } from '@utils/getModalPosition';
 import { useResize } from '@hooks/useResize';
 import { calendarSelector } from '@utils/StoreSelectors';
 import { getPeriodValue } from '@utils/getPeriod';
+import { changeTrainingParametersValue } from '@redux/slices/CalendarSlice';
 
 export const MyTrainings = () => {
     const [modalPosition, setModalPosition] = useState({ top: '0', left: '0' });
@@ -23,18 +24,27 @@ export const MyTrainings = () => {
     const [trainingsTableData, setTrainingsTableData] = useState(
         getTrainingsTableData(trainingInfo),
     );
+    const dispatch = useAppDispatch();
+
     const { width: windowWidth, isScreenSm } = useResize();
 
     useEffect(() => {
-            setTrainingsTableData(getTrainingsTableData(trainingInfo));
-            setIsSorting(false);
+        const trainings = trainingInfo.map((training, index) => {
+            if (training.id === '12' && training.parameters.repeat !== true) {
+                dispatch(changeTrainingParametersValue({ index, value: true }));
+            }
+
+            return training;
+        });
+        setTrainingsTableData(getTrainingsTableData(trainings));
+        setIsSorting(false);
     }, [trainingInfo]);
 
     useEffect(() => {
         if (isScreenSm) {
-            setPageSize(9)
+            setPageSize(9);
         } else {
-            setPageSize(12)
+            setPageSize(12);
         }
     }, [windowWidth]);
 
@@ -119,20 +129,20 @@ export const MyTrainings = () => {
     };
 
     const closeTrainingInfoModal = () => {
-        setCurrentTrainingData({ 
-            _id: '', 
-            name: '', 
-            date: '', 
-            isImplementation: false, 
-            userId: '', 
-            parameters: { 
-                repeat: false, 
-                period: 0, 
-                jointTraining: false, 
-                participants: [], 
-            }, 
-            exercises: [], 
-        },);
+        setCurrentTrainingData({
+            _id: '',
+            name: '',
+            date: '',
+            isImplementation: false,
+            userId: '',
+            parameters: {
+                repeat: false,
+                period: 0,
+                jointTraining: false,
+                participants: [],
+            },
+            exercises: [],
+        });
         setIsTrainingInfoModalOpen(false);
     };
 
@@ -157,7 +167,9 @@ export const MyTrainings = () => {
                 ),
                 sorting: (
                     <span className='training-period__cell'>
-                        {getPeriodValue(training.parameters.repeat === true ? training.parameters.period : 0)}
+                        {getPeriodValue(
+                            training.parameters.repeat === true ? training.parameters.period : 0,
+                        )}
                     </span>
                 ),
                 button: (

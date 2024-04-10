@@ -35,6 +35,18 @@ const trainingSlice = createSlice({
         changeGetUsersForJointTrainingErrorState: (state, action: PayloadAction<boolean>) => {
             state.isGetUsersForJoinTrainingError = action.payload;
         },
+        changeUsersForJointTrainingStatus: (
+            state,
+            action: PayloadAction<{ id: string; status: string }>,
+        ) => {
+            state.usersForJoinTraining = state.usersForJoinTraining.map((user) => {
+                if (user.id === action.payload.id) {
+                    user.status = action.payload.status;
+                }
+
+                return user;
+            });
+        },
         cleanError: (state) => {
             state.error = {
                 statusCode: 0,
@@ -85,6 +97,10 @@ const trainingSlice = createSlice({
     },
 });
 
-export const { cleanError, changeGetUsersForJointTrainingErrorState } = trainingSlice.actions;
+export const {
+    cleanError,
+    changeGetUsersForJointTrainingErrorState,
+    changeUsersForJointTrainingStatus,
+} = trainingSlice.actions;
 
 export default trainingSlice.reducer;

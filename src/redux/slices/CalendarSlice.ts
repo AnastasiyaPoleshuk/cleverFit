@@ -89,6 +89,12 @@ const calendarSlice = createSlice({
         changeUpdateTrainingSuccessState: (state, action: PayloadAction<boolean>) => {
             state.isUpdateTrainingSuccess = action.payload;
         },
+        changeTrainingParametersValue: (
+            state,
+            action: PayloadAction<{ index: number; value: boolean }>,
+        ) => {
+            state.trainingInfo[action.payload.index].parameters.repeat = action.payload.value;
+        },
         updateTrainingsState: (
             state,
             action: PayloadAction<{ data: ITrainingExercises[]; id: string }>,
@@ -194,6 +200,7 @@ export const {
     changeGetTrainingListSuccessState,
     changeCreateTrainingErrorState,
     updateTrainingsState,
+    changeTrainingParametersValue,
 } = calendarSlice.actions;
 
 export default calendarSlice.reducer;

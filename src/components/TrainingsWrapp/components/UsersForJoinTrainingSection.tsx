@@ -15,7 +15,7 @@ import { Hightlight } from '@utils/hightlightSearch';
 import { AppContext } from '../../../context/AppContext';
 import CONSTANTS from '@utils/constants';
 import { UpdateInvitesThunk } from '@redux/thunk/InviteThunk';
-import { GetUsersForJoinTrainingThunk } from '@redux/thunk/TrainingThunk';
+import { changeUsersForJointTrainingStatus } from '@redux/slices/TrainingSlice';
 
 export const UsersForJoinTrainingSection = ({
     changePreviewState,
@@ -27,22 +27,30 @@ export const UsersForJoinTrainingSection = ({
     const { accessToken } = useAppSelector(UserSelector);
     const [users, setUsers] = useState<IGetTrainingPalsResponse[]>([]);
     const [searchString, setSearchString] = useState('');
-    const { setJoinTrainingDrawerStatus, saveCurrentUserForJoinTraining } = useContext(AppContext);
+    const {
+        setJoinTrainingDrawerStatus,
+        saveCurrentUserForJoinTraining,
+        currentUserForJoinTraining,
+    } = useContext(AppContext);
     const dispatch = useAppDispatch();
 
     const light = useCallback((str: string) => Hightlight(searchString, str), [searchString]);
 
     useEffect(() => {
         if (isCreatedInviteSuccess) {
-            setTimeout(() => {
-                dispatch(GetUsersForJoinTrainingThunk({ trainingType: '', accessToken }));
-            }, 1000);
+            // dispatch(GetUsersForJoinTrainingThunk({ trainingType: '', accessToken }));
+            dispatch(
+                changeUsersForJointTrainingStatus({
+                    id: currentUserForJoinTraining.id,
+                    status: CONSTANTS.USER_INVITE_STATUS.PENDING,
+                }),
+            );
         }
     }, [isCreatedInviteSuccess]);
 
     useEffect(() => {
         if (searchString) {
-            const searchResult = users.filter((user) =>
+            const searchResult = usersForJoinTraining.filter((user) =>
                 user.name.toLowerCase().includes(searchString.toLowerCase()),
             );
             searchResult ? setUsers(searchResult) : setUsers(usersForJoinTraining);

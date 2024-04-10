@@ -173,12 +173,57 @@
         gap: 8px;
     }
 
+    .card__info-btns {
+        width: 100%;
+
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+
+        @media (max-width: 834px) {
+            flex-direction: column;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 32px;
+        }
+    }
+
     .messages__card {
         border-radius: 2px 8px 8px 8px;
         padding: 20px 12px;
         display: flex;
         justify-content: space-between;
         align-items: center;
+    }
+
+    .card__info-name {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        @include body-medium;
+
+        @media (max-width: 834px) {
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+    }
+
+    .card__text {
+        @include body-strong;
+        color: $primary-color-light-9;
+        margin: 12px 0;
+    }
+
+    .card__date {
+        color: $gray-color-light;
+    }
+
+    .card__info-button {
+        padding: 0;
     }
 
     .card__btn {
@@ -189,6 +234,10 @@
             @media (max-width: 834px) {
                 margin-bottom: 12px;
             }
+        }
+
+        @media (max-width: 834px) {
+            width: 100%;
         }
     }
 }
