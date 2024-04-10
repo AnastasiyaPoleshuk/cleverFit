@@ -18,7 +18,7 @@ export const MyTrainings = () => {
     const [modalPosition, setModalPosition] = useState({ top: '0', left: '0' });
     const [isTrainingInfoModalOpen, setIsTrainingInfoModalOpen] = useState(false);
     const [isSorting, setIsSorting] = useState(false);
-    const [pageSize, setPageSize] = useState(12);
+    const [pageSize, setPageSize] = useState(CONSTANTS.PAGINATION_PAGE_SIZE_DEFAULT);
     const { trainingInfo, isGetTrainingListSuccess } = useAppSelector(calendarSelector);
     const { openModal, setCurrentTrainingData } = useContext(AppContext);
     const [trainingsTableData, setTrainingsTableData] = useState(

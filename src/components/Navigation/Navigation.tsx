@@ -56,8 +56,9 @@ export const Navigation: React.FC = () => {
             <>
                 <WorkoutIcon data-test-id='notification-about-joint-training' />
                 <Badge
-                    count={myInvites.length ? myInvites.length : 0}
+                    count={myInvites.length ? myInvites.length : 2}
                     data-test-id='notification-about-joint-training'
+                    style={{ position: 'absolute', bottom: -2, minWidth: 15, height: 18 }}
                 />
             </>,
         ),

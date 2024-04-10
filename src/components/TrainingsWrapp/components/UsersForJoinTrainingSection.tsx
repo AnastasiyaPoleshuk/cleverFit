@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, Pagination } from 'antd';
+import { Avatar, Button, Card, Pagination, Tooltip } from 'antd';
 import './Components.scss';
 import Search from 'antd/es/input/Search';
 import {
@@ -8,7 +8,7 @@ import {
     UserOutlined,
 } from '@ant-design/icons';
 import { useAppDispatch, useAppSelector } from '@hooks/typed-react-redux-hooks';
-import { UserSelector, invitesSelector, trainingSelector } from '@utils/StoreSelectors';
+import { invitesSelector, trainingSelector } from '@utils/StoreSelectors';
 import { IGetTrainingPalsResponse } from '../../../types/apiTypes';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { Hightlight } from '@utils/hightlightSearch';
@@ -80,10 +80,31 @@ export const UsersForJoinTrainingSection = ({
 
     const search = (searchStr: string) => {
         setSearchString(searchStr);
-        const searchResult = users.filter((user) =>
-            user.name.toLowerCase().includes(searchStr.toLowerCase()),
-        );
-        searchResult ? setUsers(searchResult) : setUsers(usersForJoinTraining);
+        if (searchStr) {
+            const searchResult = users.filter((user) =>
+                user.name.toLowerCase().includes(searchStr.toLowerCase()),
+            );
+            searchResult
+                ? setUsers(
+                      [...searchResult].slice(
+                          pageNumber - 1,
+                          CONSTANTS.PAGINATION_PAGE_SIZE_DEFAULT,
+                      ),
+                  )
+                : setUsers(
+                      [...usersForJoinTraining].slice(
+                          pageNumber - 1,
+                          CONSTANTS.PAGINATION_PAGE_SIZE_DEFAULT,
+                      ),
+                  );
+        } else {
+            setUsers(
+                [...usersForJoinTraining].slice(
+                    pageNumber - 1,
+                    CONSTANTS.PAGINATION_PAGE_SIZE_DEFAULT,
+                ),
+            );
+        }
     };
 
     const goBack = () => {
@@ -133,7 +154,14 @@ export const UsersForJoinTrainingSection = ({
                         </Button>
                         <div className='invite-status__wrapp'>
                             <span>
-                                тренировка отклонена <ExclamationCircleOutlined />
+                                <Tooltip
+                                    placement='topRight'
+                                    title='повторный запрос будет доступнен через 2 недели'
+                                >
+                                    тренировка отклонена
+                                </Tooltip>
+
+                                <ExclamationCircleOutlined />
                             </span>
                         </div>
                     </>
@@ -158,7 +186,7 @@ export const UsersForJoinTrainingSection = ({
 
     const changePage = (page: number) => {
         setPageNumber(page);
-        setUsers([...usersForJoinTraining].slice(page - 1, 12));
+        setUsers([...usersForJoinTraining].slice(page - 1, CONSTANTS.PAGINATION_PAGE_SIZE_DEFAULT));
     };
 
     return (
@@ -235,6 +263,7 @@ export const UsersForJoinTrainingSection = ({
                 defaultPageSize={CONSTANTS.PAGINATION_PAGE_SIZE_DEFAULT}
                 onChange={changePage}
                 defaultCurrent={pageNumber}
+                style={{ marginTop: 16 }}
             />
         </section>
     );
