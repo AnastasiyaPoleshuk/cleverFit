@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, Image, Pagination } from 'antd';
+import { Avatar, Button, Card, Pagination } from 'antd';
 import './Components.scss';
 import Search from 'antd/es/input/Search';
 import {
@@ -15,7 +15,10 @@ import { Hightlight } from '@utils/hightlightSearch';
 import { AppContext } from '../../../context/AppContext';
 import CONSTANTS from '@utils/constants';
 import { UpdateInvitesThunk } from '@redux/thunk/InviteThunk';
-import { changeUsersForJointTrainingStatus } from '@redux/slices/TrainingSlice';
+import {
+    changeGetUsersForJointTrainingSuccessState,
+    changeUsersForJointTrainingStatus,
+} from '@redux/slices/TrainingSlice';
 
 export const UsersForJoinTrainingSection = ({
     changePreviewState,
@@ -24,9 +27,9 @@ export const UsersForJoinTrainingSection = ({
 }) => {
     const { isCreatedInviteSuccess } = useAppSelector(invitesSelector);
     const { usersForJoinTraining } = useAppSelector(trainingSelector);
-    const { accessToken } = useAppSelector(UserSelector);
     const [users, setUsers] = useState<IGetTrainingPalsResponse[]>([]);
     const [searchString, setSearchString] = useState('');
+    const [pageNumber, setPageNumber] = useState(1);
     const {
         setJoinTrainingDrawerStatus,
         saveCurrentUserForJoinTraining,
@@ -38,7 +41,6 @@ export const UsersForJoinTrainingSection = ({
 
     useEffect(() => {
         if (isCreatedInviteSuccess) {
-            // dispatch(GetUsersForJoinTrainingThunk({ trainingType: '', accessToken }));
             dispatch(
                 changeUsersForJointTrainingStatus({
                     id: currentUserForJoinTraining.id,
@@ -53,9 +55,26 @@ export const UsersForJoinTrainingSection = ({
             const searchResult = usersForJoinTraining.filter((user) =>
                 user.name.toLowerCase().includes(searchString.toLowerCase()),
             );
-            searchResult ? setUsers(searchResult) : setUsers(usersForJoinTraining);
+            searchResult
+                ? setUsers(
+                      [...searchResult].slice(
+                          pageNumber - 1,
+                          CONSTANTS.PAGINATION_PAGE_SIZE_DEFAULT,
+                      ),
+                  )
+                : setUsers(
+                      [...usersForJoinTraining].slice(
+                          pageNumber - 1,
+                          CONSTANTS.PAGINATION_PAGE_SIZE_DEFAULT,
+                      ),
+                  );
         } else {
-            setUsers(usersForJoinTraining);
+            setUsers(
+                [...usersForJoinTraining].slice(
+                    pageNumber - 1,
+                    CONSTANTS.PAGINATION_PAGE_SIZE_DEFAULT,
+                ),
+            );
         }
     }, [usersForJoinTraining]);
 
@@ -69,6 +88,7 @@ export const UsersForJoinTrainingSection = ({
 
     const goBack = () => {
         changePreviewState(true);
+        dispatch(changeGetUsersForJointTrainingSuccessState(false));
     };
 
     const rejectTraining = (id: string) => {
@@ -134,6 +154,11 @@ export const UsersForJoinTrainingSection = ({
     const openJoinTrainingDrawer = (currentUser: IGetTrainingPalsResponse) => {
         saveCurrentUserForJoinTraining(currentUser);
         setJoinTrainingDrawerStatus(true);
+    };
+
+    const changePage = (page: number) => {
+        setPageNumber(page);
+        setUsers([...usersForJoinTraining].slice(page - 1, 12));
     };
 
     return (
@@ -205,7 +230,12 @@ export const UsersForJoinTrainingSection = ({
                     </Card>
                 ))}
             </main>
-            <Pagination total={users.length} defaultPageSize={12} defaultCurrent={1} />
+            <Pagination
+                total={usersForJoinTraining.length}
+                defaultPageSize={CONSTANTS.PAGINATION_PAGE_SIZE_DEFAULT}
+                onChange={changePage}
+                defaultCurrent={pageNumber}
+            />
         </section>
     );
 };

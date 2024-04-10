@@ -2,7 +2,11 @@ import { TrainingsHeader } from '@components/header/TrainingsHeader';
 import './TrainingsPage.scss';
 import { TrainingsWrapp } from '@components/TrainingsWrapp/TrainingsWrapp';
 import { useAppSelector, useAppDispatch } from '@hooks/typed-react-redux-hooks';
-import { GetTrainingInfoThunk, GetTrainingListThunk, GetUsersForJoinTrainingThunk } from '@redux/thunk/TrainingThunk';
+import {
+    GetTrainingInfoThunk,
+    GetTrainingListThunk,
+    GetUsersForJoinTrainingThunk,
+} from '@redux/thunk/TrainingThunk';
 import CONSTANTS from '@utils/constants';
 import { useContext, useEffect, useLayoutEffect } from 'react';
 import { push } from 'redux-first-history';
@@ -26,8 +30,8 @@ import { UpdateTrainingFail } from '@components/ErrorModals/UpdateTrainingFail';
 import { UserSelector, calendarSelector, trainingSelector } from '@utils/StoreSelectors';
 import { JoinTrainingDrawer } from '@components/JoinTrainingDrawer/JoinTrainingDrawer';
 import { MyPartnerInfoModal } from '@components/TrainingModals/MyPartnerInfoModal';
-import { GetInvitesThunk } from '@redux/thunk/InviteThunk';
 import { GetUsersFail } from '@components/TrainingModals/GetUsersFail';
+import { findMostPopularWorkout } from '@utils/findMostPopularWorkout';
 
 export const TrainingsPage = () => {
     const { isAuth, accessToken } = useAppSelector(UserSelector);
@@ -37,6 +41,8 @@ export const TrainingsPage = () => {
         isCreateTrainingError,
         isUpdateTrainingSuccess,
         isUpdateTrainingError,
+        trainingInfo,
+        trainingList,
     } = useAppSelector(calendarSelector);
     const { isGetUsersForJoinTrainingError } = useAppSelector(trainingSelector);
     const {
@@ -49,10 +55,6 @@ export const TrainingsPage = () => {
     } = useContext(AppContext);
 
     const dispatch = useAppDispatch();
-
-    useLayoutEffect(() => {
-        dispatch(GetInvitesThunk(accessToken));
-    }, []);
 
     useEffect(() => {
         if (!isAuth) {
@@ -74,7 +76,12 @@ export const TrainingsPage = () => {
     };
 
     const repeatRequest = () => {
-        dispatch(GetUsersForJoinTrainingThunk('legs'));
+        dispatch(
+            GetUsersForJoinTrainingThunk({
+                trainingType: findMostPopularWorkout(trainingInfo, trainingList),
+                accessToken,
+            }),
+        );
     };
 
     const clearErrOfGetTrainingsList = () => {

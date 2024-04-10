@@ -12,10 +12,11 @@
 
 .training-details__modal {
     width: 312px;
+    border-radius: $border-radius-2;
 
-    .training-details__modal-title {
-        @include h5;
-        padding-bottom: 12px;
+    .training-details__modal-header {
+        display: flex;
+        justify-content: space-around;
     }
 
     .training-details__info {
@@ -39,5 +40,45 @@
 
     .training-details__exercise-params {
         color: $brand-color-light;
+    }
+}
+
+.training-details__modal-title {
+    @include body-medium;
+    padding-bottom: 12px;
+}
+
+.training-partner-info__modal {
+    .training-partner-info__name-wrapp {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 24px;
+    }
+
+    .user-card__name {
+        @include body-medium;
+    }
+
+    .user-card__info {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .user-card__type-title {
+        color: $gray-color;
+    }
+
+    .user-card__type-value {
+        color: $brand-color-light;
+        @include body-medium;
+    }
+
+    .user-card__add-btn {
+        width: 100%;
+        height: $button-height;
+        border-radius: $border-radius-2;
+        margin-top: 24px;
     }
 }

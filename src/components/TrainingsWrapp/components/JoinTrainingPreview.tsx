@@ -3,13 +3,15 @@ import './Components.scss';
 import { useAppDispatch, useAppSelector } from '@hooks/typed-react-redux-hooks';
 import { GetUsersForJoinTrainingThunk } from '@redux/thunk/TrainingThunk';
 import { useEffect } from 'react';
-import { UserSelector, trainingSelector } from '@utils/StoreSelectors';
+import { UserSelector, calendarSelector, trainingSelector } from '@utils/StoreSelectors';
+import { findMostPopularWorkout } from '@utils/findMostPopularWorkout';
 
 export const JoinTrainingPreview = ({
     changePreviewState,
 }: {
     changePreviewState: (data: boolean) => void;
 }) => {
+    const { trainingInfo, trainingList } = useAppSelector(calendarSelector);
     const { isGetUsersForJoinTrainingSuccess } = useAppSelector(trainingSelector);
     const { accessToken } = useAppSelector(UserSelector);
 
@@ -22,8 +24,14 @@ export const JoinTrainingPreview = ({
     }, [isGetUsersForJoinTrainingSuccess]);
 
     const goToFindPeople = (withType: boolean) => {
+        const mostPopularWorkout = findMostPopularWorkout(trainingInfo, trainingList);
         withType
-            ? dispatch(GetUsersForJoinTrainingThunk({ trainingType: 'legs', accessToken }))
+            ? dispatch(
+                  GetUsersForJoinTrainingThunk({
+                      trainingType: mostPopularWorkout,
+                      accessToken,
+                  }),
+              )
             : dispatch(GetUsersForJoinTrainingThunk({ trainingType: '', accessToken }));
     };
     return (

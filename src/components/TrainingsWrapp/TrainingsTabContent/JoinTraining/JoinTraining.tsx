@@ -2,8 +2,8 @@ import { useAppDispatch, useAppSelector } from '@hooks/typed-react-redux-hooks';
 import './JoinTraining.scss';
 import { useContext, useEffect, useLayoutEffect, useState } from 'react';
 import { GetTrainingPalsThunk } from '@redux/thunk/TrainingThunk';
-import { IGetTrainingPalsResponse } from '../../../../types/apiTypes';
-import { invitesSelector, trainingSelector } from '@utils/StoreSelectors';
+import { IGetInviteResponse, IGetTrainingPalsResponse } from '../../../../types/apiTypes';
+import { UserSelector, invitesSelector, trainingSelector } from '@utils/StoreSelectors';
 import { JoinTrainingPreview } from '@components/TrainingsWrapp/components/JoinTrainingPreview';
 import { UsersForJoinTrainingSection } from '@components/TrainingsWrapp/components/UsersForJoinTrainingSection';
 import { Avatar, Card } from 'antd';
@@ -11,14 +11,21 @@ import { UserOutlined } from '@ant-design/icons';
 import { AppContext } from '../../../../context/AppContext';
 import CONSTANTS from '@utils/constants';
 import { JoinTrainingMessages } from '@components/TrainingsWrapp/components/JoinTrainingMessages';
+import { GetInvitesThunk } from '@redux/thunk/InviteThunk';
 
 export const JoinTraining = () => {
     const [isPreview, setIsPreview] = useState(true);
     const [trainingPals, setTrainingPals] = useState<IGetTrainingPalsResponse[]>([]);
+    const [myInvites, setMyInvites] = useState<IGetInviteResponse[]>([]);
     const { isGeTrainingPalsSuccess, trainingPals: trainingPalsStore } =
         useAppSelector(trainingSelector);
-    const { myInvites, isUpdateInviteStatusSuccess, isTrainingRejected } =
-        useAppSelector(invitesSelector);
+    const { accessToken } = useAppSelector(UserSelector);
+    const {
+        myInvites: myInvitesStore,
+        isUpdateInviteStatusSuccess,
+        isTrainingRejected,
+        isGetMyInvitesSuccess,
+    } = useAppSelector(invitesSelector);
 
     const { openModal, saveCurrentTrainingPartner, currentTrainingPartner } =
         useContext(AppContext);
@@ -27,7 +34,14 @@ export const JoinTraining = () => {
 
     useLayoutEffect(() => {
         dispatch(GetTrainingPalsThunk());
+        dispatch(GetInvitesThunk(accessToken));
     }, []);
+
+    useLayoutEffect(() => {
+        if (isGetMyInvitesSuccess) {
+            setMyInvites(myInvitesStore);
+        }
+    }, [myInvitesStore]);
 
     useEffect(() => {
         if (isUpdateInviteStatusSuccess && !isTrainingRejected) {

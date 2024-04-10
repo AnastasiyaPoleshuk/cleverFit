@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from '@hooks/index';
 import './MyTrainings.scss';
-import { Badge, BadgeProps, Button, Select, Table } from 'antd';
+import { Badge, BadgeProps, Button, Table } from 'antd';
 import { AppContext } from '../../../../context/AppContext';
 import { useContext, useEffect, useState } from 'react';
 import CONSTANTS from '@utils/constants';
@@ -36,15 +36,16 @@ export const MyTrainings = () => {
 
             return training;
         });
+
         setTrainingsTableData(getTrainingsTableData(trainings));
         setIsSorting(false);
     }, [trainingInfo]);
 
     useEffect(() => {
         if (isScreenSm) {
-            setPageSize(9);
+            setPageSize(CONSTANTS.PAGINATION_PAGE_SIZE_MOBILE);
         } else {
-            setPageSize(12);
+            setPageSize(CONSTANTS.PAGINATION_PAGE_SIZE_DEFAULT);
         }
     }, [windowWidth]);
 

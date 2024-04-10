@@ -5,23 +5,34 @@ import { getTrainingColor } from '@utils/getTrainingColor';
 import moment from 'moment';
 import { getPeriodValue } from '@utils/getPeriod';
 import { IGetInviteResponse } from '../../types/apiTypes';
+import { CloseOutlined } from '@ant-design/icons';
 
 export const TrainingDetails = ({
     currentTrainingInvite,
+    modalPosition,
 }: {
     currentTrainingInvite: IGetInviteResponse;
+    modalPosition: { left: string; top: string };
 }) => {
     message.success({
         duration: 1000,
         icon: <></>,
+        style: {
+            position: 'absolute',
+            left: modalPosition.left,
+            top: '4vh',
+        },
         content: (
             <div data-test-id='joint-training-review-card'>
                 <header
                     style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
                         borderBottom: '1px solid #ccc',
                         paddingBottom: 8,
                         marginBottom: 24,
                     }}
+                    className='training-details__modal-header'
                 >
                     <Badge
                         color={
@@ -36,6 +47,7 @@ export const TrainingDetails = ({
                         }
                         style={{ width: 'max-content' }}
                     />
+                    <CloseOutlined />
                 </header>
                 <main className='training-details__modal'>
                     <div className='training-details__info'>

@@ -29,8 +29,12 @@ export const MyPartnerInfoModal = () => {
             closable={true}
             onCancel={close}
             footer={null}
+            width={540}
             data-test-id='partner-modal'
             className='training-partner-info__modal'
+            styles={{
+                body: { display: 'flex', justifyContent: 'space-around', padding: '24px 0' },
+            }}
         >
             <div className='training-partner-info__block'>
                 <div className='training-partner-info__name-wrapp'>
@@ -47,7 +51,7 @@ export const MyPartnerInfoModal = () => {
                     <p className='user-card__name'>{currentTrainingPartner.name}</p>
                 </div>
                 <p>
-                    Тренировка одобрена <CheckCircleFilled />
+                    Тренировка одобрена <CheckCircleFilled style={{ color: 'green' }} />
                 </p>
             </div>
             <div className='training-partner-info__block'>

@@ -23,7 +23,7 @@ import moment, { Moment } from 'moment';
 import { UpdateTrainingThunk, CreateTrainingThunk } from '@redux/thunk/TrainingThunk';
 import { ITrainingExercises } from '../../types/storeTypes';
 import { calendarSelector } from '@utils/StoreSelectors';
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 
 const defaultFormListValue = [
     { approaches: undefined, name: '', replays: undefined, weight: undefined },
@@ -100,9 +100,11 @@ export const CreateTrainingDrawer = ({ isDrawerOpen }: { isDrawerOpen: boolean }
     const [isRemoveButtonDisabled, setIsRemoveButtonDisabled] = useState(true);
     const { trainingList } = useAppSelector(calendarSelector);
     const { isScreenSm } = useResize();
-    const [trainingDate, setTrainingDate] = useState(currentTraining.date
-        ? dayjs(currentTraining.date, 'YYYY-MM-DD')
-        : dayjs(dayjs().add(1,'day'), 'YYYY-MM-DD'))
+    const [trainingDate, setTrainingDate] = useState(
+        currentTraining.date
+            ? dayjs(currentTraining.date, 'YYYY-MM-DD')
+            : dayjs(dayjs().add(1, 'day'), 'YYYY-MM-DD'),
+    );
 
     const dispatch = useAppDispatch();
 
@@ -206,7 +208,7 @@ export const CreateTrainingDrawer = ({ isDrawerOpen }: { isDrawerOpen: boolean }
 
     const onSubmit = (values: ITrainingForm) => {
         const id = currentTraining._id;
-        const trainingDate = values.trainingDate ? values.trainingDate : moment().add(1,'days');
+        const trainingDate = values.trainingDate ? values.trainingDate : moment().add(1, 'days');
         let trainingPeriod: number | null;
 
         if (withPeriod && !values.trainingPeriod) {
@@ -218,7 +220,6 @@ export const CreateTrainingDrawer = ({ isDrawerOpen }: { isDrawerOpen: boolean }
         const request = {
             _id: id,
             name: values.trainingType || currentTraining.name,
-            // date: values.trainingDate.format('YYYY-MM-DDThh:mm:ss.ms'),
             date: trainingDate.format('YYYY-MM-DDThh:mm:ss.ms'),
             parameters: {
                 repeat: withPeriod,
@@ -292,9 +293,9 @@ export const CreateTrainingDrawer = ({ isDrawerOpen }: { isDrawerOpen: boolean }
         }
     };
 
-    const handleDateChange = (date: any, dateString: any) => {
+    const handleDateChange = (date: Dayjs) => {
         setTrainingDate(date);
-      };
+    };
 
     return (
         <Drawer
@@ -361,12 +362,11 @@ export const CreateTrainingDrawer = ({ isDrawerOpen }: { isDrawerOpen: boolean }
                                 format={CONSTANTS.DATE_FORMAT}
                                 data-test-id='modal-drawer-right-date-picker'
                                 disabledDate={disablePastDays}
-//                                defaultValue = {trainingDate}
                                 onChange={handleDateChange}
-                                defaultValue ={
+                                defaultValue={
                                     currentTraining.date
                                         ? dayjs(currentTraining.date, 'YYYY-MM-DD')
-                                        : dayjs(dayjs().add(1,'day'), 'YYYY-MM-DD')
+                                        : dayjs(dayjs().add(1, 'day'), 'YYYY-MM-DD')
                                 }
                             />
                         </Form.Item>
@@ -377,7 +377,7 @@ export const CreateTrainingDrawer = ({ isDrawerOpen }: { isDrawerOpen: boolean }
                             <Checkbox
                                 name='trainingRepeat'
                                 onChange={(e) => toggleTrainingPeriod(e.target.checked)}
-                                checked = {withPeriod}
+                                checked={withPeriod}
                                 value={withPeriod}
                                 className='training-info__period-checkbox'
                                 data-test-id='modal-drawer-right-checkbox-period'
@@ -393,7 +393,12 @@ export const CreateTrainingDrawer = ({ isDrawerOpen }: { isDrawerOpen: boolean }
                                 className='training-info__select-date__form-item'
                             >
                                 <Select
-                                    defaultValue=  { periodOptions. find((item) => item.value == currentTraining.parameters?.period)?.label || periodOptions[0].label }  
+                                    defaultValue={
+                                        periodOptions.find(
+                                            (item) =>
+                                                item.value == currentTraining.parameters?.period,
+                                        )?.label || periodOptions[0].label
+                                    }
                                     options={periodOptions}
                                     onChange={onPeriodChange}
                                     className='training-info__select-period'

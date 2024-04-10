@@ -93,7 +93,7 @@ export const Navigation: React.FC = () => {
     };
 
     const goToMain = () => {
-        dispatch(push(CONSTANTS.ROUTER__PATH.AUTH__PATH));
+        dispatch(push(CONSTANTS.ROUTER__PATH.MAIN__PATH));
     };
 
     const logOut = () => {

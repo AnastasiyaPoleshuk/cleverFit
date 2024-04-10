@@ -35,6 +35,9 @@ const trainingSlice = createSlice({
         changeGetUsersForJointTrainingErrorState: (state, action: PayloadAction<boolean>) => {
             state.isGetUsersForJoinTrainingError = action.payload;
         },
+        changeGetUsersForJointTrainingSuccessState: (state, action: PayloadAction<boolean>) => {
+            state.isGetUsersForJoinTrainingSuccess = action.payload;
+        },
         changeUsersForJointTrainingStatus: (
             state,
             action: PayloadAction<{ id: string; status: string }>,
@@ -101,6 +104,7 @@ export const {
     cleanError,
     changeGetUsersForJointTrainingErrorState,
     changeUsersForJointTrainingStatus,
+    changeGetUsersForJointTrainingSuccessState,
 } = trainingSlice.actions;
 
 export default trainingSlice.reducer;

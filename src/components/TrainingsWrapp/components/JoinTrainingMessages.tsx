@@ -7,12 +7,11 @@ import moment from 'moment';
 import CONSTANTS from '@utils/constants';
 import { UpdateInvitesThunk } from '@redux/thunk/InviteThunk';
 import { IGetInviteResponse } from '../../../types/apiTypes';
-import { useState } from 'react';
 import { TrainingDetails } from '@components/TrainingModals/TrainingDetails';
 import { useResize } from '@hooks/useResize';
+import { getModalPosition } from '@utils/getModalPosition';
 
 export const JoinTrainingMessages = () => {
-    const [modalPosition, setModalPosition] = useState({ top: '', left: '' });
     const { myInvites } = useAppSelector(invitesSelector);
 
     const { width: windowWidth, isScreenSm } = useResize();
@@ -27,9 +26,10 @@ export const JoinTrainingMessages = () => {
         dispatch(UpdateInvitesThunk({ id: inviteId, status: 'accepted' }));
     };
 
-    const openTrainingDetailsModal = (invite: IGetInviteResponse) => {
+    const openTrainingDetailsModal = (invite: IGetInviteResponse, element: Element | null) => {
         TrainingDetails({
             currentTrainingInvite: invite,
+            modalPosition: getModalPosition({ element, windowWidth, isScreenSm }),
         });
     };
 
@@ -67,7 +67,9 @@ export const JoinTrainingMessages = () => {
                             <Button
                                 type='link'
                                 className='card__info-button'
-                                onClick={() => openTrainingDetailsModal(invite)}
+                                onClick={(e) =>
+                                    openTrainingDetailsModal(invite, e.target as Element | null)
+                                }
                             >
                                 Посмотреть детали тренировки
                             </Button>
