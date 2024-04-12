@@ -2,7 +2,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { IFeedbacks, IRequestError } from '../../types/apiTypes';
 import { CreateFeedbacksThunk, GetFeedbacksThunk } from '@redux/thunk/feedbacksThunk';
 
-interface IInitialState {
+type IInitialState = {
     feedbacks: IFeedbacks[];
     isLoading: boolean;
     error: IRequestError;
@@ -10,7 +10,7 @@ interface IInitialState {
     isGetFeedbacksSuccess: boolean;
     isCreateFeedbackError: boolean;
     isCreateFeedbackSuccess: boolean;
-}
+};
 
 const initialState: IInitialState = {
     feedbacks: [],

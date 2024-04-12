@@ -1,3 +1,4 @@
+import CONSTANTS from '@utils/constants';
 import { IUploadAvatarResponse } from '../types/apiTypes';
 
 import {
@@ -14,7 +15,7 @@ export const uploadAvatar = async (request: { token: string; file: FormData }) =
         apiSetContentTypeHeader('multipart/form-data');
 
         const { data, status } = await api.post<IUploadAvatarResponse>(
-            'upload-image',
+            CONSTANTS.API_URLS.UPLOAD_IMAGE,
             request.file,
         );
 

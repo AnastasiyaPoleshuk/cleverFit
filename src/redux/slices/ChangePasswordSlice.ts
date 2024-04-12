@@ -4,7 +4,7 @@ import { ConfirmEmailThunk } from '../thunk/changePasswordThunks';
 import { CheckEmailThunk } from '../thunk/changePasswordThunks';
 import { ChangePasswordThunk } from '../thunk/changePasswordThunks';
 
-interface IInitialState {
+type IInitialState = {
     isLoading: boolean;
     isCheckEmailSuccess: boolean;
     isConfirmEmailSuccess: boolean;
@@ -15,7 +15,7 @@ interface IInitialState {
     email: string;
     changePassword: IChangePasswordRequest;
     error: IRequestError;
-}
+};
 
 const initialState: IInitialState = {
     isLoading: false,

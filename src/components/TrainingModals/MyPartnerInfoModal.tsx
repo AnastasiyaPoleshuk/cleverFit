@@ -18,7 +18,12 @@ export const MyPartnerInfoModal = () => {
     };
 
     const rejectInvite = () => {
-        dispatch(UpdateInvitesThunk({ id: currentTrainingPartner.inviteId, status: 'rejected' }));
+        dispatch(
+            UpdateInvitesThunk({
+                id: currentTrainingPartner.inviteId,
+                status: CONSTANTS.USER_INVITE_STATUS.REJECTED,
+            }),
+        );
         dispatch(changeStatusOfJointTraining(true));
     };
 

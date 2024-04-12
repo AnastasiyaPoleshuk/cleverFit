@@ -27,7 +27,7 @@
         align-items: center;
 
         @media (max-width: 833px) {
-            margin-right: 24px;
+            margin-right: $padding-24;
         }
 
         @media (max-width: 360px) {
@@ -36,7 +36,7 @@
             justify-content: flex-start;
             align-items: center;
 
-            gap: 16px;
+            gap: $gap-16;
             margin: 0;
             margin-bottom: 12px;
         }
@@ -67,7 +67,7 @@
         display: flex;
         justify-content: flex-start;
         align-items: center;
-        gap: 16px;
+        gap: $gap-16;
 
         padding-bottom: 12px;
     }

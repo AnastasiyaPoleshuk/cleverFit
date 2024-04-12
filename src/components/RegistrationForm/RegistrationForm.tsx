@@ -9,11 +9,11 @@ import { push } from 'redux-first-history';
 import { AppContext } from '../../context/AppContext';
 import { UserSelector } from '@utils/StoreSelectors';
 
-interface IRegistrationData {
+type IRegistrationData = {
     email: string;
     password: string;
     passwordRepeat: string;
-}
+};
 
 export const RegistrationForm = () => {
     const [isValidEmail, setIsValidEmail] = useState(true);

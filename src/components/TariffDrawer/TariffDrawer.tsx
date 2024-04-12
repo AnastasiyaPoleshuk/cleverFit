@@ -13,6 +13,7 @@ import { PostTariffThunk } from '@redux/thunk/userThunks';
 import moment from 'moment';
 import { useResize } from '@hooks/useResize';
 import { UserSelector } from '@utils/StoreSelectors';
+import CONSTANTS from '@utils/constants';
 
 const AdvantagesTableColumns = [
     {
@@ -256,7 +257,8 @@ export const TariffDrawer = () => {
                     color='processing'
                     style={{ borderRadius: 2, border: 'none', padding: '14px 49px' }}
                 >
-                    Ваш PRO tarif активен до {moment(user.tariff.expired).format('DD.MM')}
+                    Ваш PRO tarif активен до{' '}
+                    {moment(user.tariff.expired).format(CONSTANTS.DATE_FORMAT_DD_MM)}
                 </Tag>
             ) : null}
 

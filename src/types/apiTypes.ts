@@ -1,57 +1,57 @@
 import { Moment } from 'moment';
-import { ITrainingExercises, ITrainingParameters } from './storeTypes';
+import { ISenderInviteData, ITrainingExercises, ITrainingParameters } from './storeTypes';
 
-export interface IAuthRequest {
+export type IAuthRequest = {
     email: string;
     password: string;
     remember?: boolean;
-}
+};
 
-export interface ILoginResponse {
+export type ILoginResponse = {
     accessToken: string;
-}
+};
 
-export interface IRequestError {
+export type IRequestError = {
     statusCode: number;
     error: string;
     message: string;
-}
+};
 
-export interface ICheckEmailResponse {
+export type ICheckEmailResponse = {
     email: string;
     message: string;
-}
+};
 
-export interface IConfirmEmailRequest {
+export type IConfirmEmailRequest = {
     email: string;
     code: string;
-}
+};
 
-export interface IConfirmEmailResponse {
+export type IConfirmEmailResponse = {
     email: string;
     message: string;
-}
+};
 
-export interface IChangePasswordRequest {
+export type IChangePasswordRequest = {
     password: string;
     confirmPassword: string;
-}
+};
 
-export interface IFeedbacks {
+export type IFeedbacks = {
     fullName: string | null;
     imageSrc: string | null;
     rating: number;
     createdAt: string;
     id?: string;
     message?: string;
-}
+};
 
-export interface ICreateFeedbackRequest {
+export type ICreateFeedbackRequest = {
     message: string;
     rating: number;
-}
+};
 
-export interface IGetTrainingsResponse {
+export type IGetTrainingsResponse = {
     _id: string;
     id?: string;
     name: string;
@@ -60,22 +60,22 @@ export interface IGetTrainingsResponse {
     userId: string;
     parameters: ITrainingParameters;
     exercises: ITrainingExercises[];
-}
+};
 
-export interface IGetTrainingListResponse {
+export type IGetTrainingListResponse = {
     name: string;
     key: string;
-}
+};
 
-export interface ICreateTrainingRequest {
+export type ICreateTrainingRequest = {
     _id: string | undefined;
     name: string;
     date: string;
     isImplementation: boolean;
     exercises: ITrainingExercises[];
-}
+};
 
-export interface IUser {
+export type IUser = {
     email: string;
     firstName: string;
     lastName: string;
@@ -87,9 +87,9 @@ export interface IUser {
         tariffId: string;
         expired: string;
     };
-}
+};
 
-export interface IUpdateUser {
+export type IUpdateUser = {
     email: string;
     password?: string;
     passwordRepeat?: string;
@@ -99,14 +99,14 @@ export interface IUpdateUser {
     imgSrc?: string;
     readyForJointTraining?: boolean;
     sendNotification?: boolean;
-}
+};
 
-export interface IUploadAvatarResponse {
+export type IUploadAvatarResponse = {
     name: string;
     url: string;
-}
+};
 
-export interface ITariffListResponse {
+export type ITariffListResponse = {
     _id: string;
     name: string;
     periods: {
@@ -114,14 +114,14 @@ export interface ITariffListResponse {
         cost: number;
         days: number;
     }[];
-}
+};
 
-export interface IPostTariffRequest {
+export type IPostTariffRequest = {
     tariffId: string;
     days: number;
-}
+};
 
-export interface IGetTrainingPalsResponse {
+export type IGetTrainingPalsResponse = {
     id: string;
     name: string;
     trainingType: string;
@@ -129,46 +129,31 @@ export interface IGetTrainingPalsResponse {
     avgWeightInWeek: number;
     inviteId: string;
     status: string;
-}
+};
 
-export interface IGetInviteResponse {
+export type IGetInviteResponse = {
     _id: string;
-    from: {
-        _id: string;
-        firstName?: string;
-        lastName?: string;
-        imageSrc?: string;
-    };
+    from: ISenderInviteData;
     training: IGetTrainingsResponse;
     status: string;
     createdAt: string;
-}
+};
 
-export interface ICreateInviteRequest {
+export type ICreateInviteRequest = {
     to: string;
     trainingId: string;
-}
+};
 
-export interface ICreateInviteResponse {
+export type ICreateInviteResponse = {
     _id: string;
-    from: {
-        _id: string;
-        firstName?: string;
-        lastName?: string;
-        imageSrc?: string;
-    };
+    from: ISenderInviteData;
     training: IGetTrainingsResponse;
     status: string;
     createdAt: string;
-    to: {
-        _id: string;
-        firstName?: string;
-        lastName?: string;
-        imageSrc?: string;
-    };
-}
+    to: ISenderInviteData;
+};
 
-export interface IUpdateInviteStatusRequest {
+export type IUpdateInviteStatusRequest = {
     id: string;
     status: string;
-}
+};

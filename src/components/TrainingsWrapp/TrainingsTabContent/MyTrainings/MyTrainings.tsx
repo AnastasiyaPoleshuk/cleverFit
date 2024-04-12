@@ -13,6 +13,7 @@ import { useResize } from '@hooks/useResize';
 import { calendarSelector } from '@utils/StoreSelectors';
 import { getPeriodValue } from '@utils/getPeriod';
 import { changeTrainingParametersValue } from '@redux/slices/CalendarSlice';
+import { sortDirection, sortTrainingsDataByPeriod } from '@utils/sortTrainingsDataByPeriod';
 
 export const MyTrainings = () => {
     const [modalPosition, setModalPosition] = useState({ top: '0', left: '0' });
@@ -53,33 +54,13 @@ export const MyTrainings = () => {
         let sortedData: IGetTrainingsResponse[] = [];
 
         if (isSorting) {
-            sortedData = sortDataByPeriodAsc(trainingInfo);
+            sortedData = sortTrainingsDataByPeriod(trainingInfo, sortDirection.Asc);
             setTrainingsTableData(getTrainingsTableData(sortedData));
         } else {
-            sortedData = sortDataByPeriodDesc(trainingInfo);
+            sortedData = sortTrainingsDataByPeriod(trainingInfo, sortDirection.Desc);
             setTrainingsTableData(getTrainingsTableData(sortedData));
         }
     }, [isSorting]);
-
-    const sortDataByPeriodAsc = (data: IGetTrainingsResponse[]) => {
-        return [...data].slice().sort((a, b) => {
-            const aValue =
-                a.parameters.repeat === true && a.parameters.period ? a.parameters.period : 0;
-            const bValue =
-                b.parameters.repeat === true && b.parameters.period ? b.parameters.period : 0;
-            return aValue - bValue;
-        });
-    };
-
-    const sortDataByPeriodDesc = (data: IGetTrainingsResponse[]) => {
-        return [...data].slice().sort((a, b) => {
-            const aValue =
-                a.parameters.repeat === true && a.parameters.period ? a.parameters.period : 0;
-            const bValue =
-                b.parameters.repeat === true && b.parameters.period ? b.parameters.period : 0;
-            return bValue - aValue;
-        });
-    };
 
     function toggleSorting() {
         setIsSorting(!isSorting);

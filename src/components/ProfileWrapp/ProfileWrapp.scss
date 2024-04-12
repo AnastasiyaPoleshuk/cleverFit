@@ -4,11 +4,11 @@
     flex: 1;
     background-color: $white-color;
     border-radius: 8px;
-    margin: 24px;
-    padding: 24px;
+    margin: $padding-24;
+    padding: $padding-24;
 
     @media (max-width: 360px) {
-        margin: 24px 0;
+        margin: $padding-24 0;
         padding: 16px 24px;
     }
 
@@ -21,11 +21,11 @@
 
     .personal-info__form-blok {
         width: 100%;
-        margin-bottom: 24px;
+        margin-bottom: $padding-24;
     }
 
     .personal-info__form-title {
-        margin-bottom: 24px;
+        margin-bottom: $padding-24;
 
         @include h5;
     }
@@ -62,7 +62,7 @@
     .form__submit-btn {
         width: 206px;
         height: $button-height;
-        margin-top: 24px;
+        margin-top: $padding-24;
         border-radius: $border-radius-2;
 
         @media (max-width: 360px) {
@@ -74,5 +74,5 @@
 
 .upload-avatar {
     width: fit-content !important;
-    margin-right: 24px;
+    margin-right: $padding-24;
 }

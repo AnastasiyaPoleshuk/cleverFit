@@ -2,7 +2,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { IGetTrainingPalsResponse, IRequestError } from '../../types/apiTypes';
 import { GetTrainingPalsThunk, GetUsersForJoinTrainingThunk } from '@redux/thunk/TrainingThunk';
 
-interface IInitialState {
+type IInitialState = {
     trainingPals: IGetTrainingPalsResponse[];
     usersForJoinTraining: IGetTrainingPalsResponse[];
     isLoading: boolean;
@@ -11,7 +11,7 @@ interface IInitialState {
     isGeTrainingPalsSuccess: boolean;
     isGetUsersForJoinTrainingError: boolean;
     isGetUsersForJoinTrainingSuccess: boolean;
-}
+};
 
 const initialState: IInitialState = {
     trainingPals: [],

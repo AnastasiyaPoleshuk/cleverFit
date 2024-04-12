@@ -18,25 +18,25 @@ import { useContext, useEffect, useState } from 'react';
 import { AppContext } from '../../context/AppContext';
 import { useFocus } from '@hooks/useFocus';
 
-export interface IExercises {
+export type IExercises = {
     approaches?: number;
     name?: string;
     replays?: number;
     weight?: number;
     isImplementation?: boolean;
-}
+};
 
-export interface IFormValues {
+export type IFormValues = {
     exercises: IExercises[];
-}
+};
 
-interface IProps {
+type IProps = {
     isOpen: boolean;
     onClose: (type: string) => void;
     trainingType: string;
     trainingName: string;
     date: string;
-}
+};
 
 const defaultFormListValue = [
     { approaches: undefined, name: '', replays: undefined, weight: undefined },

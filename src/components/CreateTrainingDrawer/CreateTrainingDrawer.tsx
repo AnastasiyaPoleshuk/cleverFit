@@ -220,7 +220,7 @@ export const CreateTrainingDrawer = ({ isDrawerOpen }: { isDrawerOpen: boolean }
         const request = {
             _id: id,
             name: values.trainingType || currentTraining.name,
-            date: trainingDate.format('YYYY-MM-DDThh:mm:ss.ms'),
+            date: trainingDate.format(CONSTANTS.DATE_FORMAT_REQUEST),
             parameters: {
                 repeat: withPeriod,
                 period: values.trainingPeriod || trainingPeriod,

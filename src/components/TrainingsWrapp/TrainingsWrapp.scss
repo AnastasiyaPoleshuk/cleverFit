@@ -4,11 +4,11 @@
     flex: 1;
     background-color: $white-color;
     border-radius: 8px;
-    margin: 24px;
+    margin: $padding-24;
     padding: 12px 24px 24px 24px;
 
     @media (max-width: 360px) {
-        margin: 24px 0;
+        margin: $padding-24 0;
         padding: 16px 24px;
     }
 

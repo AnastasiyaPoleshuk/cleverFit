@@ -19,11 +19,15 @@ export const JoinTrainingMessages = () => {
     const dispatch = useAppDispatch();
 
     const rejectInvite = (inviteId: string) => {
-        dispatch(UpdateInvitesThunk({ id: inviteId, status: 'rejected' }));
+        dispatch(
+            UpdateInvitesThunk({ id: inviteId, status: CONSTANTS.USER_INVITE_STATUS.REJECTED }),
+        );
     };
 
     const acceptInvite = (inviteId: string) => {
-        dispatch(UpdateInvitesThunk({ id: inviteId, status: 'accepted' }));
+        dispatch(
+            UpdateInvitesThunk({ id: inviteId, status: CONSTANTS.USER_INVITE_STATUS.ACCEPTED }),
+        );
     };
 
     const openTrainingDetailsModal = (invite: IGetInviteResponse, element: Element | null) => {

@@ -1,3 +1,4 @@
+import CONSTANTS from '@utils/constants';
 import { IGetTrainingListResponse } from '../types/apiTypes';
 
 import { api, handleError } from './api';
@@ -5,7 +6,7 @@ import { api, handleError } from './api';
 export const getTrainingList = async () => {
     try {
         const { data, status } = await api.get<IGetTrainingListResponse[]>(
-            'catalogs/training-list',
+            CONSTANTS.API_URLS.TRAINING_LIST,
         );
 
         return { data, status };

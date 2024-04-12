@@ -9,7 +9,7 @@ import {
     IGetTrainingsResponse,
 } from '../types/apiTypes';
 
-export interface IAppContext {
+export type IAppContext = {
     isFeedbacksFailModalOpen: boolean;
     isCreateFeedbackModalOpen: boolean;
     isCreateFeedbackErrorModalOpen: boolean;
@@ -54,7 +54,7 @@ export interface IAppContext {
     saveCurrentUserForJoinTraining: (data: IGetTrainingPalsResponse) => void;
     saveCurrentTrainingPartner: (data: IGetTrainingPalsResponse) => void;
     saveCurrentTrainingInvite: (data: IGetInviteResponse) => void;
-}
+};
 
 export const AppContext = createContext<IAppContext>({
     isFeedbacksFailModalOpen: false,
@@ -221,6 +221,8 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
             case CONSTANTS.TRAINING_DETAILS_MODAL:
                 setIsTrainingDetailsModalOpen(true);
                 break;
+            default:
+                break;
         }
     };
 
@@ -255,6 +257,8 @@ export const AppState = ({ children }: { children: React.ReactNode }) => {
                 break;
             case CONSTANTS.TRAINING_DETAILS_MODAL:
                 setIsTrainingDetailsModalOpen(false);
+                break;
+            default:
                 break;
         }
     };

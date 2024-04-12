@@ -58,7 +58,12 @@ export const ProfileWrapp = () => {
     useEffect(() => {
         setIsUpdateSuccess(false);
         setAvatarUrl(user.imgSrc);
-        setSubmitButtonDisabled(true);
+
+        if (user.firstName || user.email || user.birthday) {
+            setSubmitButtonDisabled(false);
+        } else {
+            setSubmitButtonDisabled(true);
+        }
 
         if (avatarUrl) {
             setAvatar([

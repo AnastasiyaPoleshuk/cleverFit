@@ -6,12 +6,12 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 24px;
+    gap: $gap-24;
     padding: 0 24px;
 
     @media (max-width: 360px) {
         padding: 0 16px;
-        gap: 48px;
+        gap: $gap-48;
     }
 
     &__card {

@@ -26,6 +26,7 @@ export const GetRequestFail = ({
             data-test-id='modal-no-review'
             closeIcon={null}
             footer={null}
+            centered={true}
         >
             <Result
                 status={CONSTANTS.RESULT_STATUS_TYPE_500}

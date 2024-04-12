@@ -5,7 +5,7 @@ import 'moment/locale/ru';
 import './CalengarWrapp.scss';
 import { useAppSelector } from '@hooks/typed-react-redux-hooks';
 import { useContext, useEffect, useState } from 'react';
-import { calendarLocale } from '@utils/constants';
+import CONSTANTS, { calendarLocale } from '@utils/constants';
 import { IGetTrainingListResponse, IGetTrainingsResponse } from '../../types/apiTypes';
 import moment from 'moment';
 import { CalendarCellInfoModal } from '@components/CalendarCellInfoModal/CalendarCellInfoModal';
@@ -31,7 +31,7 @@ const getListData = (
         const dt = moment(training.date);
         const trainings = [];
 
-        if (value.date() == +dt.format('DD')) {
+        if (value.date() == +dt.format(CONSTANTS.DATE_FORMAT_DD)) {
             const currentTraining = trainingList.find(
                 (listItem) => listItem.name === training.name,
             );
@@ -47,7 +47,11 @@ const getListData = (
     return [];
 };
 const getCurrentDayTrainings = (day: Moment, allTrainingsArr: IGetTrainingsResponse[]) => {
-    return allTrainingsArr.filter((item) => moment(item.date).format('DD') === day.format('DD'));
+    return allTrainingsArr.filter(
+        (item) =>
+            moment(item.date).format(CONSTANTS.DATE_FORMAT_DD) ===
+            day.format(CONSTANTS.DATE_FORMAT_DD),
+    );
 };
 
 export const CalengarWrapp = ({ trainings }: { trainings: IGetTrainingsResponse[] }) => {
@@ -101,11 +105,11 @@ export const CalengarWrapp = ({ trainings }: { trainings: IGetTrainingsResponse[
         );
         let element = null;
 
-        for (let i = 0; i < dateElementArr.length; i++) {
-            if (dateElementArr[i].innerHTML === value.format('DD')) {
-                element = dateElementArr[i];
+        dateElementArr.forEach((item) => {
+            if (item.innerHTML === value.format(CONSTANTS.DATE_FORMAT_DD)) {
+                element = item;
             }
-        }
+        });
 
         const newPosition = getModalPosition({ element, windowWidth, isScreenSm });
         const modalBodyData = dateCellRender(value);
@@ -144,7 +148,7 @@ export const CalengarWrapp = ({ trainings }: { trainings: IGetTrainingsResponse[
                 <ul className='events'>
                     {listData.length
                         ? listData.map((item, index) => (
-                              <li key={item.key} className='trainings__list-item'>
+                              <li key={`${item.key}${index}`} className='trainings__list-item'>
                                   <Badge
                                       color={getTrainingColor(item.name) as BadgeProps['color']}
                                       text={item.name}
@@ -180,7 +184,7 @@ export const CalengarWrapp = ({ trainings }: { trainings: IGetTrainingsResponse[
                 )}
                 {isModalRender && (
                     <CalendarCellInfoModal
-                        date={selectedDate.format('DD.MM.YYYY')}
+                        date={selectedDate.format(CONSTANTS.DATE_FORMAT)}
                         trainingsData={getCurrentDayTrainings(selectedDate, trainingInfo)}
                         modalPosition={modalPosition}
                         isModalOpen={isOpenModal}
@@ -189,7 +193,7 @@ export const CalengarWrapp = ({ trainings }: { trainings: IGetTrainingsResponse[
                     />
                 )}
                 <CalendarCreateTrainingModal
-                    date={selectedDate.format('DD.MM.YYYY')}
+                    date={selectedDate.format(CONSTANTS.DATE_FORMAT)}
                     isModalOpen={isAddTrainingModalOpen}
                     trainingsListData={trainingList}
                     trainingsData={getCurrentDayTrainings(selectedDate, trainingInfo)}

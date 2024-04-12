@@ -11,14 +11,14 @@ import { updateTrainingsState } from '@redux/slices/CalendarSlice';
 import { calendarSelector } from '@utils/StoreSelectors';
 import { getTrainingColor } from '@utils/getTrainingColor';
 
-interface IProps {
+type IProps = {
     date: string;
     isModalOpen: boolean;
     trainingsData: IGetTrainingsResponse[];
     modalPosition: { left: string; top: string };
     isAddTrainingDisabled: boolean;
     setOpen: (isModalOpen: boolean) => void;
-}
+};
 
 const getTrainingsData = (
     trainingsData: IGetTrainingsResponse[],
@@ -35,7 +35,7 @@ const getTrainingsData = (
         const dt = moment(training.date);
         const trainings = [];
 
-        if (date.date() == +dt.format('DD')) {
+        if (date.date() == +dt.format(CONSTANTS.DATE_FORMAT_DD)) {
             const currentTraining = trainingList.find(
                 (listItem) => listItem.name === training.name,
             );

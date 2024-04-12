@@ -20,7 +20,7 @@
         width: 100%;
 
         & a {
-            margin-bottom: 24px;
+            margin-bottom: $padding-24;
         }
     }
 
@@ -36,5 +36,5 @@
 .ant-form-item-explain-error,
 .ant-form-item-explain-success {
     @include body-small;
-    margin-bottom: 24px;
+    margin-bottom: $padding-24;
 }

@@ -7,11 +7,11 @@ import { getTrainingColor } from '@utils/getTrainingColor';
 import { ITrainingExercises } from '../../types/storeTypes';
 import './TrainingModals.scss';
 
-interface IProps {
+type IProps = {
     isModalOpen: boolean;
     modalPosition: { left: string; top: string };
     close: () => void;
-}
+};
 
 const getExercisesList = (exercises: ITrainingExercises[]) => {
     return exercises.map((item) => (

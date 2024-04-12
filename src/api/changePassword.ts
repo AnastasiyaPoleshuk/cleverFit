@@ -1,3 +1,4 @@
+import CONSTANTS from '@utils/constants';
 import { IChangePasswordRequest } from '../types/apiTypes';
 
 import { api, handleError } from './api';
@@ -5,7 +6,7 @@ import { api, handleError } from './api';
 export const changePassword = async (request: IChangePasswordRequest) => {
     try {
         const { data, status } = await api.post<{ message: string }>(
-            'auth/change-password',
+            CONSTANTS.API_URLS.CHANGE_PASSWORD,
             request,
             { withCredentials: true },
         );

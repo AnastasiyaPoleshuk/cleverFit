@@ -15,7 +15,7 @@ import {
 } from '../thunk/userThunks';
 import { RegisterUserThunk } from '../thunk/userThunks';
 
-interface IInitialState {
+type IInitialState = {
     accessToken: string;
     isLoading: boolean;
     isAuth: boolean;
@@ -36,7 +36,7 @@ interface IInitialState {
     isGetTariffSuccess: boolean;
     isPostTariffError: boolean;
     isPostTariffSuccess: boolean;
-}
+};
 
 const initialState: IInitialState = {
     accessToken: '',

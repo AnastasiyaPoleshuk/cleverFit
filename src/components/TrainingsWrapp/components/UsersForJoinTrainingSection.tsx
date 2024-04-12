@@ -19,6 +19,7 @@ import {
     changeGetUsersForJointTrainingSuccessState,
     changeUsersForJointTrainingStatus,
 } from '@redux/slices/TrainingSlice';
+import { getCardsForCurrentPage } from '@utils/getCardsForCurrentPage';
 
 export const UsersForJoinTrainingSection = ({
     changePreviewState,
@@ -56,25 +57,10 @@ export const UsersForJoinTrainingSection = ({
                 user.name.toLowerCase().includes(searchString.toLowerCase()),
             );
             searchResult
-                ? setUsers(
-                      [...searchResult].slice(
-                          pageNumber - 1,
-                          CONSTANTS.PAGINATION_PAGE_SIZE_DEFAULT,
-                      ),
-                  )
-                : setUsers(
-                      [...usersForJoinTraining].slice(
-                          pageNumber - 1,
-                          CONSTANTS.PAGINATION_PAGE_SIZE_DEFAULT,
-                      ),
-                  );
+                ? setUsers(getCardsForCurrentPage(searchResult, pageNumber))
+                : setUsers(getCardsForCurrentPage(usersForJoinTraining, pageNumber));
         } else {
-            setUsers(
-                [...usersForJoinTraining].slice(
-                    pageNumber - 1,
-                    CONSTANTS.PAGINATION_PAGE_SIZE_DEFAULT,
-                ),
-            );
+            setUsers(getCardsForCurrentPage(usersForJoinTraining, pageNumber));
         }
     }, [usersForJoinTraining]);
 
@@ -85,25 +71,10 @@ export const UsersForJoinTrainingSection = ({
                 user.name.toLowerCase().includes(searchStr.toLowerCase()),
             );
             searchResult
-                ? setUsers(
-                      [...searchResult].slice(
-                          pageNumber - 1,
-                          CONSTANTS.PAGINATION_PAGE_SIZE_DEFAULT,
-                      ),
-                  )
-                : setUsers(
-                      [...usersForJoinTraining].slice(
-                          pageNumber - 1,
-                          CONSTANTS.PAGINATION_PAGE_SIZE_DEFAULT,
-                      ),
-                  );
+                ? setUsers(getCardsForCurrentPage(searchResult, pageNumber))
+                : setUsers(getCardsForCurrentPage(usersForJoinTraining, pageNumber));
         } else {
-            setUsers(
-                [...usersForJoinTraining].slice(
-                    pageNumber - 1,
-                    CONSTANTS.PAGINATION_PAGE_SIZE_DEFAULT,
-                ),
-            );
+            setUsers(getCardsForCurrentPage(usersForJoinTraining, pageNumber));
         }
     };
 
@@ -113,7 +84,7 @@ export const UsersForJoinTrainingSection = ({
     };
 
     const rejectTraining = (id: string) => {
-        dispatch(UpdateInvitesThunk({ id, status: 'rejected' }));
+        dispatch(UpdateInvitesThunk({ id, status: CONSTANTS.USER_INVITE_STATUS.REJECTED }));
     };
 
     const getCardButton = (user: IGetTrainingPalsResponse) => {
@@ -186,7 +157,7 @@ export const UsersForJoinTrainingSection = ({
 
     const changePage = (page: number) => {
         setPageNumber(page);
-        setUsers([...usersForJoinTraining].slice(page - 1, CONSTANTS.PAGINATION_PAGE_SIZE_DEFAULT));
+        setUsers(getCardsForCurrentPage(usersForJoinTraining, page));
     };
 
     return (

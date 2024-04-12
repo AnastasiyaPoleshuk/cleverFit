@@ -92,8 +92,10 @@ export const SettingsWrapp = () => {
                             <span className='card__footer-text'>
                                 Активен до{' '}
                                 {user.tariff?.expired
-                                    ? moment(user.tariff?.expired).format('DD.MM')
-                                    : moment().format('DD.MM')}
+                                    ? moment(user.tariff?.expired).format(
+                                          CONSTANTS.DATE_FORMAT_DD_MM,
+                                      )
+                                    : moment().format(CONSTANTS.DATE_FORMAT_DD_MM)}
                             </span>
                         ) : (
                             <Button

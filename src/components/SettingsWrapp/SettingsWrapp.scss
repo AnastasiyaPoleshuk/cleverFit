@@ -4,11 +4,11 @@
     flex: 1;
     background-color: $white-color;
     border-radius: 8px;
-    margin: 24px;
-    padding: 24px;
+    margin: $padding-24;
+    padding: $padding-24;
 
     @media (max-width: 360px) {
-        margin: 24px 0;
+        margin: $padding-24 0;
         padding: 16px 24px;
     }
 
@@ -79,7 +79,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 8px;
+        gap: $gap-8;
         height: 95px;
 
         .card__footer-text {
@@ -96,7 +96,7 @@
 
     .advantages__box {
         width: 505px;
-        margin-top: 24px;
+        margin-top: $padding-24;
 
         @media (max-width: 360px) {
             width: 312px;

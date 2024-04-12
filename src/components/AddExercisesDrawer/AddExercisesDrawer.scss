@@ -13,8 +13,8 @@
 
 .drawer__body {
     @media (max-width: 360px) {
-        border-top-right-radius: 24px !important;
-        border-top-left-radius: 24px !important;
+        border-top-right-radius: $padding-24 !important;
+        border-top-left-radius: $padding-24 !important;
     }
 }
 
@@ -34,10 +34,10 @@
 }
 
 .add-exercises__form {
-    padding: 24px 32px;
+    padding: $padding-24 32px;
 
     @media (max-width: 360px) {
-        padding: 24px 0px;
+        padding: $padding-24 0px;
     }
 }
 

@@ -9,7 +9,7 @@ import moment from 'moment';
 import { useAppDispatch } from '@hooks/typed-react-redux-hooks';
 import { CreateTrainingThunk, UpdateTrainingThunk } from '@redux/thunk/TrainingThunk';
 
-interface IProps {
+type IProps = {
     date: string;
     isModalOpen: boolean;
     trainingsListData: IGetTrainingListResponse[];
@@ -17,7 +17,7 @@ interface IProps {
     modalPosition: { left: string; top: string };
     closeModal: (type: string) => void;
     openInfoModal: (data: boolean) => void;
-}
+};
 
 export const CalendarCreateTrainingModal = ({
     date,
@@ -123,8 +123,8 @@ export const CalendarCreateTrainingModal = ({
         const request = {
             _id: id,
             name: addExercisesData.name,
-            date: moment(date, 'DD.MM.YYYY').format('YYYY-MM-DDThh:mm:ss.ms'),
-            isImplementation: moment(date, 'DD.MM.YYYY') < moment(),
+            date: moment(date, CONSTANTS.DATE_FORMAT).format(CONSTANTS.DATE_FORMAT_REQUEST),
+            isImplementation: moment(date, CONSTANTS.DATE_FORMAT) < moment(),
             exercises: exercisesData,
         };
 

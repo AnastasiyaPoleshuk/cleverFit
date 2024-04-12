@@ -1,10 +1,11 @@
+import CONSTANTS from '@utils/constants';
 import { IAuthRequest } from '../types/apiTypes';
 
 import { api, handleError } from './api';
 
 export const registerUser = async (request: IAuthRequest) => {
     try {
-        const { data, status } = await api.post<object>('auth/registration', {
+        const { data, status } = await api.post<object>(CONSTANTS.API_URLS.REGISTRATION, {
             email: request.email,
             password: request.password,
         });

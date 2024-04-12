@@ -46,7 +46,7 @@ export const Header = () => {
                 <Breadcrumb.Item>
                     <Button
                         type='link'
-                        onClick={() => dispatch(push(`${CONSTANTS.ROUTER__PATH.AUTH__PATH}`))}
+                        onClick={() => dispatch(push(`${CONSTANTS.ROUTER__PATH.MAIN__PATH}`))}
                         className='header__main-link_btn'
                     >
                         Главная

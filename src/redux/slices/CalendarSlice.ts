@@ -12,7 +12,7 @@ import {
 } from '@redux/thunk/TrainingThunk';
 import { ITrainingExercises } from '../../types/storeTypes';
 
-interface IInitialState {
+type IInitialState = {
     trainingInfo: IGetTrainingsResponse[];
     trainingList: IGetTrainingListResponse[];
     training: IGetTrainingsResponse;
@@ -26,7 +26,7 @@ interface IInitialState {
     isCreateTrainingSuccess: boolean;
     isUpdateTrainingError: boolean;
     isUpdateTrainingSuccess: boolean;
-}
+};
 
 const initialState: IInitialState = {
     trainingInfo: [],

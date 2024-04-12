@@ -1,3 +1,4 @@
+import CONSTANTS from '@utils/constants';
 import { IGetTrainingPalsResponse } from '../types/apiTypes';
 
 import { api, apiSetHeader, handleError } from './api';
@@ -11,8 +12,8 @@ export const getUsersForJoinTraining = async (request: {
 
         const { data, status } = await api.get<IGetTrainingPalsResponse[]>(
             request.trainingType
-                ? `catalogs/user-joint-training-list?trainingType=${request.trainingType}`
-                : 'catalogs/user-joint-training-list',
+                ? `${CONSTANTS.API_URLS.USERS_JOINT_TRAINING_LIST}?trainingType=${request.trainingType}`
+                : CONSTANTS.API_URLS.USERS_JOINT_TRAINING_LIST,
         );
 
         return { data, status };

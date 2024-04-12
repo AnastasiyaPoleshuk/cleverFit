@@ -5,7 +5,7 @@
     padding: 12px 24px 92px 24px;
 
     @media (max-width: 360px) {
-        padding: 24px;
+        padding: $padding-24;
     }
 }
 
@@ -65,9 +65,9 @@
     text-overflow: ellipsis;
 }
 .notes-month {
-    font-size: 28px;
+    font-size: $font-size-28;
     text-align: center;
 }
 .notes-month section {
-    font-size: 28px;
+    font-size: $font-size-28;
 }

@@ -51,10 +51,10 @@
 .prise__title {
     @include body-strong;
     margin-top: 74px;
-    margin-bottom: 24px;
+    margin-bottom: $padding-24;
 
     @media (max-width: 360px) {
-        margin-top: 24px;
+        margin-top: $padding-24;
         margin-bottom: 12px;
     }
 }

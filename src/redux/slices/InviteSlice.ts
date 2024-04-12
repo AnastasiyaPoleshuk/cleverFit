@@ -7,7 +7,7 @@ import {
     UpdateInvitesThunk,
 } from '@redux/thunk/InviteThunk';
 
-interface IInitialState {
+type IInitialState = {
     myInvites: IGetInviteResponse[];
     createdInvite: ICreateInviteResponse;
     isLoading: boolean;
@@ -21,7 +21,7 @@ interface IInitialState {
     isRemoveInviteError: boolean;
     isRemoveInviteSuccess: boolean;
     isTrainingRejected: boolean;
-}
+};
 
 const initialState: IInitialState = {
     myInvites: [],

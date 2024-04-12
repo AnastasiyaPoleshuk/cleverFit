@@ -28,12 +28,12 @@ import CONSTANTS from '@utils/constants';
 import moment, { Moment } from 'moment';
 import { CreateInvitesThunk } from '@redux/thunk/InviteThunk';
 
-interface ITrainingForm {
+type ITrainingForm = {
     trainingDate: Moment;
     trainingRepeat: boolean;
     trainingPeriod: number;
     exercises: IExercises[];
-}
+};
 
 const defaultFormListValue = [
     { approaches: undefined, name: '', replays: undefined, weight: undefined },
@@ -187,7 +187,7 @@ export const JoinTrainingDrawer = ({ isDrawerOpen }: { isDrawerOpen: boolean }) 
         const request = {
             _id: '',
             name: currentUserForJoinTraining.trainingType,
-            date: trainingDate.format('YYYY-MM-DDThh:mm:ss.ms'),
+            date: trainingDate.format(CONSTANTS.DATE_FORMAT_REQUEST),
             isImplementation: false,
             parameters: {
                 repeat: withPeriod,
