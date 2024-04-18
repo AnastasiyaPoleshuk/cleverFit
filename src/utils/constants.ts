@@ -30,6 +30,7 @@ const CONSTANTS = {
         PROFILE__PATH: '/profile',
         SETTINGS__PATH: '/settings',
         TRAININGS__PATH: '/trainings',
+        ACHIEVEMENTS__PATH: '/achievements',
         RESULT: {
             RESULT: '/result',
             SUCCESS: {

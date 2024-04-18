@@ -16,7 +16,7 @@ import { useAppDispatch, useAppSelector } from '@hooks/typed-react-redux-hooks';
 import { changeAuthState, setToken } from '@redux/slices/UserSlice';
 import { push } from 'redux-first-history';
 import { MenuInfo } from 'rc-menu/lib/interface';
-import { GetTrainingInfoThunk, GetTrainingListThunk } from '@redux/thunk/TrainingThunk';
+import { GetTrainingInfoThunk } from '@redux/thunk/TrainingThunk';
 import { useResize } from '@hooks/useResize';
 import { UserSelector, invitesSelector } from '@utils/StoreSelectors';
 import { AppContext } from '../../context/AppContext';
@@ -42,7 +42,7 @@ function getItem(
 export const Navigation: React.FC = () => {
     const { width: windowWidth, isScreenSm } = useResize();
     const [collapsed, setCollapsed] = useState(isScreenSm);
-    const { setIsCalendar } = useContext(AppContext);
+    const { setIsCalendar, setIsTrainingPage } = useContext(AppContext);
     const { accessToken } = useAppSelector(UserSelector);
     const { myInvites } = useAppSelector(invitesSelector);
 
@@ -62,7 +62,11 @@ export const Navigation: React.FC = () => {
                 />
             </>,
         ),
-        getItem('Достижения', CONSTANTS.SIDEBAR_KEYS.ACHIEVEMENTS, <AchievementsIcon />),
+        getItem(
+            <span data-test-id='sidebar-achievements'>Достижения</span>,
+            CONSTANTS.SIDEBAR_KEYS.ACHIEVEMENTS,
+            <AchievementsIcon />,
+        ),
         getItem('Профиль', CONSTANTS.SIDEBAR_KEYS.PROFILE, <ProfileIcon />),
     ];
 
@@ -85,6 +89,13 @@ export const Navigation: React.FC = () => {
                 break;
             case CONSTANTS.SIDEBAR_KEYS.TRAININGS:
                 dispatch(GetTrainingInfoThunk(accessToken));
+                setIsTrainingPage(true);
+                setIsCalendar(false);
+
+                break;
+            case CONSTANTS.SIDEBAR_KEYS.ACHIEVEMENTS:
+                dispatch(GetTrainingInfoThunk(accessToken));
+                setIsTrainingPage(false);
                 setIsCalendar(false);
 
                 break;

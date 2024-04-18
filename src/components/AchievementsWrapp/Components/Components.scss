@@ -1,0 +1,82 @@
+@import '../../../App.variables.scss';
+
+.tab-header {
+    width: 100%;
+    display: flex;
+
+    justify-content: flex-start;
+    align-items: center;
+    gap: 24px;
+
+    .tab-header__title {
+        @include h5;
+    }
+
+    .buttons-wrapp {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .tab-header__button {
+        border-radius: $border-radius-2;
+        padding: 0 8px;
+    }
+
+    .tab-header__button-active {
+        border-color: $brand-color-light;
+        color: $brand-color-light;
+        background: $primary-color-light-1;
+    }
+}
+
+.average-weight__section {
+    width: 183px;
+
+    .average-weight__title {
+        @include h5;
+        text-align: left;
+        width: 85%;
+
+        @media (max-width: 834px) {
+            width: 145%;
+        }
+    }
+
+    .average-weight__list {
+        margin-top: 20px;
+        padding: 0;
+        width: 100%;
+    }
+
+    .average-weight__list-item {
+        width: 100%;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 16px;
+        margin-top: 20px;
+    }
+
+    .average-weight__list-title {
+        @include body-medium;
+
+        color: $gray-color;
+        width: 88px;
+    }
+
+    .average-weight__list-weight {
+        width: 57px;
+        @include body-strong;
+        text-align: end;
+    }
+}
+
+.average-weight-month__section {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}

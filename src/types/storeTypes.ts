@@ -19,3 +19,9 @@ export type ISenderInviteData = {
     lastName?: string;
     imageSrc?: string;
 };
+
+export type IStatisticDataWeek = {
+    id: string;
+    weekDay: string;
+    weight: number;
+};

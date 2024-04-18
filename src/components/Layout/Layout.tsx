@@ -37,6 +37,7 @@ export const Layout = () => {
         isCreateFeedbackSuccessModalOpen,
         isCreateFeedbackErrorModalOpen,
         isCalendar,
+        isTrainingPage,
     } = useContext(AppContext);
     const dispatch = useAppDispatch();
 
@@ -54,8 +55,12 @@ export const Layout = () => {
             dispatch(push(`${CONSTANTS.ROUTER__PATH.CALENDAR__PATH}`));
             dispatch(GetTrainingListThunk());
         }
-        if (isGetTrainingInfoSuccess && !isCalendar) {
+        if (isGetTrainingInfoSuccess && isTrainingPage) {
             dispatch(push(`${CONSTANTS.ROUTER__PATH.TRAININGS__PATH}`));
+            dispatch(GetTrainingListThunk());
+        }
+        if (isGetTrainingInfoSuccess && !isTrainingPage && !isCalendar) {
+            dispatch(push(`${CONSTANTS.ROUTER__PATH.ACHIEVEMENTS__PATH}`));
             dispatch(GetTrainingListThunk());
         }
     }, [isGetTrainingInfoSuccess, isCalendar]);

@@ -1,4 +1,4 @@
-import { IGetTrainingsResponse } from '@types/apiTypes';
+import { IGetTrainingsResponse } from '../types/apiTypes';
 
 export const sortTrainingsDataByPeriod = (
     data: IGetTrainingsResponse[],

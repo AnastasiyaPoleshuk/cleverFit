@@ -24,6 +24,7 @@ import { ProfilePage } from '@pages/ProfilePage/ProfilePage';
 import { SettingsPage } from '@pages/SettingsPage/SettingsPage';
 import { ErrorPage } from '@pages/ErrorPage/ErrorPage';
 import { TrainingsPage } from '@pages/TrainingsPage/TrainingsPage';
+import { AchievementsPage } from '@pages/AchievementsPage/AchievementsPage';
 
 export const App = () => {
     return (
@@ -36,6 +37,10 @@ export const App = () => {
                 <Route path={CONSTANTS.ROUTER__PATH.PROFILE__PATH} element={<ProfilePage />} />
                 <Route path={CONSTANTS.ROUTER__PATH.SETTINGS__PATH} element={<SettingsPage />} />
                 <Route path={CONSTANTS.ROUTER__PATH.TRAININGS__PATH} element={<TrainingsPage />} />
+                <Route
+                    path={CONSTANTS.ROUTER__PATH.ACHIEVEMENTS__PATH}
+                    element={<AchievementsPage />}
+                />
                 <Route path='*' element={<ErrorPage />} />
             </Route>
             <Route path={`${CONSTANTS.ROUTER__PATH.AUTH__PATH}`} element={<AuthPage />}>

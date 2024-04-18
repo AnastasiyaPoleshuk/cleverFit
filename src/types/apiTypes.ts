@@ -157,3 +157,9 @@ export type IUpdateInviteStatusRequest = {
     id: string;
     status: string;
 };
+
+export type weekStatistic = {
+    id: string;
+    weekDay: string;
+    weight: number;
+};

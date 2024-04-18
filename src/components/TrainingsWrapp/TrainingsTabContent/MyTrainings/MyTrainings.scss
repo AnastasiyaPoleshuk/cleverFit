@@ -14,7 +14,7 @@
 
 .trainings__table-header-cell-title {
     width: 217px;
-    background-color: rgba($color: #000000, $alpha: 0.06);
+    background-color: $gray-color-extra-light;
     padding: 7.5px 12px;
 
     @media (max-width: 360px) {
@@ -28,7 +28,7 @@
     height: 37px;
     border-radius: $border-radius-2;
     border: none;
-    background-color: rgba($color: #000000, $alpha: 0.06);
+    background-color: $gray-color-extra-light;
 
     @media (max-width: 360px) {
         width: 120px;
@@ -63,7 +63,7 @@
 
 .training-name__cell {
     width: 241px;
-    border-bottom: 1px solid rgba($color: #000000, $alpha: 0.06);
+    border-bottom: 1px solid $gray-color-extra-light;
     display: flex;
     justify-content: space-between;
 
@@ -76,7 +76,7 @@
     display: inline-block;
     text-align: start;
     width: 241px;
-    border-bottom: 1px solid rgba($color: #000000, $alpha: 0.06);
+    border-bottom: 1px solid $gray-color-extra-light;
 
     @media (max-width: 360px) {
         width: 120px;

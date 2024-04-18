@@ -11,6 +11,10 @@ $gold-color-6: #faad14;
 $white-color: #fff;
 $gray-color: #8c8c8c;
 $gray-color-light: #bfbfbf;
+$gray-color-extra-light: rgba(
+    $color: #000000,
+    $alpha: 0.06,
+);
 $text-color: rgba(0, 0, 0, 0.85);
 
 $button-height: 40px;

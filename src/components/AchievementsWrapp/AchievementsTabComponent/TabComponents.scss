@@ -1,0 +1,131 @@
+@import '../../../App.variables.scss';
+
+.week-tab__weight-block {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 150px;
+    margin-top: 40px;
+
+    @media (max-width: 834px) {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: $gap-24;
+    }
+
+    .week-tab__weight-schedule {
+        border: 1px solid $gray-color-extra-light;
+
+        @media (max-width: 834px) {
+            width: 100%;
+        }
+    }
+}
+
+.week-tab__general-block {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: $gap-24;
+    margin: 48px 0;
+
+    @media (max-width: 834px) {
+        flex-wrap: wrap;
+        gap: $gap-16;
+        margin: $gap-24 0;
+        width: 55%;
+    }
+
+    @media (max-width: 360px) {
+        width: 100%;
+    }
+
+    .card {
+        width: 110px;
+        height: 88px;
+        border: 1px solid $gray-color-light;
+        border-radius: $border-radius-2;
+        padding: $gap-24;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: $gap-8;
+
+        @media (max-width: 834px) {
+            width: 130px;
+        }
+
+        @media (max-width: 360px) {
+            width: 100%;
+            height: 30px;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+    }
+
+    .card-title {
+        @include h1;
+    }
+
+    .card-text {
+        @include body-medium;
+        color: $gray-color-light;
+        text-align: center;
+    }
+}
+
+.most-popular-data-block {
+    margin-bottom: $gap-24;
+    padding: $gap-24;
+
+    .most-popular-data__list {
+        padding: 0;
+    }
+
+    .most-popular-data__list-item {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 105px;
+        margin-bottom: 16px;
+    }
+
+    .most-popular-data__list-item-title {
+        @include body-medium;
+        color: $gray-color-light;
+        width: 9%;
+    }
+
+    .most-popular-data__list-item-value {
+        @include h3;
+    }
+}
+
+.most-popular-exercise-block {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 150px;
+
+    @media (max-width: 834px) {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: $gap-24;
+    }
+}
+
+.month-tab {
+    .month-tab__weight-block {
+        width: 100%;
+
+        margin: $gap-24 0;
+    }
+    .month-tab__weight-schedule {
+        border: 1px solid $gray-color-extra-light;
+
+        width: 100%;
+
+        margin-bottom: $gap-24;
+    }
+}
